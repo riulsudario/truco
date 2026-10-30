@@ -32,6 +32,9 @@ const EMOJI_SOUND: Partial<Record<TauntId, string>> = {
   clap: 'emoji/clap',
 }
 
+/** Full slider = this much of the file's loudness: at 100% the table was too loud. */
+export const OUTPUT_SCALE = 0.5
+
 /** Max simultaneous lines: any more and the table turns into noise nobody understands. */
 const MAX_VOICES = 2
 
@@ -84,7 +87,7 @@ class Sound {
     if (voice && this.mutedVoices.includes(voice)) return
     if (this.speaking.size >= MAX_VOICES) return
     const audio = this.element(voice ? `${file}.${VOICE_EXT}` : `${file}.ogg`)
-    audio.volume = this.voiceVolume
+    audio.volume = this.voiceVolume * OUTPUT_SCALE
     this.speaking.add(audio)
     const done = () => this.speaking.delete(audio)
     audio.addEventListener('ended', done, { once: true })
@@ -128,7 +131,7 @@ class Sound {
   playFile(file: string): void {
     if (this.volume <= 0 || typeof Audio === 'undefined') return
     const audio = this.element(`${file}.ogg`)
-    audio.volume = this.volume
+    audio.volume = this.volume * OUTPUT_SCALE
     // Without a user gesture the browser may block it; the game carries on silently.
     void audio.play().catch(() => {})
   }

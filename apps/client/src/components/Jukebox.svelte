@@ -3,6 +3,7 @@
   import type { GameSession } from '../lib/session.svelte'
   import { t } from '../lib/strings'
   import JukeboxTV from './JukeboxTV.svelte'
+  import Marquee from './Marquee.svelte'
 
   interface Props {
     session: GameSession
@@ -36,11 +37,11 @@
 </script>
 
 {#snippet controls()}
-  <div class="now">
+  <div class="now" data-marquee-host>
     <span class="note" aria-hidden="true">♪</span>
     <div class="what">
-      <b>{current?.title ?? t.jukebox.silence}</b>
-      {#if current}<span>{current.artist}</span>{/if}
+      <b><Marquee text={current?.title ?? t.jukebox.silence} /></b>
+      {#if current}<span><Marquee text={current.artist} /></span>{/if}
     </div>
     <div class="buttons">
       <button
@@ -74,11 +75,12 @@
           <button
             class:on={track.id === current?.id}
             aria-pressed={track.id === current?.id}
-            title="{track.title} · {track.artist}"
+            aria-label="{track.title}, {track.artist}"
+            data-marquee-host
             onclick={() => choose(track.id)}
           >
             <img src={cover(track.youtube)} alt="" loading="lazy" />
-            <span>{track.title}</span>
+            <span class="title"><Marquee text={track.title} /></span>
           </button>
         </li>
       {/each}
@@ -86,7 +88,7 @@
     {@render controls()}
     {#if session.sharedJukebox}<p class="hint">{t.jukebox.shared}</p>{/if}
   {:else if current}
-    <div class="mini">
+    <div class="mini" data-marquee-host>
       <button class="opener" aria-label={t.jukebox.open} onclick={() => (open = true)}></button>
       {@render controls()}
     </div>
@@ -168,10 +170,8 @@
     display: block;
     background: var(--ink);
   }
-  .tracks span {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .title {
+    min-width: 0;
     text-align: center;
   }
   .tracks button:hover {
@@ -216,9 +216,7 @@
   }
   .what b,
   .what span {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    min-width: 0;
   }
   .what b {
     font-weight: 400;
