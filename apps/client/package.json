@@ -1,0 +1,27 @@
+{
+  "name": "@truco/client",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview --host",
+    "typecheck": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
+    "test": "vitest run",
+    "avatar": "node scripts/build-avatar.mjs"
+  },
+  "dependencies": {
+    "@truco/bots": "workspace:*",
+    "@truco/engine": "workspace:*",
+    "@truco/protocol": "workspace:*",
+    "valibot": "^1.5.0"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^7.3.1",
+    "pngjs": "^7.0.0",
+    "sharp": "^0.34.5",
+    "svelte": "^5.57.3",
+    "svelte-check": "^4.7.7",
+    "vite": "^8.3.5"
+  }
+}

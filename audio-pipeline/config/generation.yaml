@@ -1,0 +1,56 @@
+# Modelo e parâmetros comuns da geração.
+
+model:
+  # pt-br: finetune "Chatterbox Multilingual V3 Single Language Pack" para português do Brasil (MIT).
+  # v3: checkpoint multilíngue geral V3, para comparação.
+  variant: pt-br
+  language_id: pt
+  device: cuda
+
+# Padrões do generate() quando nem o personagem nem a categoria dizem outra coisa.
+defaults:
+  exaggeration: 0.5
+  cfg_weight: 0.5
+  temperature: 0.8
+  repetition_penalty: 1.2
+  min_p: 0.05
+  top_p: 1.0
+
+# O generate() do Chatterbox não recebe seed: o script fixa torch/numpy/random antes de cada tomada
+# com uma semente derivada de (base_seed, personagem, fala, variação), então a mesma tomada sai igual.
+base_seed: 1977
+variants: 3
+
+# Fase B: interpretações. Cada estilo substitui os parâmetros do personagem.
+styles:
+  normal: { exaggeration: 0.5, cfg_weight: 0.5, temperature: 0.8 }
+  deboche: { exaggeration: 0.65, cfg_weight: 0.45, temperature: 0.85 }
+  provocacao: { exaggeration: 0.8, cfg_weight: 0.35, temperature: 0.85 }
+  grito: { exaggeration: 1.2, cfg_weight: 0.25, temperature: 0.8 }
+  indignacao: { exaggeration: 1.0, cfg_weight: 0.3, temperature: 0.9 }
+
+phases:
+  A:
+    lines: [seis_001]
+  B:
+    lines: [truco_001, seis_001, provocacao_001, vitoria_003, derrota_002]
+    styles: [normal, deboche, provocacao, grito, indignacao]
+
+# Tratamento (process_audio.py) e exportação (export.py).
+processing:
+  trim_threshold_db: -45      # abaixo disso conta como silêncio nas pontas
+  keep_silence_ms: 60         # respiro que fica antes e depois da fala
+  loudness_lufs: -16          # alvo de volume integrado
+  true_peak_db: -1.5          # teto para não clipar
+  compress: true              # compressão leve antes da normalização
+
+export:
+  opus_bitrate: 48k
+  mp3_quality: 5              # VBR do LAME, ~130 kbps em mono; suficiente para voz
+  sample_rate: 48000
+
+validation:
+  min_duration_s: 0.4
+  max_duration_s: 8.0
+  max_edge_silence_s: 0.35    # nos arquivos tratados
+  clip_ratio: 0.001           # fração de amostras no teto que já conta como clipping

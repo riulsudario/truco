@@ -1,0 +1,22 @@
+{
+  "name": "@truco/server",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --port 8787",
+    "deploy": "wrangler deploy",
+    "test": "vitest run",
+    "typecheck": "tsc -p ."
+  },
+  "dependencies": {
+    "@truco/bots": "workspace:*",
+    "@truco/engine": "workspace:*",
+    "@truco/protocol": "workspace:*",
+    "valibot": "^1.5.0"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "^1.4.11",
+    "@cloudflare/workers-types": "^5.20261029.1",
+    "wrangler": "^4.156.0"
+  }
+}

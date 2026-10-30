@@ -1,0 +1,11 @@
+pnpm-lock.yaml
+dist/
+.wrangler/
+apps/client/public/sprites/
+assets-src/
+test-results/
+playwright-report/
+.venv/
+**/.venv/
+audio-pipeline/
+audio-pipeline/

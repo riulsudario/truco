@@ -1,0 +1,130 @@
+:root {
+  --bg-pattern: none;
+  --display: 'Press Start 2P', 'Pixelify Sans', monospace;
+  --ink: #1a1423;
+  --paper: #f4ecd8;
+  --card-face: #f7f1e1;
+  --card-shade: #d8ccb0;
+  --red: #c0392b;
+  --gold: #f2c14e;
+  --us: #6cc4a1;
+  --them: #ef8a62;
+  --panel: #2b2140;
+  --bg: #120e1a;
+
+  /* Feltro Clássico */
+  --felt: #2f7d4f;
+  --felt-edge: #24633e;
+  --felt-pattern: radial-gradient(#3a8c5a 1px, transparent 1px) 0 0 / 8px 8px;
+  --rail: #6b3f22;
+  --back-a: #2b4c9b;
+  --back-b: #f4ecd8;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  background-image: var(--bg-pattern);
+  color: var(--paper);
+  font-family: 'Pixelify Sans', ui-monospace, monospace;
+  font-size: 16px;
+  /* Só há peso 400: negrito falso deixa o C parecido com O. */
+  font-synthesis: none;
+  -webkit-font-smoothing: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn {
+  font: inherit;
+  padding: 8px 14px;
+  border: 3px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  cursor: pointer;
+}
+.btn:active:not(:disabled) {
+  translate: 2px 2px;
+  box-shadow: 1px 1px 0 var(--ink);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn.primary {
+  background: var(--us);
+}
+.btn.hot {
+  background: var(--gold);
+  font-family: var(--display);
+  font-size: 16px;
+  padding: 10px 14px;
+}
+.btn:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* Formulários */
+.field {
+  display: grid;
+  gap: 6px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+.field input:not([type='radio']) {
+  font: inherit;
+  font-size: 18px;
+  padding: 8px 10px;
+  border: 3px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chip {
+  /* O rádio escondido fica dentro do próprio chip, e não solto pela página. */
+  position: relative;
+  padding: 4px 10px;
+  border: 3px solid var(--ink);
+  background: var(--panel);
+  cursor: pointer;
+}
+.chip.on {
+  background: var(--gold);
+  color: var(--ink);
+}
+.chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.chip:has(input:focus-visible) {
+  outline: 3px solid var(--paper);
+}
+.big {
+  font-size: 20px;
+  padding: 12px;
+}
+
+h1,
+h2 {
+  font-family: var(--display);
+  font-weight: 400;
+  line-height: 1.3;
+}

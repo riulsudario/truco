@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "categories": {
+    "truco": { "name": "Pedidos de truco", "group": "truco" },
+    "seis": { "name": "Seis", "group": "aumento" },
+    "nove": { "name": "Nove", "group": "aumento" },
+    "doze": { "name": "Doze", "group": "aumento" },
+    "provocacao": { "name": "Provocações", "group": "provocacao" },
+    "vitoria": { "name": "Comemorações", "group": "comemoracao" },
+    "derrota": { "name": "Reclamações", "group": "reclamacao" }
+  },
+  "lines": [
+    { "id": "truco_001", "number": 1, "category": "truco", "text": "SUBI NO MURO, CAÍ DE COSTAS! TRUCO, SEU BOSTA!" },
+    { "id": "truco_002", "number": 2, "category": "truco", "text": "TRUUUUUCO, DESGRAÇA!" },
+    { "id": "truco_003", "number": 3, "category": "truco", "text": "TRUCO, LADRÃO! AQUI NÃO TEM MOLEZA!" },
+    { "id": "truco_004", "number": 4, "category": "truco", "text": "TRUCO, FI DUMA ÉGUA!" },
+    { "id": "truco_005", "number": 5, "category": "truco", "text": "CÊ ACHA QUE EU TÔ BRINCANDO? TRUUUCO!" },
+    { "id": "truco_006", "number": 6, "category": "truco", "text": "TRUCO, SEU PÉ DE RATO!" },
+    { "id": "truco_007", "number": 7, "category": "truco", "text": "TRUCO, MISERÁVEL! AGORA EU QUERO VER!" },
+    { "id": "truco_008", "number": 8, "category": "truco", "text": "ÔÔÔ, MEU CONSAGRADO! TRUCO NESSA BAGAÇA!" },
+
+    { "id": "seis_001", "number": 9, "category": "seis", "text": "SEIS, LADRÃO!" },
+    { "id": "seis_002", "number": 10, "category": "seis", "text": "SEEEEEIS, SEU CORNO!" },
+    { "id": "nove_001", "number": 11, "category": "nove", "text": "NOVE, DESGRAÇADO! AGORA AGUENTA!" },
+    { "id": "doze_001", "number": 12, "category": "doze", "text": "DOZE! DOZE! DOZE! CÊ TÁ LASCADO!" },
+    { "id": "nove_002", "number": 13, "category": "nove", "text": "PEDIU SEIS? ENTÃO TOMA NOVE, INFELIZ!" },
+    { "id": "doze_002", "number": 14, "category": "doze", "text": "AQUI É DOZE, MEU FILHO! DOZE!" },
+    { "id": "seis_003", "number": 15, "category": "seis", "text": "SEIS, SEU PÉ DE CHINELO!" },
+    { "id": "nove_003", "number": 16, "category": "nove", "text": "NOVE! QUERO VER SE TEM CORAGEM!" },
+
+    { "id": "provocacao_001", "number": 17, "category": "provocacao", "text": "CÊ JOGA TRUCO OU TÁ APRENDENDO A CONTAR?" },
+    { "id": "provocacao_002", "number": 18, "category": "provocacao", "text": "ESSA CARTA AÍ NUM MATA NEM MOSQUITO!" },
+    { "id": "provocacao_003", "number": 19, "category": "provocacao", "text": "MINHA VÓ JOGA MELHOR QUE VOCÊ, RAPAZ!" },
+    { "id": "provocacao_004", "number": 20, "category": "provocacao", "text": "Ô MÃO RUIM DA DESGRAÇA!" },
+    { "id": "provocacao_005", "number": 21, "category": "provocacao", "text": "CÊ TÁ COM MEDO? CHAMA SUA MÃE!" },
+    { "id": "provocacao_006", "number": 22, "category": "provocacao", "text": "TÁ TREMENDO POR QUÊ, FILHO?" },
+    { "id": "provocacao_007", "number": 23, "category": "provocacao", "text": "VAI CORRER? ENTÃO CORRE DIREITO!" },
+    { "id": "provocacao_008", "number": 24, "category": "provocacao", "text": "ISSO AQUI É TRUCO, NÃO É REUNIÃO DE CONDOMÍNIO!" },
+
+    { "id": "vitoria_001", "number": 25, "category": "vitoria", "text": "CHUPAAAA, DESGRAÇADO!" },
+    { "id": "vitoria_002", "number": 26, "category": "vitoria", "text": "AQUI TEM CARTA, MEU PATRÃO!" },
+    { "id": "vitoria_003", "number": 27, "category": "vitoria", "text": "RESPEITA O PAI, RAPAZ!" },
+    { "id": "vitoria_004", "number": 28, "category": "vitoria", "text": "É O TREM! É O TREM!" },
+    { "id": "vitoria_005", "number": 29, "category": "vitoria", "text": "ESSA FOI PRA ACABAR COM A AMIZADE!" },
+    { "id": "vitoria_006", "number": 30, "category": "vitoria", "text": "PODE CHORAR QUE HOJE EU TÔ SEM LENÇO!" },
+    { "id": "vitoria_007", "number": 31, "category": "vitoria", "text": "É TRUCO, NÃO É PRA QUALQUER UM!" },
+    { "id": "vitoria_008", "number": 32, "category": "vitoria", "text": "EU AVISEI, SEU ANIMAL!" },
+
+    { "id": "derrota_001", "number": 33, "category": "derrota", "text": "AH, VAI TOMAR BANHO, RAPAZ!" },
+    { "id": "derrota_002", "number": 34, "category": "derrota", "text": "NÃO É POSSÍVEL UMA DESGRAÇA DESSA!" },
+    { "id": "derrota_003", "number": 35, "category": "derrota", "text": "Ô PARCEIRO BURRO DA PESTE!" },
+    { "id": "derrota_004", "number": 36, "category": "derrota", "text": "CÊ TINHA O ZAP E NÃO JOGOU?!" },
+    { "id": "derrota_005", "number": 37, "category": "derrota", "text": "EU VOU EMBORA DESSA MESA!" },
+    { "id": "derrota_006", "number": 38, "category": "derrota", "text": "ESSE BARALHO TÁ MARCADO, SÓ PODE!" },
+    { "id": "derrota_007", "number": 39, "category": "derrota", "text": "NUNCA MAIS JOGO COM ESSE INFELIZ!" },
+    { "id": "derrota_008", "number": 40, "category": "derrota", "text": "QUE JOGO DESGRAÇADO, SÔ!" }
+  ],
+  "tts_overrides": {
+    "truco_002": "Truuuco, desgraça!",
+    "seis_002": "Seis, seu corno!"
+  }
+}

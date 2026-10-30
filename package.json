@@ -1,0 +1,31 @@
+{
+  "name": "truco",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.16.1",
+  "scripts": {
+    "dev": "pnpm --parallel --filter @truco/server --filter @truco/client dev",
+    "build": "pnpm --filter @truco/client build",
+    "test": "pnpm -r --if-present test",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "lint": "eslint . && prettier --check .",
+    "format": "prettier --write .",
+    "check": "pnpm typecheck && pnpm lint && pnpm test",
+    "e2e": "pnpm build && playwright test",
+    "deploy": "pnpm build && pnpm --filter @truco/server deploy",
+    "assets": "pnpm --filter @truco/client avatar && pnpm --filter @truco/client exec node scripts/build-table-front.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.0",
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^24.19.2",
+    "eslint": "^10.13.0",
+    "eslint-plugin-svelte": "^3.23.1",
+    "globals": "^16.0.0",
+    "prettier": "^3.9.10",
+    "prettier-plugin-svelte": "^4.1.1",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.72.1",
+    "vitest": "~4.1.12"
+  }
+}

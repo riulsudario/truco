@@ -1,0 +1,13 @@
+{
+  "name": "@truco/protocol",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc -p ."
+  },
+  "dependencies": {
+    "@truco/engine": "workspace:*",
+    "valibot": "^1.5.0"
+  }
+}

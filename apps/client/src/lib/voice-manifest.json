@@ -1,0 +1,3521 @@
+{
+  "version": 1,
+  "lines": [
+    {
+      "id": "truco_001",
+      "event": "truco",
+      "text": "SUBI NO MURO, CAÍ DE COSTAS! TRUCO, SEU BOSTA!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/truco/subi_no_muro_cai_de_costas_truco_seu_bosta_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/truco/subi_no_muro_cai_de_costas_truco_seu_bosta_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/truco/subi_no_muro_cai_de_costas_truco_seu_bosta_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/truco/subi_no_muro_cai_de_costas_truco_seu_bosta_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/truco/subi_no_muro_cai_de_costas_truco_seu_bosta_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/truco/subi_no_muro_cai_de_costas_truco_seu_bosta_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/truco/subi_no_muro_cai_de_costas_truco_seu_bosta_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/truco/subi_no_muro_cai_de_costas_truco_seu_bosta_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/truco/subi_no_muro_cai_de_costas_truco_seu_bosta_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/truco/subi_no_muro_cai_de_costas_truco_seu_bosta_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/truco/subi_no_muro_cai_de_costas_truco_seu_bosta_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/truco/subi_no_muro_cai_de_costas_truco_seu_bosta_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/truco/subi_no_muro_cai_de_costas_truco_seu_bosta_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/truco/subi_no_muro_cai_de_costas_truco_seu_bosta_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/truco/subi_no_muro_cai_de_costas_truco_seu_bosta_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/truco/subi_no_muro_cai_de_costas_truco_seu_bosta_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/truco/subi_no_muro_cai_de_costas_truco_seu_bosta_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/truco/subi_no_muro_cai_de_costas_truco_seu_bosta_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "truco_002",
+      "event": "truco",
+      "text": "TRUUUUUCO, DESGRAÇA!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/truco/truuuuuco_desgraca_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/truco/truuuuuco_desgraca_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/truco/truuuuuco_desgraca_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/truco/truuuuuco_desgraca_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/truco/truuuuuco_desgraca_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/truco/truuuuuco_desgraca_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/truco/truuuuuco_desgraca_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/truco/truuuuuco_desgraca_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/truco/truuuuuco_desgraca_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/truco/truuuuuco_desgraca_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/truco/truuuuuco_desgraca_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/truco/truuuuuco_desgraca_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/truco/truuuuuco_desgraca_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/truco/truuuuuco_desgraca_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/truco/truuuuuco_desgraca_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/truco/truuuuuco_desgraca_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/truco/truuuuuco_desgraca_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/truco/truuuuuco_desgraca_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "truco_003",
+      "event": "truco",
+      "text": "TRUCO, LADRÃO! AQUI NÃO TEM MOLEZA!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/truco/truco_ladrao_aqui_nao_tem_moleza_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/truco/truco_ladrao_aqui_nao_tem_moleza_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/truco/truco_ladrao_aqui_nao_tem_moleza_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/truco/truco_ladrao_aqui_nao_tem_moleza_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/truco/truco_ladrao_aqui_nao_tem_moleza_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/truco/truco_ladrao_aqui_nao_tem_moleza_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/truco/truco_ladrao_aqui_nao_tem_moleza_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/truco/truco_ladrao_aqui_nao_tem_moleza_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/truco/truco_ladrao_aqui_nao_tem_moleza_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/truco/truco_ladrao_aqui_nao_tem_moleza_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/truco/truco_ladrao_aqui_nao_tem_moleza_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/truco/truco_ladrao_aqui_nao_tem_moleza_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/truco/truco_ladrao_aqui_nao_tem_moleza_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/truco/truco_ladrao_aqui_nao_tem_moleza_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/truco/truco_ladrao_aqui_nao_tem_moleza_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/truco/truco_ladrao_aqui_nao_tem_moleza_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/truco/truco_ladrao_aqui_nao_tem_moleza_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/truco/truco_ladrao_aqui_nao_tem_moleza_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "truco_004",
+      "event": "truco",
+      "text": "TRUCO, FI DUMA ÉGUA!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 3,
+            "file": "dona_cida/truco/truco_fi_duma_egua_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/truco/truco_fi_duma_egua_01"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 3,
+            "file": "tiao/truco/truco_fi_duma_egua_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 2,
+            "file": "ze/truco/truco_fi_duma_egua_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/truco/truco_fi_duma_egua_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "truco_005",
+      "event": "truco",
+      "text": "CÊ ACHA QUE EU TÔ BRINCANDO? TRUUUCO!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/truco/ce_acha_que_eu_to_brincando_truuuco_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/truco/ce_acha_que_eu_to_brincando_truuuco_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/truco/ce_acha_que_eu_to_brincando_truuuco_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/truco/ce_acha_que_eu_to_brincando_truuuco_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/truco/ce_acha_que_eu_to_brincando_truuuco_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/truco/ce_acha_que_eu_to_brincando_truuuco_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/truco/ce_acha_que_eu_to_brincando_truuuco_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/truco/ce_acha_que_eu_to_brincando_truuuco_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/truco/ce_acha_que_eu_to_brincando_truuuco_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/truco/ce_acha_que_eu_to_brincando_truuuco_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/truco/ce_acha_que_eu_to_brincando_truuuco_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/truco/ce_acha_que_eu_to_brincando_truuuco_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/truco/ce_acha_que_eu_to_brincando_truuuco_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/truco/ce_acha_que_eu_to_brincando_truuuco_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/truco/ce_acha_que_eu_to_brincando_truuuco_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/truco/ce_acha_que_eu_to_brincando_truuuco_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/truco/ce_acha_que_eu_to_brincando_truuuco_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/truco/ce_acha_que_eu_to_brincando_truuuco_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "truco_006",
+      "event": "truco",
+      "text": "TRUCO, SEU PÉ DE RATO!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/truco/truco_seu_pe_de_rato_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/truco/truco_seu_pe_de_rato_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/truco/truco_seu_pe_de_rato_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/truco/truco_seu_pe_de_rato_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/truco/truco_seu_pe_de_rato_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/truco/truco_seu_pe_de_rato_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/truco/truco_seu_pe_de_rato_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/truco/truco_seu_pe_de_rato_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/truco/truco_seu_pe_de_rato_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/truco/truco_seu_pe_de_rato_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/truco/truco_seu_pe_de_rato_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/truco/truco_seu_pe_de_rato_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/truco/truco_seu_pe_de_rato_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/truco/truco_seu_pe_de_rato_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/truco/truco_seu_pe_de_rato_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/truco/truco_seu_pe_de_rato_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/truco/truco_seu_pe_de_rato_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/truco/truco_seu_pe_de_rato_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "truco_007",
+      "event": "truco",
+      "text": "TRUCO, MISERÁVEL! AGORA EU QUERO VER!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/truco/truco_miseravel_agora_eu_quero_ver_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/truco/truco_miseravel_agora_eu_quero_ver_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/truco/truco_miseravel_agora_eu_quero_ver_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/truco/truco_miseravel_agora_eu_quero_ver_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/truco/truco_miseravel_agora_eu_quero_ver_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/truco/truco_miseravel_agora_eu_quero_ver_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/truco/truco_miseravel_agora_eu_quero_ver_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/truco/truco_miseravel_agora_eu_quero_ver_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/truco/truco_miseravel_agora_eu_quero_ver_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/truco/truco_miseravel_agora_eu_quero_ver_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/truco/truco_miseravel_agora_eu_quero_ver_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/truco/truco_miseravel_agora_eu_quero_ver_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/truco/truco_miseravel_agora_eu_quero_ver_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/truco/truco_miseravel_agora_eu_quero_ver_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/truco/truco_miseravel_agora_eu_quero_ver_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/truco/truco_miseravel_agora_eu_quero_ver_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/truco/truco_miseravel_agora_eu_quero_ver_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/truco/truco_miseravel_agora_eu_quero_ver_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "truco_008",
+      "event": "truco",
+      "text": "ÔÔÔ, MEU CONSAGRADO! TRUCO NESSA BAGAÇA!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/truco/ooo_meu_consagrado_truco_nessa_bagaca_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/truco/ooo_meu_consagrado_truco_nessa_bagaca_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/truco/ooo_meu_consagrado_truco_nessa_bagaca_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/truco/ooo_meu_consagrado_truco_nessa_bagaca_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/truco/ooo_meu_consagrado_truco_nessa_bagaca_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/truco/ooo_meu_consagrado_truco_nessa_bagaca_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/truco/ooo_meu_consagrado_truco_nessa_bagaca_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/truco/ooo_meu_consagrado_truco_nessa_bagaca_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/truco/ooo_meu_consagrado_truco_nessa_bagaca_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/truco/ooo_meu_consagrado_truco_nessa_bagaca_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/truco/ooo_meu_consagrado_truco_nessa_bagaca_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/truco/ooo_meu_consagrado_truco_nessa_bagaca_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/truco/ooo_meu_consagrado_truco_nessa_bagaca_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/truco/ooo_meu_consagrado_truco_nessa_bagaca_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/truco/ooo_meu_consagrado_truco_nessa_bagaca_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/truco/ooo_meu_consagrado_truco_nessa_bagaca_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/truco/ooo_meu_consagrado_truco_nessa_bagaca_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/truco/ooo_meu_consagrado_truco_nessa_bagaca_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "seis_001",
+      "event": "seis",
+      "text": "SEIS, LADRÃO!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/seis/seis_ladrao_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/seis/seis_ladrao_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/seis/seis_ladrao_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/seis/seis_ladrao_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/seis/seis_ladrao_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/seis/seis_ladrao_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/seis/seis_ladrao_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/seis/seis_ladrao_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/seis/seis_ladrao_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/seis/seis_ladrao_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/seis/seis_ladrao_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/seis/seis_ladrao_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/seis/seis_ladrao_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/seis/seis_ladrao_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/seis/seis_ladrao_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/seis/seis_ladrao_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/seis/seis_ladrao_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/seis/seis_ladrao_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "seis_002",
+      "event": "seis",
+      "text": "SEEEEEIS, SEU CORNO!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/seis/seeeeeis_seu_corno_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/seis/seeeeeis_seu_corno_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/seis/seeeeeis_seu_corno_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/seis/seeeeeis_seu_corno_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/seis/seeeeeis_seu_corno_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/seis/seeeeeis_seu_corno_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/seis/seeeeeis_seu_corno_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/seis/seeeeeis_seu_corno_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/seis/seeeeeis_seu_corno_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/seis/seeeeeis_seu_corno_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/seis/seeeeeis_seu_corno_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/seis/seeeeeis_seu_corno_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/seis/seeeeeis_seu_corno_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/seis/seeeeeis_seu_corno_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/seis/seeeeeis_seu_corno_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/seis/seeeeeis_seu_corno_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/seis/seeeeeis_seu_corno_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/seis/seeeeeis_seu_corno_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nove_001",
+      "event": "nove",
+      "text": "NOVE, DESGRAÇADO! AGORA AGUENTA!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/nove/nove_desgracado_agora_aguenta_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/nove/nove_desgracado_agora_aguenta_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/nove/nove_desgracado_agora_aguenta_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/nove/nove_desgracado_agora_aguenta_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/nove/nove_desgracado_agora_aguenta_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/nove/nove_desgracado_agora_aguenta_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/nove/nove_desgracado_agora_aguenta_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/nove/nove_desgracado_agora_aguenta_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/nove/nove_desgracado_agora_aguenta_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/nove/nove_desgracado_agora_aguenta_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/nove/nove_desgracado_agora_aguenta_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/nove/nove_desgracado_agora_aguenta_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/nove/nove_desgracado_agora_aguenta_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/nove/nove_desgracado_agora_aguenta_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/nove/nove_desgracado_agora_aguenta_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/nove/nove_desgracado_agora_aguenta_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/nove/nove_desgracado_agora_aguenta_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/nove/nove_desgracado_agora_aguenta_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "doze_001",
+      "event": "doze",
+      "text": "DOZE! DOZE! DOZE! CÊ TÁ LASCADO!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/doze/doze_doze_doze_ce_ta_lascado_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/doze/doze_doze_doze_ce_ta_lascado_02"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/doze/doze_doze_doze_ce_ta_lascado_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/doze/doze_doze_doze_ce_ta_lascado_02"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/doze/doze_doze_doze_ce_ta_lascado_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/doze/doze_doze_doze_ce_ta_lascado_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/doze/doze_doze_doze_ce_ta_lascado_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/doze/doze_doze_doze_ce_ta_lascado_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/doze/doze_doze_doze_ce_ta_lascado_02"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/doze/doze_doze_doze_ce_ta_lascado_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/doze/doze_doze_doze_ce_ta_lascado_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/doze/doze_doze_doze_ce_ta_lascado_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/doze/doze_doze_doze_ce_ta_lascado_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/doze/doze_doze_doze_ce_ta_lascado_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/doze/doze_doze_doze_ce_ta_lascado_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nove_002",
+      "event": "nove",
+      "text": "PEDIU SEIS? ENTÃO TOMA NOVE, INFELIZ!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/nove/pediu_seis_entao_toma_nove_infeliz_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/nove/pediu_seis_entao_toma_nove_infeliz_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/nove/pediu_seis_entao_toma_nove_infeliz_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/nove/pediu_seis_entao_toma_nove_infeliz_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/nove/pediu_seis_entao_toma_nove_infeliz_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/nove/pediu_seis_entao_toma_nove_infeliz_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/nove/pediu_seis_entao_toma_nove_infeliz_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/nove/pediu_seis_entao_toma_nove_infeliz_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/nove/pediu_seis_entao_toma_nove_infeliz_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/nove/pediu_seis_entao_toma_nove_infeliz_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/nove/pediu_seis_entao_toma_nove_infeliz_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/nove/pediu_seis_entao_toma_nove_infeliz_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/nove/pediu_seis_entao_toma_nove_infeliz_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/nove/pediu_seis_entao_toma_nove_infeliz_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/nove/pediu_seis_entao_toma_nove_infeliz_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/nove/pediu_seis_entao_toma_nove_infeliz_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/nove/pediu_seis_entao_toma_nove_infeliz_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/nove/pediu_seis_entao_toma_nove_infeliz_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "doze_002",
+      "event": "doze",
+      "text": "AQUI É DOZE, MEU FILHO! DOZE!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/doze/aqui_e_doze_meu_filho_doze_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/doze/aqui_e_doze_meu_filho_doze_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/doze/aqui_e_doze_meu_filho_doze_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/doze/aqui_e_doze_meu_filho_doze_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/doze/aqui_e_doze_meu_filho_doze_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/doze/aqui_e_doze_meu_filho_doze_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/doze/aqui_e_doze_meu_filho_doze_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/doze/aqui_e_doze_meu_filho_doze_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/doze/aqui_e_doze_meu_filho_doze_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/doze/aqui_e_doze_meu_filho_doze_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/doze/aqui_e_doze_meu_filho_doze_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/doze/aqui_e_doze_meu_filho_doze_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/doze/aqui_e_doze_meu_filho_doze_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/doze/aqui_e_doze_meu_filho_doze_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/doze/aqui_e_doze_meu_filho_doze_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/doze/aqui_e_doze_meu_filho_doze_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/doze/aqui_e_doze_meu_filho_doze_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/doze/aqui_e_doze_meu_filho_doze_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "seis_003",
+      "event": "seis",
+      "text": "SEIS, SEU PÉ DE CHINELO!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/seis/seis_seu_pe_de_chinelo_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/seis/seis_seu_pe_de_chinelo_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/seis/seis_seu_pe_de_chinelo_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/seis/seis_seu_pe_de_chinelo_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/seis/seis_seu_pe_de_chinelo_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/seis/seis_seu_pe_de_chinelo_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/seis/seis_seu_pe_de_chinelo_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/seis/seis_seu_pe_de_chinelo_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/seis/seis_seu_pe_de_chinelo_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/seis/seis_seu_pe_de_chinelo_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/seis/seis_seu_pe_de_chinelo_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/seis/seis_seu_pe_de_chinelo_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/seis/seis_seu_pe_de_chinelo_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/seis/seis_seu_pe_de_chinelo_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/seis/seis_seu_pe_de_chinelo_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/seis/seis_seu_pe_de_chinelo_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/seis/seis_seu_pe_de_chinelo_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/seis/seis_seu_pe_de_chinelo_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nove_003",
+      "event": "nove",
+      "text": "NOVE! QUERO VER SE TEM CORAGEM!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/nove/nove_quero_ver_se_tem_coragem_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/nove/nove_quero_ver_se_tem_coragem_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/nove/nove_quero_ver_se_tem_coragem_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/nove/nove_quero_ver_se_tem_coragem_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/nove/nove_quero_ver_se_tem_coragem_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/nove/nove_quero_ver_se_tem_coragem_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/nove/nove_quero_ver_se_tem_coragem_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/nove/nove_quero_ver_se_tem_coragem_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/nove/nove_quero_ver_se_tem_coragem_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/nove/nove_quero_ver_se_tem_coragem_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/nove/nove_quero_ver_se_tem_coragem_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/nove/nove_quero_ver_se_tem_coragem_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/nove/nove_quero_ver_se_tem_coragem_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/nove/nove_quero_ver_se_tem_coragem_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/nove/nove_quero_ver_se_tem_coragem_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/nove/nove_quero_ver_se_tem_coragem_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/nove/nove_quero_ver_se_tem_coragem_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/nove/nove_quero_ver_se_tem_coragem_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "provocacao_001",
+      "event": "provocacao",
+      "text": "CÊ JOGA TRUCO OU TÁ APRENDENDO A CONTAR?",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/provocacao/ce_joga_truco_ou_ta_aprendendo_a_contar_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/provocacao/ce_joga_truco_ou_ta_aprendendo_a_contar_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/provocacao/ce_joga_truco_ou_ta_aprendendo_a_contar_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/provocacao/ce_joga_truco_ou_ta_aprendendo_a_contar_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/provocacao/ce_joga_truco_ou_ta_aprendendo_a_contar_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/provocacao/ce_joga_truco_ou_ta_aprendendo_a_contar_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/provocacao/ce_joga_truco_ou_ta_aprendendo_a_contar_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/provocacao/ce_joga_truco_ou_ta_aprendendo_a_contar_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/provocacao/ce_joga_truco_ou_ta_aprendendo_a_contar_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/provocacao/ce_joga_truco_ou_ta_aprendendo_a_contar_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/provocacao/ce_joga_truco_ou_ta_aprendendo_a_contar_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/provocacao/ce_joga_truco_ou_ta_aprendendo_a_contar_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/provocacao/ce_joga_truco_ou_ta_aprendendo_a_contar_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/provocacao/ce_joga_truco_ou_ta_aprendendo_a_contar_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/provocacao/ce_joga_truco_ou_ta_aprendendo_a_contar_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/provocacao/ce_joga_truco_ou_ta_aprendendo_a_contar_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/provocacao/ce_joga_truco_ou_ta_aprendendo_a_contar_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/provocacao/ce_joga_truco_ou_ta_aprendendo_a_contar_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "provocacao_002",
+      "event": "provocacao",
+      "text": "ESSA CARTA AÍ NUM MATA NEM MOSQUITO!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/provocacao/essa_carta_ai_num_mata_nem_mosquito_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/provocacao/essa_carta_ai_num_mata_nem_mosquito_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/provocacao/essa_carta_ai_num_mata_nem_mosquito_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/provocacao/essa_carta_ai_num_mata_nem_mosquito_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/provocacao/essa_carta_ai_num_mata_nem_mosquito_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/provocacao/essa_carta_ai_num_mata_nem_mosquito_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/provocacao/essa_carta_ai_num_mata_nem_mosquito_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/provocacao/essa_carta_ai_num_mata_nem_mosquito_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/provocacao/essa_carta_ai_num_mata_nem_mosquito_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/provocacao/essa_carta_ai_num_mata_nem_mosquito_01"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/provocacao/essa_carta_ai_num_mata_nem_mosquito_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/provocacao/essa_carta_ai_num_mata_nem_mosquito_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/provocacao/essa_carta_ai_num_mata_nem_mosquito_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/provocacao/essa_carta_ai_num_mata_nem_mosquito_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/provocacao/essa_carta_ai_num_mata_nem_mosquito_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/provocacao/essa_carta_ai_num_mata_nem_mosquito_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/provocacao/essa_carta_ai_num_mata_nem_mosquito_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "provocacao_003",
+      "event": "provocacao",
+      "text": "MINHA VÓ JOGA MELHOR QUE VOCÊ, RAPAZ!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/provocacao/minha_vo_joga_melhor_que_voce_rapaz_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/provocacao/minha_vo_joga_melhor_que_voce_rapaz_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/provocacao/minha_vo_joga_melhor_que_voce_rapaz_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/provocacao/minha_vo_joga_melhor_que_voce_rapaz_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/provocacao/minha_vo_joga_melhor_que_voce_rapaz_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/provocacao/minha_vo_joga_melhor_que_voce_rapaz_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/provocacao/minha_vo_joga_melhor_que_voce_rapaz_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/provocacao/minha_vo_joga_melhor_que_voce_rapaz_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/provocacao/minha_vo_joga_melhor_que_voce_rapaz_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/provocacao/minha_vo_joga_melhor_que_voce_rapaz_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/provocacao/minha_vo_joga_melhor_que_voce_rapaz_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/provocacao/minha_vo_joga_melhor_que_voce_rapaz_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/provocacao/minha_vo_joga_melhor_que_voce_rapaz_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/provocacao/minha_vo_joga_melhor_que_voce_rapaz_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/provocacao/minha_vo_joga_melhor_que_voce_rapaz_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/provocacao/minha_vo_joga_melhor_que_voce_rapaz_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/provocacao/minha_vo_joga_melhor_que_voce_rapaz_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/provocacao/minha_vo_joga_melhor_que_voce_rapaz_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "provocacao_004",
+      "event": "provocacao",
+      "text": "Ô MÃO RUIM DA DESGRAÇA!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/provocacao/o_mao_ruim_da_desgraca_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/provocacao/o_mao_ruim_da_desgraca_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/provocacao/o_mao_ruim_da_desgraca_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/provocacao/o_mao_ruim_da_desgraca_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/provocacao/o_mao_ruim_da_desgraca_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/provocacao/o_mao_ruim_da_desgraca_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/provocacao/o_mao_ruim_da_desgraca_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/provocacao/o_mao_ruim_da_desgraca_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/provocacao/o_mao_ruim_da_desgraca_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/provocacao/o_mao_ruim_da_desgraca_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/provocacao/o_mao_ruim_da_desgraca_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/provocacao/o_mao_ruim_da_desgraca_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/provocacao/o_mao_ruim_da_desgraca_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/provocacao/o_mao_ruim_da_desgraca_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/provocacao/o_mao_ruim_da_desgraca_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/provocacao/o_mao_ruim_da_desgraca_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/provocacao/o_mao_ruim_da_desgraca_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/provocacao/o_mao_ruim_da_desgraca_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "provocacao_005",
+      "event": "provocacao",
+      "text": "CÊ TÁ COM MEDO? CHAMA SUA MÃE!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/provocacao/ce_ta_com_medo_chama_sua_mae_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/provocacao/ce_ta_com_medo_chama_sua_mae_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/provocacao/ce_ta_com_medo_chama_sua_mae_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/provocacao/ce_ta_com_medo_chama_sua_mae_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/provocacao/ce_ta_com_medo_chama_sua_mae_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/provocacao/ce_ta_com_medo_chama_sua_mae_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/provocacao/ce_ta_com_medo_chama_sua_mae_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/provocacao/ce_ta_com_medo_chama_sua_mae_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/provocacao/ce_ta_com_medo_chama_sua_mae_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/provocacao/ce_ta_com_medo_chama_sua_mae_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/provocacao/ce_ta_com_medo_chama_sua_mae_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/provocacao/ce_ta_com_medo_chama_sua_mae_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/provocacao/ce_ta_com_medo_chama_sua_mae_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/provocacao/ce_ta_com_medo_chama_sua_mae_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/provocacao/ce_ta_com_medo_chama_sua_mae_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/provocacao/ce_ta_com_medo_chama_sua_mae_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/provocacao/ce_ta_com_medo_chama_sua_mae_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/provocacao/ce_ta_com_medo_chama_sua_mae_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "provocacao_006",
+      "event": "provocacao",
+      "text": "TÁ TREMENDO POR QUÊ, FILHO?",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/provocacao/ta_tremendo_por_que_filho_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/provocacao/ta_tremendo_por_que_filho_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/provocacao/ta_tremendo_por_que_filho_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/provocacao/ta_tremendo_por_que_filho_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/provocacao/ta_tremendo_por_que_filho_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/provocacao/ta_tremendo_por_que_filho_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/provocacao/ta_tremendo_por_que_filho_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/provocacao/ta_tremendo_por_que_filho_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/provocacao/ta_tremendo_por_que_filho_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/provocacao/ta_tremendo_por_que_filho_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/provocacao/ta_tremendo_por_que_filho_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/provocacao/ta_tremendo_por_que_filho_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/provocacao/ta_tremendo_por_que_filho_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/provocacao/ta_tremendo_por_que_filho_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/provocacao/ta_tremendo_por_que_filho_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/provocacao/ta_tremendo_por_que_filho_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/provocacao/ta_tremendo_por_que_filho_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/provocacao/ta_tremendo_por_que_filho_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "provocacao_007",
+      "event": "provocacao",
+      "text": "VAI CORRER? ENTÃO CORRE DIREITO!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/provocacao/vai_correr_entao_corre_direito_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/provocacao/vai_correr_entao_corre_direito_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/provocacao/vai_correr_entao_corre_direito_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/provocacao/vai_correr_entao_corre_direito_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/provocacao/vai_correr_entao_corre_direito_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/provocacao/vai_correr_entao_corre_direito_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/provocacao/vai_correr_entao_corre_direito_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/provocacao/vai_correr_entao_corre_direito_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/provocacao/vai_correr_entao_corre_direito_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/provocacao/vai_correr_entao_corre_direito_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/provocacao/vai_correr_entao_corre_direito_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/provocacao/vai_correr_entao_corre_direito_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/provocacao/vai_correr_entao_corre_direito_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/provocacao/vai_correr_entao_corre_direito_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/provocacao/vai_correr_entao_corre_direito_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/provocacao/vai_correr_entao_corre_direito_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/provocacao/vai_correr_entao_corre_direito_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/provocacao/vai_correr_entao_corre_direito_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "provocacao_008",
+      "event": "provocacao",
+      "text": "ISSO AQUI É TRUCO, NÃO É REUNIÃO DE CONDOMÍNIO!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/provocacao/isso_aqui_e_truco_nao_e_reuniao_de_condominio_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/provocacao/isso_aqui_e_truco_nao_e_reuniao_de_condominio_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/provocacao/isso_aqui_e_truco_nao_e_reuniao_de_condominio_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/provocacao/isso_aqui_e_truco_nao_e_reuniao_de_condominio_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/provocacao/isso_aqui_e_truco_nao_e_reuniao_de_condominio_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/provocacao/isso_aqui_e_truco_nao_e_reuniao_de_condominio_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/provocacao/isso_aqui_e_truco_nao_e_reuniao_de_condominio_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/provocacao/isso_aqui_e_truco_nao_e_reuniao_de_condominio_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/provocacao/isso_aqui_e_truco_nao_e_reuniao_de_condominio_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/provocacao/isso_aqui_e_truco_nao_e_reuniao_de_condominio_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/provocacao/isso_aqui_e_truco_nao_e_reuniao_de_condominio_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/provocacao/isso_aqui_e_truco_nao_e_reuniao_de_condominio_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/provocacao/isso_aqui_e_truco_nao_e_reuniao_de_condominio_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/provocacao/isso_aqui_e_truco_nao_e_reuniao_de_condominio_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/provocacao/isso_aqui_e_truco_nao_e_reuniao_de_condominio_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/provocacao/isso_aqui_e_truco_nao_e_reuniao_de_condominio_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/provocacao/isso_aqui_e_truco_nao_e_reuniao_de_condominio_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/provocacao/isso_aqui_e_truco_nao_e_reuniao_de_condominio_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "vitoria_001",
+      "event": "vitoria",
+      "text": "CHUPAAAA, DESGRAÇADO!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/vitoria/chupaaaa_desgracado_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/vitoria/chupaaaa_desgracado_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/vitoria/chupaaaa_desgracado_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/vitoria/chupaaaa_desgracado_01"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/vitoria/chupaaaa_desgracado_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/vitoria/chupaaaa_desgracado_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/vitoria/chupaaaa_desgracado_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/vitoria/chupaaaa_desgracado_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/vitoria/chupaaaa_desgracado_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/vitoria/chupaaaa_desgracado_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/vitoria/chupaaaa_desgracado_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/vitoria/chupaaaa_desgracado_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/vitoria/chupaaaa_desgracado_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/vitoria/chupaaaa_desgracado_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/vitoria/chupaaaa_desgracado_01"
+          },
+          {
+            "variant": 3,
+            "file": "ze/vitoria/chupaaaa_desgracado_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "vitoria_002",
+      "event": "vitoria",
+      "text": "AQUI TEM CARTA, MEU PATRÃO!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/vitoria/aqui_tem_carta_meu_patrao_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/vitoria/aqui_tem_carta_meu_patrao_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/vitoria/aqui_tem_carta_meu_patrao_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/vitoria/aqui_tem_carta_meu_patrao_01"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/vitoria/aqui_tem_carta_meu_patrao_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/vitoria/aqui_tem_carta_meu_patrao_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/vitoria/aqui_tem_carta_meu_patrao_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/vitoria/aqui_tem_carta_meu_patrao_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/vitoria/aqui_tem_carta_meu_patrao_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/vitoria/aqui_tem_carta_meu_patrao_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/vitoria/aqui_tem_carta_meu_patrao_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/vitoria/aqui_tem_carta_meu_patrao_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/vitoria/aqui_tem_carta_meu_patrao_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/vitoria/aqui_tem_carta_meu_patrao_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/vitoria/aqui_tem_carta_meu_patrao_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/vitoria/aqui_tem_carta_meu_patrao_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/vitoria/aqui_tem_carta_meu_patrao_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "vitoria_003",
+      "event": "vitoria",
+      "text": "RESPEITA O PAI, RAPAZ!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/vitoria/respeita_o_pai_rapaz_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/vitoria/respeita_o_pai_rapaz_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/vitoria/respeita_o_pai_rapaz_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/vitoria/respeita_o_pai_rapaz_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/vitoria/respeita_o_pai_rapaz_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/vitoria/respeita_o_pai_rapaz_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/vitoria/respeita_o_pai_rapaz_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/vitoria/respeita_o_pai_rapaz_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/vitoria/respeita_o_pai_rapaz_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/vitoria/respeita_o_pai_rapaz_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/vitoria/respeita_o_pai_rapaz_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/vitoria/respeita_o_pai_rapaz_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/vitoria/respeita_o_pai_rapaz_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/vitoria/respeita_o_pai_rapaz_02"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/vitoria/respeita_o_pai_rapaz_01"
+          },
+          {
+            "variant": 3,
+            "file": "ze/vitoria/respeita_o_pai_rapaz_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "vitoria_004",
+      "event": "vitoria",
+      "text": "É O TREM! É O TREM!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/vitoria/e_o_trem_e_o_trem_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/vitoria/e_o_trem_e_o_trem_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/vitoria/e_o_trem_e_o_trem_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/vitoria/e_o_trem_e_o_trem_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/vitoria/e_o_trem_e_o_trem_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/vitoria/e_o_trem_e_o_trem_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/vitoria/e_o_trem_e_o_trem_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/vitoria/e_o_trem_e_o_trem_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/vitoria/e_o_trem_e_o_trem_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/vitoria/e_o_trem_e_o_trem_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/vitoria/e_o_trem_e_o_trem_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/vitoria/e_o_trem_e_o_trem_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/vitoria/e_o_trem_e_o_trem_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/vitoria/e_o_trem_e_o_trem_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/vitoria/e_o_trem_e_o_trem_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/vitoria/e_o_trem_e_o_trem_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/vitoria/e_o_trem_e_o_trem_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/vitoria/e_o_trem_e_o_trem_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "vitoria_005",
+      "event": "vitoria",
+      "text": "ESSA FOI PRA ACABAR COM A AMIZADE!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/vitoria/essa_foi_pra_acabar_com_a_amizade_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/vitoria/essa_foi_pra_acabar_com_a_amizade_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/vitoria/essa_foi_pra_acabar_com_a_amizade_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/vitoria/essa_foi_pra_acabar_com_a_amizade_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/vitoria/essa_foi_pra_acabar_com_a_amizade_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/vitoria/essa_foi_pra_acabar_com_a_amizade_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/vitoria/essa_foi_pra_acabar_com_a_amizade_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/vitoria/essa_foi_pra_acabar_com_a_amizade_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/vitoria/essa_foi_pra_acabar_com_a_amizade_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/vitoria/essa_foi_pra_acabar_com_a_amizade_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/vitoria/essa_foi_pra_acabar_com_a_amizade_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/vitoria/essa_foi_pra_acabar_com_a_amizade_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/vitoria/essa_foi_pra_acabar_com_a_amizade_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/vitoria/essa_foi_pra_acabar_com_a_amizade_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/vitoria/essa_foi_pra_acabar_com_a_amizade_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/vitoria/essa_foi_pra_acabar_com_a_amizade_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/vitoria/essa_foi_pra_acabar_com_a_amizade_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/vitoria/essa_foi_pra_acabar_com_a_amizade_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "vitoria_006",
+      "event": "vitoria",
+      "text": "PODE CHORAR QUE HOJE EU TÔ SEM LENÇO!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/vitoria/pode_chorar_que_hoje_eu_to_sem_lenco_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/vitoria/pode_chorar_que_hoje_eu_to_sem_lenco_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/vitoria/pode_chorar_que_hoje_eu_to_sem_lenco_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/vitoria/pode_chorar_que_hoje_eu_to_sem_lenco_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/vitoria/pode_chorar_que_hoje_eu_to_sem_lenco_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/vitoria/pode_chorar_que_hoje_eu_to_sem_lenco_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/vitoria/pode_chorar_que_hoje_eu_to_sem_lenco_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/vitoria/pode_chorar_que_hoje_eu_to_sem_lenco_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/vitoria/pode_chorar_que_hoje_eu_to_sem_lenco_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/vitoria/pode_chorar_que_hoje_eu_to_sem_lenco_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/vitoria/pode_chorar_que_hoje_eu_to_sem_lenco_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/vitoria/pode_chorar_que_hoje_eu_to_sem_lenco_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/vitoria/pode_chorar_que_hoje_eu_to_sem_lenco_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/vitoria/pode_chorar_que_hoje_eu_to_sem_lenco_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/vitoria/pode_chorar_que_hoje_eu_to_sem_lenco_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/vitoria/pode_chorar_que_hoje_eu_to_sem_lenco_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/vitoria/pode_chorar_que_hoje_eu_to_sem_lenco_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/vitoria/pode_chorar_que_hoje_eu_to_sem_lenco_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "vitoria_007",
+      "event": "vitoria",
+      "text": "É TRUCO, NÃO É PRA QUALQUER UM!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/vitoria/e_truco_nao_e_pra_qualquer_um_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/vitoria/e_truco_nao_e_pra_qualquer_um_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/vitoria/e_truco_nao_e_pra_qualquer_um_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/vitoria/e_truco_nao_e_pra_qualquer_um_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/vitoria/e_truco_nao_e_pra_qualquer_um_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/vitoria/e_truco_nao_e_pra_qualquer_um_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/vitoria/e_truco_nao_e_pra_qualquer_um_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/vitoria/e_truco_nao_e_pra_qualquer_um_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/vitoria/e_truco_nao_e_pra_qualquer_um_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/vitoria/e_truco_nao_e_pra_qualquer_um_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/vitoria/e_truco_nao_e_pra_qualquer_um_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/vitoria/e_truco_nao_e_pra_qualquer_um_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/vitoria/e_truco_nao_e_pra_qualquer_um_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/vitoria/e_truco_nao_e_pra_qualquer_um_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/vitoria/e_truco_nao_e_pra_qualquer_um_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/vitoria/e_truco_nao_e_pra_qualquer_um_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/vitoria/e_truco_nao_e_pra_qualquer_um_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/vitoria/e_truco_nao_e_pra_qualquer_um_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "vitoria_008",
+      "event": "vitoria",
+      "text": "EU AVISEI, SEU ANIMAL!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/vitoria/eu_avisei_seu_animal_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/vitoria/eu_avisei_seu_animal_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/vitoria/eu_avisei_seu_animal_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/vitoria/eu_avisei_seu_animal_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/vitoria/eu_avisei_seu_animal_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/vitoria/eu_avisei_seu_animal_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/vitoria/eu_avisei_seu_animal_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/vitoria/eu_avisei_seu_animal_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/vitoria/eu_avisei_seu_animal_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/vitoria/eu_avisei_seu_animal_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/vitoria/eu_avisei_seu_animal_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/vitoria/eu_avisei_seu_animal_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/vitoria/eu_avisei_seu_animal_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/vitoria/eu_avisei_seu_animal_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/vitoria/eu_avisei_seu_animal_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/vitoria/eu_avisei_seu_animal_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/vitoria/eu_avisei_seu_animal_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/vitoria/eu_avisei_seu_animal_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "derrota_001",
+      "event": "derrota",
+      "text": "AH, VAI TOMAR BANHO, RAPAZ!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/derrota/ah_vai_tomar_banho_rapaz_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/derrota/ah_vai_tomar_banho_rapaz_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/derrota/ah_vai_tomar_banho_rapaz_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/derrota/ah_vai_tomar_banho_rapaz_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/derrota/ah_vai_tomar_banho_rapaz_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/derrota/ah_vai_tomar_banho_rapaz_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 2,
+            "file": "juninho/derrota/ah_vai_tomar_banho_rapaz_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/derrota/ah_vai_tomar_banho_rapaz_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/derrota/ah_vai_tomar_banho_rapaz_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/derrota/ah_vai_tomar_banho_rapaz_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/derrota/ah_vai_tomar_banho_rapaz_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/derrota/ah_vai_tomar_banho_rapaz_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/derrota/ah_vai_tomar_banho_rapaz_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/derrota/ah_vai_tomar_banho_rapaz_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/derrota/ah_vai_tomar_banho_rapaz_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/derrota/ah_vai_tomar_banho_rapaz_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/derrota/ah_vai_tomar_banho_rapaz_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "derrota_002",
+      "event": "derrota",
+      "text": "NÃO É POSSÍVEL UMA DESGRAÇA DESSA!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/derrota/nao_e_possivel_uma_desgraca_dessa_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/derrota/nao_e_possivel_uma_desgraca_dessa_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/derrota/nao_e_possivel_uma_desgraca_dessa_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/derrota/nao_e_possivel_uma_desgraca_dessa_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/derrota/nao_e_possivel_uma_desgraca_dessa_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/derrota/nao_e_possivel_uma_desgraca_dessa_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/derrota/nao_e_possivel_uma_desgraca_dessa_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/derrota/nao_e_possivel_uma_desgraca_dessa_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/derrota/nao_e_possivel_uma_desgraca_dessa_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/derrota/nao_e_possivel_uma_desgraca_dessa_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/derrota/nao_e_possivel_uma_desgraca_dessa_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/derrota/nao_e_possivel_uma_desgraca_dessa_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/derrota/nao_e_possivel_uma_desgraca_dessa_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/derrota/nao_e_possivel_uma_desgraca_dessa_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/derrota/nao_e_possivel_uma_desgraca_dessa_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/derrota/nao_e_possivel_uma_desgraca_dessa_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/derrota/nao_e_possivel_uma_desgraca_dessa_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/derrota/nao_e_possivel_uma_desgraca_dessa_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "derrota_003",
+      "event": "derrota",
+      "text": "Ô PARCEIRO BURRO DA PESTE!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/derrota/o_parceiro_burro_da_peste_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/derrota/o_parceiro_burro_da_peste_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/derrota/o_parceiro_burro_da_peste_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/derrota/o_parceiro_burro_da_peste_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/derrota/o_parceiro_burro_da_peste_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/derrota/o_parceiro_burro_da_peste_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/derrota/o_parceiro_burro_da_peste_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/derrota/o_parceiro_burro_da_peste_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/derrota/o_parceiro_burro_da_peste_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/derrota/o_parceiro_burro_da_peste_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/derrota/o_parceiro_burro_da_peste_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/derrota/o_parceiro_burro_da_peste_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/derrota/o_parceiro_burro_da_peste_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/derrota/o_parceiro_burro_da_peste_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/derrota/o_parceiro_burro_da_peste_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/derrota/o_parceiro_burro_da_peste_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/derrota/o_parceiro_burro_da_peste_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/derrota/o_parceiro_burro_da_peste_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "derrota_004",
+      "event": "derrota",
+      "text": "CÊ TINHA O ZAP E NÃO JOGOU?!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/derrota/ce_tinha_o_zap_e_nao_jogou_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/derrota/ce_tinha_o_zap_e_nao_jogou_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/derrota/ce_tinha_o_zap_e_nao_jogou_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 2,
+            "file": "jessica/derrota/ce_tinha_o_zap_e_nao_jogou_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/derrota/ce_tinha_o_zap_e_nao_jogou_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/derrota/ce_tinha_o_zap_e_nao_jogou_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/derrota/ce_tinha_o_zap_e_nao_jogou_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/derrota/ce_tinha_o_zap_e_nao_jogou_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/derrota/ce_tinha_o_zap_e_nao_jogou_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/derrota/ce_tinha_o_zap_e_nao_jogou_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/derrota/ce_tinha_o_zap_e_nao_jogou_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/derrota/ce_tinha_o_zap_e_nao_jogou_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/derrota/ce_tinha_o_zap_e_nao_jogou_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/derrota/ce_tinha_o_zap_e_nao_jogou_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/derrota/ce_tinha_o_zap_e_nao_jogou_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/derrota/ce_tinha_o_zap_e_nao_jogou_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/derrota/ce_tinha_o_zap_e_nao_jogou_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "derrota_005",
+      "event": "derrota",
+      "text": "EU VOU EMBORA DESSA MESA!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/derrota/eu_vou_embora_dessa_mesa_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/derrota/eu_vou_embora_dessa_mesa_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/derrota/eu_vou_embora_dessa_mesa_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 2,
+            "file": "jessica/derrota/eu_vou_embora_dessa_mesa_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/derrota/eu_vou_embora_dessa_mesa_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/derrota/eu_vou_embora_dessa_mesa_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/derrota/eu_vou_embora_dessa_mesa_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/derrota/eu_vou_embora_dessa_mesa_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/derrota/eu_vou_embora_dessa_mesa_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/derrota/eu_vou_embora_dessa_mesa_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/derrota/eu_vou_embora_dessa_mesa_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/derrota/eu_vou_embora_dessa_mesa_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/derrota/eu_vou_embora_dessa_mesa_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/derrota/eu_vou_embora_dessa_mesa_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/derrota/eu_vou_embora_dessa_mesa_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/derrota/eu_vou_embora_dessa_mesa_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/derrota/eu_vou_embora_dessa_mesa_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "derrota_006",
+      "event": "derrota",
+      "text": "ESSE BARALHO TÁ MARCADO, SÓ PODE!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/derrota/esse_baralho_ta_marcado_so_pode_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/derrota/esse_baralho_ta_marcado_so_pode_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/derrota/esse_baralho_ta_marcado_so_pode_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 1,
+            "file": "jessica/derrota/esse_baralho_ta_marcado_so_pode_01"
+          },
+          {
+            "variant": 2,
+            "file": "jessica/derrota/esse_baralho_ta_marcado_so_pode_02"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/derrota/esse_baralho_ta_marcado_so_pode_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/derrota/esse_baralho_ta_marcado_so_pode_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/derrota/esse_baralho_ta_marcado_so_pode_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/derrota/esse_baralho_ta_marcado_so_pode_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/derrota/esse_baralho_ta_marcado_so_pode_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/derrota/esse_baralho_ta_marcado_so_pode_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/derrota/esse_baralho_ta_marcado_so_pode_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/derrota/esse_baralho_ta_marcado_so_pode_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/derrota/esse_baralho_ta_marcado_so_pode_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/derrota/esse_baralho_ta_marcado_so_pode_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/derrota/esse_baralho_ta_marcado_so_pode_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/derrota/esse_baralho_ta_marcado_so_pode_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "derrota_007",
+      "event": "derrota",
+      "text": "NUNCA MAIS JOGO COM ESSE INFELIZ!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/derrota/nunca_mais_jogo_com_esse_infeliz_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/derrota/nunca_mais_jogo_com_esse_infeliz_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/derrota/nunca_mais_jogo_com_esse_infeliz_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 2,
+            "file": "jessica/derrota/nunca_mais_jogo_com_esse_infeliz_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/derrota/nunca_mais_jogo_com_esse_infeliz_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/derrota/nunca_mais_jogo_com_esse_infeliz_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/derrota/nunca_mais_jogo_com_esse_infeliz_02"
+          },
+          {
+            "variant": 3,
+            "file": "juninho/derrota/nunca_mais_jogo_com_esse_infeliz_03"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/derrota/nunca_mais_jogo_com_esse_infeliz_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/derrota/nunca_mais_jogo_com_esse_infeliz_02"
+          },
+          {
+            "variant": 3,
+            "file": "tiao/derrota/nunca_mais_jogo_com_esse_infeliz_03"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/derrota/nunca_mais_jogo_com_esse_infeliz_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/derrota/nunca_mais_jogo_com_esse_infeliz_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/derrota/nunca_mais_jogo_com_esse_infeliz_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/derrota/nunca_mais_jogo_com_esse_infeliz_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/derrota/nunca_mais_jogo_com_esse_infeliz_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/derrota/nunca_mais_jogo_com_esse_infeliz_03"
+          }
+        ]
+      }
+    },
+    {
+      "id": "derrota_008",
+      "event": "derrota",
+      "text": "QUE JOGO DESGRAÇADO, SÔ!",
+      "takes": {
+        "dona_cida": [
+          {
+            "variant": 1,
+            "file": "dona_cida/derrota/que_jogo_desgracado_so_01"
+          },
+          {
+            "variant": 2,
+            "file": "dona_cida/derrota/que_jogo_desgracado_so_02"
+          },
+          {
+            "variant": 3,
+            "file": "dona_cida/derrota/que_jogo_desgracado_so_03"
+          }
+        ],
+        "jessica": [
+          {
+            "variant": 2,
+            "file": "jessica/derrota/que_jogo_desgracado_so_02"
+          },
+          {
+            "variant": 3,
+            "file": "jessica/derrota/que_jogo_desgracado_so_03"
+          }
+        ],
+        "juninho": [
+          {
+            "variant": 1,
+            "file": "juninho/derrota/que_jogo_desgracado_so_01"
+          },
+          {
+            "variant": 2,
+            "file": "juninho/derrota/que_jogo_desgracado_so_02"
+          }
+        ],
+        "tiao": [
+          {
+            "variant": 1,
+            "file": "tiao/derrota/que_jogo_desgracado_so_01"
+          },
+          {
+            "variant": 2,
+            "file": "tiao/derrota/que_jogo_desgracado_so_02"
+          }
+        ],
+        "tonhao": [
+          {
+            "variant": 1,
+            "file": "tonhao/derrota/que_jogo_desgracado_so_01"
+          },
+          {
+            "variant": 2,
+            "file": "tonhao/derrota/que_jogo_desgracado_so_02"
+          },
+          {
+            "variant": 3,
+            "file": "tonhao/derrota/que_jogo_desgracado_so_03"
+          }
+        ],
+        "ze": [
+          {
+            "variant": 1,
+            "file": "ze/derrota/que_jogo_desgracado_so_01"
+          },
+          {
+            "variant": 2,
+            "file": "ze/derrota/que_jogo_desgracado_so_02"
+          },
+          {
+            "variant": 3,
+            "file": "ze/derrota/que_jogo_desgracado_so_03"
+          }
+        ]
+      }
+    }
+  ]
+}

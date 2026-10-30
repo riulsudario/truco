@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Revisão das vozes</title>
+<style>
+  :root {
+    --bg: #f6f3ee; --panel: #fff; --ink: #1f1b16; --muted: #6b6359; --line: #e2dbd0;
+    --ok: #1f7a3d; --ok-bg: #e3f3e8; --bad: #a3262a; --bad-bg: #f8e2e2; --warn: #8a5a00;
+    --accent: #b5541b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #17140f; --panel: #221e18; --ink: #efe8dc; --muted: #a59b8c; --line: #3a332a;
+      --ok: #7fd49a; --ok-bg: #1d3325; --bad: #f09a9a; --bad-bg: #3a1f1f; --warn: #e3b25c;
+      --accent: #f08a4b;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.45 system-ui, sans-serif; background: var(--bg); color: var(--ink); }
+  header { position: sticky; top: 0; z-index: 2; background: var(--bg); border-bottom: 1px solid var(--line);
+    padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+  h1 { font-size: 16px; margin: 0 8px 0 0; }
+  label { display: flex; gap: 6px; align-items: center; color: var(--muted); }
+  select, input[type=search] { font: inherit; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px;
+    background: var(--panel); color: var(--ink); max-width: 260px; }
+  .tabs button { font: inherit; border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+    padding: 4px 10px; cursor: pointer; }
+  .tabs button:first-child { border-radius: 6px 0 0 6px; } .tabs button:last-child { border-radius: 0 6px 6px 0; }
+  .tabs button[aria-pressed=true] { background: var(--ink); color: var(--bg); }
+  .stats { margin-left: auto; color: var(--muted); }
+  main { padding: 16px; display: grid; gap: 12px; }
+  .group { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+  .group h2 { margin: 0 0 2px; font-size: 15px; }
+  .meta { color: var(--muted); font-size: 12px; }
+  .takes { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin-top: 10px; }
+  .take { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; display: grid; gap: 6px; }
+  .take.approved { border-color: var(--ok); background: var(--ok-bg); }
+  .take.rejected { border-color: var(--bad); background: var(--bad-bg); opacity: .75; }
+  .take .head { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; }
+  .take audio { width: 100%; height: 34px; }
+  .actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .actions button { font: inherit; font-size: 13px; padding: 3px 8px; border-radius: 6px; cursor: pointer;
+    border: 1px solid var(--line); background: var(--panel); color: var(--ink); }
+  .actions button.on.ok { background: var(--ok); color: var(--panel); border-color: var(--ok); }
+  .actions button.on.bad { background: var(--bad); color: var(--panel); border-color: var(--bad); }
+  .actions button.on.best { background: var(--accent); color: var(--panel); border-color: var(--accent); }
+  .warn { color: var(--warn); font-size: 12px; }
+  details { font-size: 12px; color: var(--muted); }
+  details pre { margin: 4px 0 0; white-space: pre-wrap; }
+  .grid { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; background: var(--panel); border-radius: 10px; }
+  th, td { border: 1px solid var(--line); padding: 8px; vertical-align: top; text-align: left; }
+  td .take { min-width: 220px; }
+  .empty { color: var(--muted); padding: 40px; text-align: center; }
+  kbd { border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; font-size: 11px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Revisão das vozes</h1>
+  <div class="tabs" role="group">
+    <button data-view="list" aria-pressed="true">Por fala</button>
+    <button data-view="compare" aria-pressed="false">Comparar vozes</button>
+  </div>
+  <label>Origem <select id="root"></select></label>
+  <label>Personagem <select id="character"></select></label>
+  <label>Categoria/estilo <select id="folder"></select></label>
+  <label>Fala <select id="line"></select></label>
+  <label>Status <select id="status">
+    <option value="">todos</option><option value="pending">pendentes</option>
+    <option value="approved">aprovadas</option><option value="rejected">rejeitadas</option>
+  </select></label>
+  <label><input type="checkbox" id="processed"> ouvir tratado</label>
+  <span class="stats" id="stats"></span>
+</header>
+<main id="main"><div class="empty">Carregando…</div></main>
+<script>
+const state = { view: 'list', data: null }
+const $ = (id) => document.getElementById(id)
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
+
+async function load() {
+  state.data = await (await fetch('/api/catalog')).json()
+  const roots = Object.entries(state.data.roots).filter(([r]) => state.data.takes.some((t) => t.root === r))
+  fill('root', roots.map(([id, name]) => [id, name]), false)
+  refreshFilters()
+  render()
+}
+
+function fill(id, options, withAll = true) {
+  const el = $(id), prev = el.value
+  el.innerHTML = (withAll ? '<option value="">todos</option>' : '') +
+    options.map(([v, l]) => `<option value="${esc(v)}">${esc(l)}</option>`).join('')
+  if ([...el.options].some((o) => o.value === prev)) el.value = prev
+}
+
+function refreshFilters() {
+  const inRoot = state.data.takes.filter((t) => t.root === $('root').value)
+  const chars = [...new Set(inRoot.map((t) => t.character))]
+  fill('character', chars.map((c) => [c, state.data.characters[c] ?? c]))
+  const folders = [...new Set(inRoot.map(folderOf))]
+  fill('folder', folders.map((f) => [f, state.data.categories[f]?.name ?? f]))
+  const lineIds = new Set(inRoot.map((t) => t.line_id))
+  fill('line', state.data.lines.filter((l) => lineIds.has(l.id)).map((l) => [l.id, `${l.number}. ${l.text}`]),
+    state.view !== 'compare')
+}
+
+const folderOf = (t) => t.style ?? t.category
+function filtered() {
+  return state.data.takes.filter((t) =>
+    t.root === $('root').value &&
+    (!$('character').value || t.character === $('character').value || state.view === 'compare') &&
+    (!$('folder').value || folderOf(t) === $('folder').value) &&
+    (!$('line').value || t.line_id === $('line').value) &&
+    (!$('status').value || t.status === $('status').value))
+}
+
+function takeCard(t) {
+  const src = $('processed').checked && t.processed ? t.processed : t.path
+  const asr = t.asr ? `<div class="meta">ouvido pelo Whisper: “${esc(t.asr.text)}” (${Math.round(t.asr.cer * 100)}% de diferença)</div>` : ''
+  const warn = t.warnings.map((w) => `<div class="warn">⚠ ${esc(w)}</div>`).join('')
+  const spoken = t.spoken_text !== t.text ? `<div class="meta">texto falado: ${esc(t.spoken_text)}</div>` : ''
+  return `<div class="take ${t.status}" data-path="${esc(t.path)}">
+    <div class="head"><strong>#${t.variant}${t.style ? ' · ' + esc(t.style) : ''}</strong>
+      <span class="meta">${t.duration_s.toFixed(1)}s${t.processed ? ' · tratado' : ''}</span></div>
+    <audio controls preload="none" src="/audio/${encodeURI(src)}"></audio>
+    ${spoken}${asr}${warn}
+    <div class="actions">
+      <button class="ok ${t.status === 'approved' ? 'on' : ''}" data-act="approved">✓ aprovar</button>
+      <button class="bad ${t.status === 'rejected' ? 'on' : ''}" data-act="rejected">✗ rejeitar</button>
+      <button class="best ${t.best ? 'on' : ''}" data-act="best">★ melhor</button>
+    </div>
+    <details><summary>parâmetros</summary><pre>${esc(JSON.stringify({ ...t.params, seed: t.seed, model: t.model, reference: t.reference }, null, 1))}</pre></details>
+  </div>`
+}
+
+function render() {
+  const takes = filtered()
+  const total = state.data.takes.filter((t) => t.root === $('root').value)
+  const approved = total.filter((t) => t.status === 'approved').length
+  const rejected = total.filter((t) => t.status === 'rejected').length
+  $('stats').textContent = `${total.length} tomadas · ${approved} aprovadas · ${rejected} rejeitadas`
+  if (!takes.length) { $('main').innerHTML = '<div class="empty">Nada com esses filtros.</div>'; return }
+  $('main').innerHTML = state.view === 'list' ? renderList(takes) : renderCompare(takes)
+}
+
+function renderList(takes) {
+  const groups = new Map()
+  for (const t of takes) {
+    const key = `${t.character}|${t.line_id}|${folderOf(t)}`
+    if (!groups.has(key)) groups.set(key, [])
+    groups.get(key).push(t)
+  }
+  return [...groups.values()].map((g) => {
+    const t = g[0]
+    return `<section class="group"><h2>${esc(t.text)}</h2>
+      <div class="meta">${esc(state.data.characters[t.character] ?? t.character)} · ${esc(folderOf(t))} · ${esc(t.line_id)}</div>
+      <div class="takes">${g.sort((a, b) => a.variant - b.variant).map(takeCard).join('')}</div></section>`
+  }).join('')
+}
+
+function renderCompare(takes) {
+  // Uma fala por vez: linhas = personagens, colunas = variações (ou estilos na fase B).
+  const lineId = $('line').value || takes[0].line_id
+  const subset = takes.filter((t) => t.line_id === lineId)
+  const chars = [...new Set(subset.map((t) => t.character))]
+  const cols = [...new Set(subset.map((t) => (t.style ? t.style : `#${t.variant}`)))]
+  const line = state.data.lines.find((l) => l.id === lineId)
+  const cell = (c, col) => subset.filter((t) => t.character === c && (t.style ? t.style : `#${t.variant}`) === col).map(takeCard).join('')
+  return `<section class="group"><h2>${esc(line?.text)}</h2><div class="meta">mesma fala em todas as vozes</div></section>
+    <div class="grid"><table><thead><tr><th>Voz</th>${cols.map((c) => `<th>${esc(c)}</th>`).join('')}</tr></thead>
+    <tbody>${chars.map((c) => `<tr><th>${esc(state.data.characters[c] ?? c)}</th>${cols.map((col) => `<td>${cell(c, col)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`
+}
+
+document.addEventListener('click', async (e) => {
+  const tab = e.target.closest('[data-view]')
+  if (tab) {
+    state.view = tab.dataset.view
+    document.querySelectorAll('[data-view]').forEach((b) => b.setAttribute('aria-pressed', String(b === tab)))
+    refreshFilters(); render(); return
+  }
+  const btn = e.target.closest('[data-act]')
+  if (!btn) return
+  const path = btn.closest('.take').dataset.path
+  const take = state.data.takes.find((t) => t.path === path)
+  const act = btn.dataset.act
+  const body = act === 'best' ? { path, best: !take.best }
+    : { path, status: take.status === act ? 'pending' : act }
+  const res = await fetch('/api/review', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+  if (!res.ok) { alert((await res.json()).error); return }
+  await load()
+})
+
+// Tocar uma toca só: pausa as outras.
+document.addEventListener('play', (e) => {
+  document.querySelectorAll('audio').forEach((a) => { if (a !== e.target) a.pause() })
+}, true)
+
+for (const id of ['root']) $(id).addEventListener('change', () => { refreshFilters(); render() })
+for (const id of ['character', 'folder', 'line', 'status', 'processed']) $(id).addEventListener('change', render)
+load()
+</script>
+</body>
+</html>
