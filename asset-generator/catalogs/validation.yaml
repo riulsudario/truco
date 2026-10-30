@@ -1,0 +1,115 @@
+# Phase 1: six assets that must look like they belong to the same game.
+# Scale comes from reference A: a bar stool spans one floor square and the pool
+# table 3x6 squares, so a square is ~0.42 m. Round 1 used a 32 px tile and was
+# rejected as too low on detail, so round 2 doubles it: a 64 px tile holds 2x2
+# ceramic squares (32 px each, ~76 px per metre).
+catalog: validation
+assets:
+  - id: wooden_truco_table
+    name: Wooden Truco Table
+    category: furniture
+    style: world_topdown
+    kind: sprite
+    description: >
+      Square rustic wooden table for a Brazilian truco game, viewed from a
+      top-down 3/4 perspective.
+    prompt: >
+      one small square rustic wooden table, tabletop as wide as it is deep,
+      dark brown planks, four thick legs, seen from above at 45 degrees,
+      nothing on the tabletop
+    negative: long table, rectangular table, bench, stool, chairs, bottles, cups, food
+    # ~0.8 m wide, about two chairs across
+    target_size: {width: 80, height: 72}
+    transparent: true
+    anchor: bottom_center
+    variants: [clean]
+    generation: {candidates: 3, max_retries: 3}
+
+  - id: wooden_chair
+    name: Wooden Bar Chair
+    category: furniture
+    style: world_topdown
+    kind: sprite
+    description: Simple Brazilian boteco wooden chair, same scale and view as the table.
+    # Generated facing right; the scene mirrors it for the other side of the table.
+    prompt: >
+      a simple wooden bar chair with a tall backrest, brown wood, four legs,
+      side view facing right
+    negative: table, stool, several chairs, armchair
+    target_size: {width: 40, height: 64}
+    transparent: true
+    anchor: bottom_center
+    generation: {candidates: 3, max_retries: 3}
+
+  - id: tropical_plant
+    name: Tropical Plant
+    category: decorations
+    style: world_topdown
+    kind: sprite
+    description: Ornamental tropical plant in a clay pot.
+    prompt: >
+      a lush detailed tropical plant with big green leaves in a terracotta
+      clay pot, potted plant
+    negative: several plants, tree, flowers
+    target_size: {width: 56, height: 80}
+    transparent: true
+    anchor: bottom_center
+    generation: {candidates: 3, max_retries: 3}
+
+  - id: terracotta_floor
+    name: Terracotta Ceramic Floor
+    category: environment
+    style: world_topdown
+    kind: tile
+    description: Seamless terracotta ceramic floor tile.
+    prompt: >
+      seamless texture of terracotta ceramic floor, a grid of 2 by 2 large
+      square clay tiles with thin dark grout lines, worn reddish orange
+      tiles, flat top-down view, clean and simple, uniform colour, minimal
+      texture
+    negative: pebbles, stones, rocks, cobblestone, gravel, dirt, noise, cracks, debris, leaves
+    target_size: {width: 64, height: 64}
+    transparent: false
+    anchor: top_left
+    # The reference crops are full of furniture; a light touch keeps only the tones.
+    generation: {candidates: 3, max_retries: 3, ip_weight: 0.3}
+
+  - id: character_male
+    name: Male Patron
+    category: characters
+    style: world_topdown
+    kind: sprite
+    description: Adult man in casual boteco clothes, compatible with the map view.
+    prompt: >
+      full body adult brazilian man standing, facing the viewer, short dark
+      hair, wearing a light blue t-shirt, dark shorts, flip-flops, both arms
+      relaxed at his sides, empty hands, detailed game character sprite
+    negative: >-
+      child, kid, baby, chibi, big head, back view, several people, shirtless,
+      bare chest, bag, holding objects, props, accessories
+    # ~1.7 m tall, 1.75 tiles
+    target_size: {width: 48, height: 112}
+    transparent: true
+    anchor: bottom_center
+    # The reference has no people; a high weight pushes props onto the body.
+    generation: {candidates: 3, max_retries: 3, ip_weight: 0.45}
+
+  - id: character_female
+    name: Female Patron
+    category: characters
+    style: world_topdown
+    kind: sprite
+    description: Adult woman, same scale and detail as the male character.
+    prompt: >
+      full body adult brazilian woman standing, facing the viewer, long
+      curly dark hair, yellow sleeveless blouse, blue jeans, sandals, both
+      arms relaxed at her sides, empty hands, detailed game character sprite
+    negative: >-
+      child, kid, baby, chibi, big head, back view, several people, extra
+      limbs, missing arm, bag, purse, holding objects, props, accessories,
+      floating items
+    target_size: {width: 48, height: 112}
+    transparent: true
+    anchor: bottom_center
+    # The reference has no people; a high weight pushes props onto the body.
+    generation: {candidates: 3, max_retries: 3, ip_weight: 0.45}

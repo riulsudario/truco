@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+.pytest_cache/
+# ComfyUI checkout and custom nodes; versions are pinned in config/settings.yaml.
+comfyui/
+# Generated images and the state database are reproducible from the metadata.
+output/
+# Style references are supplied locally (see README); not redistributed.
+references/

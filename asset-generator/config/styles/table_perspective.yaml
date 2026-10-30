@@ -1,0 +1,47 @@
+# Visual profile for the match scene (reference B): first-person view at the
+# table. Not used in phase 1; it exists so the two perspectives never share a
+# profile. Generation settings are inherited from the same model stack.
+id: table_perspective
+reference: references/table.png
+
+perspective: frontal first-person view seated at the table, depth towards the back wall
+lighting: warm hanging lamp above the table, light from the top-center, soft falloff to the walls
+detail: high detail foreground (table, cards), lower detail background
+logical_resolution: {width: 480, height: 270}
+
+prompt:
+  prefix: pixel art, detailed 16-bit game scene element, front view from a seated player, brazilian boteco bar
+  sprite_prefix: single isolated object, centered, full object visible
+  suffix: warm lamp light, dark wood, green felt, crisp dark outline, limited color palette
+  tile_suffix: seamless tileable texture, flat
+  negative: >-
+    photo, photorealistic, 3d render, blurry, text, watermark, signature,
+    frame, border, cropped, top-down view, isometric, jpeg artifacts, low
+    quality, deformed
+
+generation:
+  checkpoint: sd_xl_base_1.0.safetensors
+  vae: sdxl_vae_fp16_fix.safetensors
+  loras:
+    - {name: pixel-art-xl.safetensors, strength: 1.0}
+    - {name: lcm-lora-sdxl.safetensors, strength: 1.0}
+  steps: 8
+  cfg: 1.5
+  sampler: lcm
+  scheduler: sgm_uniform
+  seed_salt: table_perspective-v1
+
+ip_adapter:
+  model: ip-adapter-plus_sdxl_vit-h.safetensors
+  clip_vision: CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors
+  weight_type: style transfer
+  weight: 0.8
+
+palette:
+  file: config/styles/table_perspective.palette.json
+  size: 48
+  extra: []
+
+outline: {enabled: true, color: auto}
+shadow: {keep: true, alpha: 110}
+processing: {padding: 1, alpha_threshold: 128, shadow_min_alpha: 40, min_island_ratio: 0.01}

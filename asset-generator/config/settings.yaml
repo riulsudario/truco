@@ -1,0 +1,37 @@
+comfyui:
+  dir: comfyui
+  host: 127.0.0.1
+  port: 8188
+  # Pinned so a fresh checkout reproduces the same graph behaviour.
+  commit: b5a432157de6b8884f81104cd02926adf4d597e4
+  custom_nodes:
+    ComfyUI_IPAdapter_plus:
+      url: https://github.com/cubiq/ComfyUI_IPAdapter_plus
+      commit: a0f451a5113cf9becb0847b92884cb10cbdec0ef
+    ComfyUI-layerdiffuse:
+      url: https://github.com/huchenlei/ComfyUI-layerdiffuse
+      commit: b4f6a9e024064a4489f774a8b91049ce0b606ea3
+    ComfyUI-seamless-tiling:
+      url: https://github.com/spinagon/ComfyUI-seamless-tiling
+      commit: 9225ed5d2293c8cad25a11385ffe681e9b349f14
+  # Seconds to wait for the server to come up and for one prompt to finish.
+  startup_timeout: 180
+  prompt_timeout: 900
+  extra_args: ["--preview-method", "none"]
+
+generation:
+  # One prompt at a time: SDXL + IP-Adapter + LayerDiffuse already fills 8 GB.
+  sequential: true
+  width: 1024
+  height: 1024
+  # Unload models from VRAM when a batch ends so the GPU is free for other work.
+  unload_after_batch: true
+
+paths:
+  output: output
+  state_db: output/state.db
+  comfy_input_subdir: assetgen
+
+preview:
+  host: 127.0.0.1
+  port: 8765

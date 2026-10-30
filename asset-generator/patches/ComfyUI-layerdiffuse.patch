@@ -1,0 +1,31 @@
+diff --git a/layered_diffusion.py b/layered_diffusion.py
+index 5ffc79b..98b9049 100644
+--- a/layered_diffusion.py
++++ b/layered_diffusion.py
+@@ -127,9 +127,10 @@ class LayeredDiffusionDecodeRGBA(LayeredDiffusionDecode):
+     RETURN_TYPES = ("IMAGE",)
+ 
+     def decode(self, samples, images, sd_version: str, sub_batch_size: int):
+-        image, mask = super().decode(samples, images, sd_version, sub_batch_size)
+-        alpha = 1.0 - mask
+-        return JoinImageWithAlpha().join_image_with_alpha(image, alpha)
++        # decode() returns the decoder's alpha channel as is; the old
++        # JoinImageWithAlpha inverted it twice, so no inversion here.
++        image, alpha = super().decode(samples, images, sd_version, sub_batch_size)
++        return (torch.cat((image[..., :3], alpha.unsqueeze(-1)), dim=-1),)
+ 
+ 
+ class LayeredDiffusionDecodeSplit(LayeredDiffusionDecodeRGBA):
+@@ -256,6 +257,12 @@ class LayeredDiffusionBase:
+             file_name=self.model_file_name,
+         )
+         def pad_diff_weight(v):
++            # ComfyUI dropped the ("lora", [up, down, alpha, mid, ...]) tuple
++            # patch format; current versions expect a LoRAAdapter instance.
++            if len(v) == 2 and v[0] == "lora":
++                from comfy.weight_adapter.lora import LoRAAdapter
++                w = v[1]
++                return LoRAAdapter(set(), (w[0], w[1], w[2], w[3], w[4], None))
+             if len(v) == 1:
+                 return ("diff", [v[0], {"pad_weight": True}])
+             elif len(v) == 2 and v[0] == "diff":

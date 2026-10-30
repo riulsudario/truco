@@ -1,0 +1,58 @@
+{
+  "sdxl_base": {
+    "repo": "stabilityai/stable-diffusion-xl-base-1.0",
+    "file": "sd_xl_base_1.0.safetensors",
+    "path": "/home/riul/.cache/huggingface/hub/blobs/3d/3d6f740fa52572e1071b8ecb7c5f8a8e2cbef596a51121102877bd9900078891",
+    "sha256": "31e35c80fc4829d14f90153f4c74cd59c90b779f6afe05a74cd6120b893f7e5b",
+    "license": "CreativeML OpenRAIL++-M"
+  },
+  "sdxl_vae_fp16": {
+    "repo": "madebyollin/sdxl-vae-fp16-fix",
+    "file": "sdxl_vae.safetensors",
+    "path": "/home/riul/.cache/huggingface/hub/blobs/d6/d6398c43e7912853c6a2650f2d1687e5278756affe2a98777aeb671b972224f5",
+    "sha256": "235745af8d86bf4a4c1b5b4f529868b37019a10f7c0b2e79ad0abca3a22bc6e1",
+    "license": "MIT"
+  },
+  "pixel_art_lora": {
+    "repo": "nerijs/pixel-art-xl",
+    "file": "pixel-art-xl.safetensors",
+    "path": "/home/riul/.cache/huggingface/hub/blobs/64/642413eec144aa5f6a1ef3b27035acd353a174bec8e3371974636f0d21da487b",
+    "sha256": "4234637cb80c998f41e348e6a6cb6bc20d8d038b2b0f256b6129b3b5e353eef7",
+    "license": "CreativeML OpenRAIL-M"
+  },
+  "lcm_lora": {
+    "repo": "latent-consistency/lcm-lora-sdxl",
+    "file": "pytorch_lora_weights.safetensors",
+    "path": "/home/riul/.cache/huggingface/hub/blobs/66/660d96a395d6bb8ea43307d7e65a16417441253d65df5dcab53fd8ee4170b213",
+    "sha256": "a764e6859b6e04047cd761c08ff0cee96413a8e004c9f07707530cd776b19141",
+    "license": "CreativeML OpenRAIL++-M"
+  },
+  "ipadapter_plus": {
+    "repo": "h94/IP-Adapter",
+    "file": "sdxl_models/ip-adapter-plus_sdxl_vit-h.safetensors",
+    "path": "/home/riul/.cache/huggingface/hub/blobs/00/001dd46c96ecb6bd9bd6f662b8dfd078e73a79b24746f83048ed17e4424170e5",
+    "sha256": "3f5062b8400c94b7159665b21ba5c62acdcd7682262743d7f2aefedef00e6581",
+    "license": "Apache-2.0"
+  },
+  "clip_vision_h": {
+    "repo": "h94/IP-Adapter",
+    "file": "models/image_encoder/model.safetensors",
+    "path": "/home/riul/.cache/huggingface/hub/blobs/16/1686fef5ab13a4c8dcc32876ef7b557b296cb78ec2f1ec259360ae9135044209",
+    "sha256": "6ca9667da1ca9e0b0f75e46bb030f7e011f44f86cbfb8d5a36590fcd7507b030",
+    "license": "Apache-2.0"
+  },
+  "layerdiffuse_attn": {
+    "repo": "LayerDiffusion/layerdiffusion-v1",
+    "file": "layer_xl_transparent_attn.safetensors",
+    "path": "/home/riul/.cache/huggingface/hub/blobs/e7/e76b97c07e3c6cb6dd305d20267ee198dc85a1ed95781c3093877a1796bef1c1",
+    "sha256": "b7919c5b4837fb64f24c97a7abdf1a9c6e8d60de080a5dae089dde098266df95",
+    "license": "CreativeML OpenRAIL-M"
+  },
+  "layerdiffuse_decoder": {
+    "repo": "LayerDiffusion/layerdiffusion-v1",
+    "file": "vae_transparent_decoder.safetensors",
+    "path": "/home/riul/.cache/huggingface/hub/blobs/13/1387841be8e3f650352865f72805f0a44f9e58111a5b9e92ebc1085e89dc2d5d",
+    "sha256": "59dc8feefe40d26b6cb7186aed7af70c60d94ac4f9db8ebe7f121a01ba27a2fc",
+    "license": "CreativeML OpenRAIL-M"
+  }
+}

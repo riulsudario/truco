@@ -1,0 +1,13 @@
+# Demo scene for phase 1, in logical pixels (8 x 6 tiles of 64 px). Sprites are
+# placed by their anchor (bottom-center), so y is where the object touches the floor.
+width: 512
+height: 384
+floor: terracotta_floor
+objects:
+  - {asset: tropical_plant, x: 48, y: 112}
+  - {asset: tropical_plant, x: 464, y: 112}
+  - {asset: wooden_chair, x: 204, y: 232}
+  - {asset: wooden_chair, x: 308, y: 232, flip: true}
+  - {asset: wooden_truco_table, x: 256, y: 248}
+  - {asset: character_male, x: 168, y: 320}
+  - {asset: character_female, x: 352, y: 328}

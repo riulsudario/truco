@@ -1,0 +1,82 @@
+# Visual profile for the exploration map (reference A). Frozen on approval:
+# `generate.py approve` stores the hash of this file and production refuses to
+# run if it changes afterwards.
+id: world_topdown
+reference: references/world.png
+
+perspective: top-down 3/4 (camera ~45 degrees above, objects show top and front faces)
+lighting: warm night light, main light from the top-left, soft shadows falling to the bottom-right
+detail: medium detail, readable silhouettes at 1x, no single-pixel noise
+# Round 2 (2026-10-30): 64 px tiles; 32 px was rejected as too low on detail.
+logical_resolution: {tile: 64}
+
+prompt:
+  prefix: pixel art, 16-bit RPG game asset, top-down three-quarter view, cozy brazilian boteco bar
+  sprite_prefix: single isolated object, centered, full object visible
+  suffix: warm night lighting, soft shadow, rich warm wood tones, crisp dark outline, limited color palette
+  tile_suffix: seamless tileable texture, flat, uniform lighting, no objects
+  negative: >-
+    photo, photorealistic, 3d render, blurry, smooth gradients, text, letters,
+    watermark, signature, logo, frame, border, cropped, cut off, multiple
+    objects, collage, character sheet, isometric grid, jpeg artifacts, low
+    quality, deformed
+  sprite_negative: >-
+    extra objects, props scattered around, second object, scene, room, floor,
+    background
+  tile_negative: perspective, vanishing point, shadow, furniture, vignette
+
+generation:
+  checkpoint: sd_xl_base_1.0.safetensors
+  vae: sdxl_vae_fp16_fix.safetensors
+  loras:
+    - {name: pixel-art-xl.safetensors, strength: 1.0}
+    - {name: lcm-lora-sdxl.safetensors, strength: 1.0}
+  steps: 8
+  cfg: 1.5
+  sampler: lcm
+  scheduler: sgm_uniform
+  seed_salt: world_topdown-v1
+
+ip_adapter:
+  model: ip-adapter-plus_sdxl_vit-h.safetensors
+  clip_vision: CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors
+  # "style transfer" only feeds the style blocks of SDXL, so the reference's
+  # colours and rendering carry over without copying its layout.
+  weight_type: style transfer
+  # Tuned on 2026-10-30: 0.8 on the whole map leaked content (dirty shirts,
+  # child proportions); square crops at 0.65 keep the warm wood and greens.
+  weight: 0.65
+  start_at: 0.0
+  end_at: 1.0
+  # Square crops of reference A (x0, y0, x1, y1), batched into the adapter:
+  # bar and shelves, patio plants and lamps, pool table on the tiles, entrance.
+  crops:
+    - [640, 110, 1000, 470]
+    - [60, 160, 420, 520]
+    - [900, 330, 1260, 690]
+    - [300, 700, 660, 1060]
+
+palette:
+  # Extracted from the reference by `generate.py palette`; extra colours cover
+  # skin and clothing tones the night scene may not contain.
+  file: config/styles/world_topdown.palette.json
+  size: 40
+  extra: ["#f1c7a3", "#c68a62", "#8d5a3b", "#5a3825", "#e9e2d0", "#3f6fb5", "#e7c23a"]
+
+outline:
+  enabled: true
+  # darkest colour of the palette
+  color: auto
+
+shadow:
+  # Semi-transparent pixels below the object are kept as one flat shadow tone.
+  keep: true
+  alpha: 110
+
+processing:
+  padding: 1
+  alpha_threshold: 128
+  shadow_min_alpha: 40
+  min_island_ratio: 0.01
+  # Floor tiles read as noise with the full palette ("muito poluído" in round 1).
+  tile_max_colours: 8

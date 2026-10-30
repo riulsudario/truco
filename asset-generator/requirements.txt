@@ -1,0 +1,11 @@
+# torch comes from the PyTorch CUDA index; scripts/setup.sh installs it first:
+#   uv pip install torch==2.11.0 torchvision==0.26.0 --index-url https://download.pytorch.org/whl/cu128
+# ComfyUI's own requirements are installed from comfyui/requirements.txt.
+pyyaml>=6
+pillow>=10
+numpy>=1.25
+scipy>=1.11
+huggingface_hub>=0.24
+diffusers>=0.29      # ComfyUI-layerdiffuse
+opencv-python-headless  # ComfyUI-layerdiffuse
+pytest>=8

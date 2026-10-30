@@ -1,0 +1,31 @@
+diff --git a/SeamlessTile.py b/SeamlessTile.py
+index 37ee196..c670fbe 100644
+--- a/SeamlessTile.py
++++ b/SeamlessTile.py
+@@ -92,18 +92,14 @@ class CircularVAEDecode:
+     CATEGORY = "latent"
+ 
+     def decode(self, samples, vae, tiling):
+-        vae_copy = copy.deepcopy(vae)
+-
+-        if tiling == "enable":
+-            make_circular_asymm(vae_copy.first_stage_model, True, True)
+-        elif tiling == "x_only":
+-            make_circular_asymm(vae_copy.first_stage_model, True, False)
+-        elif tiling == "y_only":
+-            make_circular_asymm(vae_copy.first_stage_model, False, True)
+-        else:
+-            make_circular_asymm(vae_copy.first_stage_model, False, False)
+-
+-        result = (vae_copy.decode(samples["samples"]),)
++        # deepcopy of the VAE fails on current ComfyUI (pinned host buffers), so
++        # patch the decoder in place and restore zero padding afterwards.
++        model = vae.first_stage_model
++        make_circular_asymm(model, tiling in ("enable", "x_only"), tiling in ("enable", "y_only"))
++        try:
++            result = (vae.decode(samples["samples"]),)
++        finally:
++            make_circular_asymm(model, False, False)
+         return result
+ 
+ 
