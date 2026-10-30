@@ -41,6 +41,8 @@ export const RoomSettingsSchema = v.object({
   visibility: v.picklist(['public', 'private']),
   password: v.nullable(password),
   difficulty: v.picklist(DIFFICULTIES),
+  /** Whether people can watch without a seat. Rooms created before the option allow it. */
+  spectators: v.optional(v.boolean(), true),
 })
 export type RoomSettings = v.InferOutput<typeof RoomSettingsSchema>
 
@@ -125,6 +127,7 @@ export interface RoomSnapshot {
   visibility: Visibility
   hasPassword: boolean
   difficulty: Difficulty
+  spectators: boolean
   status: RoomStatus
   seats: SeatInfo[]
   players: PlayerInfo[]
@@ -141,6 +144,7 @@ export interface RoomSummary {
   bots: number
   status: RoomStatus
   hasPassword: boolean
+  spectators: boolean
 }
 
 export type RoomError =
@@ -157,6 +161,7 @@ export type RoomError =
   | 'not_seated'
   | 'rate_limited'
   | 'player_not_found'
+  | 'no_spectators'
 
 export type ErrorCode = RoomError | GameError
 

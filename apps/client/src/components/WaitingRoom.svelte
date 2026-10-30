@@ -30,6 +30,7 @@
     visibility: 'public' as Visibility,
     password: '',
     difficulty: 'normal' as Difficulty,
+    spectators: true,
   })
 
   const playerById = (id: string) => room.players.find((p) => p.id === id)
@@ -40,6 +41,7 @@
       visibility: room.visibility,
       password: '',
       difficulty: room.difficulty,
+      spectators: room.spectators,
     }
     editing = true
   }
@@ -52,6 +54,7 @@
         name: form.name.trim() || room.name,
         visibility: form.visibility,
         difficulty: form.difficulty,
+        spectators: form.spectators,
         // An empty field keeps the current password; removing it has its own button.
         ...(form.password.trim() ? { password: form.password.trim() } : {}),
       },
@@ -95,7 +98,9 @@
         {#each [0, 1, 2, 3] as seat (seat)}
           <option value={String(seat)}>{t.moveTo} {seat + 1}</option>
         {/each}
-        <option value="null">{t.watch}</option>
+        {#if room.spectators || player.seat === null}
+          <option value="null">{t.watch}</option>
+        {/if}
       </select>
       <button class="mini" onclick={() => session.send({ t: 'owner', playerId: player.id })}
         >{t.makeOwner}</button
@@ -185,7 +190,9 @@
       <button class="btn" onclick={() => session.send({ t: 'ready', ready: !me.ready })}
         >{me.ready ? `✔ ${t.ready}` : t.notReady}</button
       >
-      <button class="btn" onclick={() => session.send({ t: 'stand' })}>{t.stand}</button>
+      {#if room.spectators}
+        <button class="btn" onclick={() => session.send({ t: 'stand' })}>{t.stand}</button>
+      {/if}
     {/if}
     <TauntBar ontaunt={(id) => session.taunt(id)} />
   </section>
@@ -227,6 +234,17 @@
               <input type="radio" bind:group={form.difficulty} value={id} />{label}
             </label>
           {/each}
+        </div>
+      </fieldset>
+      <fieldset class="field">
+        <legend>{t.allowSpectators}</legend>
+        <div class="chips">
+          <label class="chip" class:on={form.spectators}>
+            <input type="radio" bind:group={form.spectators} value={true} />{t.yesNo.yes}
+          </label>
+          <label class="chip" class:on={!form.spectators}>
+            <input type="radio" bind:group={form.spectators} value={false} />{t.yesNo.no}
+          </label>
         </div>
       </fieldset>
       <label class="field">

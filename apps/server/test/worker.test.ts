@@ -8,6 +8,7 @@ const settings = (patch: Partial<RoomSettings> = {}): RoomSettings => ({
   visibility: 'public',
   password: null,
   difficulty: 'normal',
+  spectators: true,
   ...patch,
 })
 

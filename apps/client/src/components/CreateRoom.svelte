@@ -17,6 +17,7 @@
   let visibility = $state<Visibility>('public')
   let password = $state('')
   let difficulty = $state<Difficulty>('normal')
+  let spectators = $state(true)
   let busy = $state(false)
   let failed = $state<string | null>(null)
 
@@ -29,6 +30,7 @@
       visibility,
       password: password.trim() || null,
       difficulty,
+      spectators,
     }
     try {
       const response = await fetch('/api/rooms', {
@@ -84,6 +86,18 @@
             <input type="radio" bind:group={difficulty} value={id} />{label}
           </label>
         {/each}
+      </div>
+    </fieldset>
+
+    <fieldset class="field">
+      <legend>{t.allowSpectators}</legend>
+      <div class="chips">
+        <label class="chip" class:on={spectators}>
+          <input type="radio" bind:group={spectators} value={true} />{t.yesNo.yes}
+        </label>
+        <label class="chip" class:on={!spectators}>
+          <input type="radio" bind:group={spectators} value={false} />{t.yesNo.no}
+        </label>
       </div>
     </fieldset>
 

@@ -130,6 +130,10 @@ export class RoomCore {
       if (data.settings.password && !isCreator && hello.password !== data.settings.password) {
         return { ok: false, error: 'bad_password' }
       }
+      const free = data.game ? -1 : data.seats.findIndex((s) => s.kind === 'empty')
+      if (free < 0 && !this.spectatorsAllowed && !isCreator) {
+        return { ok: false, error: 'no_spectators' }
+      }
       player = {
         id: this.newId(),
         token: hello.token,
@@ -142,7 +146,6 @@ export class RoomCore {
         lastTauntAt: 0,
       }
       data.players.push(player)
-      const free = data.game ? -1 : data.seats.findIndex((s) => s.kind === 'empty')
       if (free >= 0) this.seatPlayer(player, free as Seat)
       if (isCreator || data.ownerId === null) data.ownerId = player.id
     }
@@ -185,6 +188,7 @@ export class RoomCore {
         return this.sit(player, msg.seat)
       case 'stand':
         if (this.data.game) return this.error(player, 'game_running')
+        if (!this.spectatorsAllowed) return this.error(player, 'no_spectators')
         this.unseat(player)
         return this.broadcastRoom()
     }
@@ -272,6 +276,7 @@ export class RoomCore {
       visibility: data.settings.visibility,
       hasPassword: Boolean(data.settings.password),
       difficulty: data.settings.difficulty,
+      spectators: this.spectatorsAllowed,
       status: data.game ? 'playing' : 'waiting',
       jukebox: data.jukebox ?? { trackId: null, startedAt: null },
       serverTime: this.now(),
@@ -296,7 +301,13 @@ export class RoomCore {
       bots: data.seats.filter((s) => s.kind === 'bot').length,
       status: data.game ? 'playing' : 'waiting',
       hasPassword: Boolean(data.settings.password),
+      spectators: this.spectatorsAllowed,
     }
+  }
+
+  /** Settings stored before the option existed have no flag: those rooms allow watching. */
+  private get spectatorsAllowed(): boolean {
+    return this.data.settings.spectators !== false
   }
 
   // ---- room -----------------------------------------------------------------------------
@@ -322,6 +333,7 @@ export class RoomCore {
     const target = this.player(targetId)
     if (!target) return this.error(owner, 'player_not_found')
     if (seat === null) {
+      if (!this.spectatorsAllowed) return this.error(owner, 'no_spectators')
       this.unseat(target)
       return this.broadcastRoom()
     }

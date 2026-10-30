@@ -8,6 +8,7 @@ const SETTINGS: RoomSettings = {
   visibility: 'public',
   password: null,
   difficulty: 'normal',
+  spectators: true,
 }
 const CREATOR = 'token-of-the-creator-123'
 const token = (n: number) => `token-player-${n}-xxxxxx`
@@ -102,6 +103,41 @@ describe('joining the room', () => {
     const late = join('Latecomer', token(9))
     expect(room.snapshot().players.find((p) => p.id === late)?.seat).toBeNull()
   })
+
+  it('without spectators, only those who get a seat come in, and nobody stands up to watch', () => {
+    setup({ spectators: false })
+    const owner = join('Riul', CREATOR)
+    const ana = join('Ana', token(1))
+    expect(room.snapshot().spectators).toBe(false)
+    room.handle(ana, { t: 'stand' })
+    expect(inbox(room.drain(), ana)).toEqual([{ t: 'error', code: 'no_spectators' }])
+    room.handle(owner, { t: 'move', playerId: ana, seat: null })
+    expect(inbox(room.drain(), owner)).toEqual([{ t: 'error', code: 'no_spectators' }])
+
+    join('Bia', token(2))
+    join('Caio', token(3))
+    expect(room.join({ t: 'hello', nick: 'Dani', token: token(4) })).toEqual({
+      ok: false,
+      error: 'no_spectators',
+    })
+    // A player of the room coming back still gets in, even mid-game.
+    room.handle(owner, { t: 'start' })
+    room.disconnect(ana)
+    expect(join('Ana', token(1))).toBe(ana)
+    expect(room.summary().spectators).toBe(false)
+  })
+
+  it('rooms stored before the option existed allow spectators', () => {
+    const { spectators: _, ...old } = SETTINGS
+    room = new RoomCore(
+      createRoomData('ABCD', old as RoomSettings, CREATOR, 42, clock),
+      () => clock,
+    )
+    join('Riul', CREATOR)
+    room.handle(room.snapshot().ownerId!, { t: 'start' })
+    expect(() => join('Latecomer', token(9))).not.toThrow()
+    expect(room.snapshot().spectators).toBe(true)
+  })
 })
 
 describe('owner powers', () => {
@@ -147,13 +183,15 @@ describe('owner powers', () => {
     expect(room.snapshot().seats[1]).toEqual({ kind: 'empty' })
   })
 
-  it('changes name and visibility', () => {
+  it('changes name, visibility and spectators', () => {
     const owner = join('Riul', CREATOR)
     room.handle(owner, {
       t: 'settings',
       settings: { name: 'Boteco', visibility: 'private' },
     })
     expect(room.snapshot()).toMatchObject({ name: 'Boteco', visibility: 'private' })
+    room.handle(owner, { t: 'settings', settings: { spectators: false } })
+    expect(room.snapshot()).toMatchObject({ name: 'Boteco', spectators: false })
   })
 
   it('closing the room disconnects everyone', () => {

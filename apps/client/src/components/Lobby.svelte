@@ -76,7 +76,9 @@
           <button class="room" onclick={() => onjoin(room.code)}>
             <span class="name">{room.name}{room.hasPassword ? ' 🔒' : ''}</span>
             <span class="meta">
-              {t.people(room.humans)} · {t.bots(room.bots)}
+              {t.people(room.humans)} · {t.bots(room.bots)}{room.spectators
+                ? ''
+                : ` · ${t.noSpectators}`}
             </span>
             <span class="status" class:playing={room.status === 'playing'}>
               {room.status === 'playing' ? t.playing : t.waitingStatus}
