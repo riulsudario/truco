@@ -15,8 +15,6 @@ export type Difficulty = 'easy' | 'normal'
 interface Profile {
   /** Minimum chance of winning the hand to call truco. */
   callTruco: number
-  /** Minimum chance to raise in response to a call. */
-  raise: number
   /** Margin added to the expected-value threshold to accept; the higher, the more timid. */
   caution: number
   /** Probability of bluffing a truco call with an average hand. */
@@ -31,7 +29,6 @@ interface Profile {
 export const PROFILES: Record<Difficulty, Profile> = {
   easy: {
     callTruco: 0.8,
-    raise: 0.92,
     caution: 0.2,
     bluff: 0,
     samples: 30,
@@ -40,7 +37,6 @@ export const PROFILES: Record<Difficulty, Profile> = {
   },
   normal: {
     callTruco: 0.68,
-    raise: 0.82,
     caution: 0.2,
     bluff: 0.06,
     samples: 80,
@@ -90,7 +86,6 @@ function respond(
   const opponentScore = view.scores[1 - teamOf(seat)]!
   // Running gives the current stake to the opponents; if that already ends the game, there is nothing to lose.
   if (opponentScore + current >= WINNING_SCORE) return { type: 'accept', seat }
-  if (view.legal.truco && p >= profile.raise) return { type: 'truco', seat }
 
   // Accepting is worth p·s − (1−p)·s; running is worth −current. Accept when the former is higher.
   const breakEven = (proposed - current) / (2 * proposed)

@@ -133,15 +133,17 @@ describe('truco', () => {
     expect(state.lastHand).toEqual({ winner: 1, points: 1, reason: 'ran' })
   })
 
-  it('raising in response accepts the truco; running afterwards gives 3', () => {
-    const { state } = run(
-      strongTeam0,
-      { type: 'truco', seat: 1 },
-      { type: 'truco', seat: 0 },
-      { type: 'run', seat: 3 },
-      { type: 'run', seat: 1 },
-    )
-    expect(state.scores).toEqual([3, 0])
+  it('nobody raises while answering a call: six only on your turn', () => {
+    const { state } = run(strongTeam0, { type: 'truco', seat: 1 })
+    expect(reduce(state, { type: 'truco', seat: 0 })).toEqual({
+      ok: false,
+      error: 'truco_pending',
+    })
+    const voted = run(state, { type: 'run', seat: 0 }).state
+    expect(reduce(voted, { type: 'truco', seat: 2 })).toEqual({
+      ok: false,
+      error: 'truco_pending',
+    })
   })
 
   it('one partner wanting to run is not enough: the other still decides', () => {
@@ -168,30 +170,24 @@ describe('truco', () => {
     expect(state.hand.truco).toBeNull()
   })
 
-  it('the partner can raise after the other wanted to run', () => {
-    const { state } = run(
-      strongTeam0,
-      { type: 'truco', seat: 1 },
-      { type: 'run', seat: 0 },
-      { type: 'truco', seat: 2 },
-    )
-    expect(state.hand.truco).toEqual({ team: 0, caller: 2, stake: 6, runVotes: [] })
-  })
-
   it('stops at twelve', () => {
     const { state } = run(
       strongTeam0,
       { type: 'truco', seat: 1 },
-      { type: 'truco', seat: 0 },
-      { type: 'truco', seat: 1 },
+      { type: 'accept', seat: 2 },
+      play(1),
       { type: 'truco', seat: 2 },
+      { type: 'accept', seat: 3 },
+      play(2),
+      { type: 'truco', seat: 3 },
+      { type: 'accept', seat: 0 },
+      play(3),
+      { type: 'truco', seat: 0 },
     )
     expect(state.hand.truco?.stake).toBe(12)
-    expect(reduce(state, { type: 'truco', seat: 3 })).toEqual({
-      ok: false,
-      error: 'truco_not_allowed',
-    })
-    const accepted = run(state, { type: 'accept', seat: 1 }, play(1)).state
+    // Seat 2 won the round and leads, but its team already raised to twelve: nothing left.
+    const accepted = run(state, { type: 'accept', seat: 1 }, play(0)).state
+    expect(accepted.hand.stake).toBe(12)
     expect(reduce(accepted, { type: 'truco', seat: 2 })).toEqual({
       ok: false,
       error: 'truco_not_allowed',

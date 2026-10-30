@@ -289,9 +289,7 @@ describe('game', () => {
     expect(room.data.timer?.kind).toBe('act')
     advance(BOT_DECISION_DELAY_MS[1])
     const after = room.data.game!
-    const ranOrAccepted = after.phase !== 'playing' || after.hand.truco === null
-    const raised = after.hand.truco?.team === 0
-    expect(ranOrAccepted || raised).toBe(true)
+    expect(after.phase !== 'playing' || after.hand.truco === null).toBe(true)
     expect(owner).toBeTruthy()
   })
 

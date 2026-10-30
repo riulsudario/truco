@@ -139,11 +139,8 @@ function validate(state: GameState, action: Action): GameError | null {
 
   if (action.type === 'truco') {
     if (hand.kind !== 'normal') return 'truco_not_allowed'
-    if (hand.truco) {
-      if (team === hand.truco.team) return 'not_your_team'
-      if (hand.truco.runVotes.includes(action.seat)) return 'already_voted'
-      return nextStake(hand.truco.stake) === null ? 'truco_not_allowed' : null
-    }
+    // Raising only happens on your turn to play, never as the answer to a call.
+    if (hand.truco) return 'truco_pending'
     if (hand.turn !== action.seat) return 'not_your_turn'
     if (hand.raisedBy === team || nextStake(hand.stake) === null) return 'truco_not_allowed'
     return null
