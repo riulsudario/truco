@@ -1,4 +1,4 @@
-import { BOT_TAUNT_COOLDOWN_MS, decide, tauntReaction } from '@truco/bots'
+import { BOT_TAUNT_COOLDOWN_MS, botDelay, decide, tauntReaction } from '@truco/bots'
 import {
   newGame,
   nextRandom,
@@ -30,7 +30,6 @@ export const TURN_MS = 20_000
 export const NEXT_HAND_MS = 2_600
 /** Extra pause after a round closes, so everyone sees the four cards. */
 export const ROUND_HOLD_MS = 1_300
-export const BOT_DELAY_MS = [450, 950] as const
 /** How long a room whose people all dropped (not left) waits for someone to come back. */
 export const EMPTY_CLOSE_MS = 30_000
 /**
@@ -493,7 +492,7 @@ export class RoomCore {
   }
 
   /**
-   * Decides who acts next and when: a connected human gets a clock, a bot acts right away.
+   * Decides who acts next and when: a connected human gets a clock, a bot acts after a pause.
    * keepClock keeps the running clock when only who is connected has changed.
    */
   private schedule(roundClosed: boolean, keepClock = false): void {
@@ -505,9 +504,8 @@ export class RoomCore {
     } else if (game.phase === 'handOver') {
       this.data.timer = { kind: 'nextHand', at: now + NEXT_HAND_MS }
     } else if (seatsToAct(game).some((seat) => !this.humanAt(seat)?.connected)) {
-      // A bot on turn (or a bot answering truco alongside a human partner) acts right away.
-      const [min, max] = BOT_DELAY_MS
-      this.data.timer = { kind: 'act', at: now + hold + min + this.random() * (max - min) }
+      // A bot on turn (or a bot answering truco alongside a human partner) acts after a pause.
+      this.data.timer = { kind: 'act', at: now + hold + botDelay(game, () => this.random()) }
     } else {
       const keep = keepClock && this.data.timer?.kind === 'timeout' && this.data.timer.at > now
       this.data.timer = keep ? this.data.timer : { kind: 'timeout', at: now + hold + TURN_MS }

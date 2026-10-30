@@ -1,3 +1,4 @@
+import { BOT_DECISION_DELAY_MS, BOT_PLAY_DELAY_MS } from '@truco/bots'
 import { seatsToAct } from '@truco/engine'
 import { DEFAULT_AVATAR, type RoomSettings, type ServerMessage } from '@truco/protocol'
 import { beforeEach, describe, expect, it } from 'vitest'
@@ -251,12 +252,12 @@ describe('game', () => {
     expect(room.data.game).not.toBe(before)
   })
 
-  it('a player disconnected on their turn: the bot takes over right away', () => {
+  it('a player disconnected on their turn: the bot takes over without waiting for the clock', () => {
     const owner = startWithOneHuman()
     advance(10_000)
     room.disconnect(owner)
     expect(room.data.timer?.kind).toBe('act')
-    expect(room.data.timer!.at - clock).toBeLessThan(1_000)
+    expect(room.data.timer!.at - clock).toBeLessThanOrEqual(BOT_PLAY_DELAY_MS[1])
   })
 
   it('actions from someone not seated are rejected', () => {
@@ -286,7 +287,7 @@ describe('game', () => {
     // The human wanted to run; now the bot in seat 2 decides, without waiting 20 s.
     expect(room.data.game!.hand.truco?.runVotes).toEqual([0])
     expect(room.data.timer?.kind).toBe('act')
-    advance(2_000)
+    advance(BOT_DECISION_DELAY_MS[1])
     const after = room.data.game!
     const ranOrAccepted = after.phase !== 'playing' || after.hand.truco === null
     const raised = after.hand.truco?.team === 0

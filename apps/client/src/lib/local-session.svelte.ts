@@ -1,4 +1,10 @@
-import { BOT_TAUNT_COOLDOWN_MS, decide, tauntReaction, type Difficulty } from '@truco/bots'
+import {
+  BOT_TAUNT_COOLDOWN_MS,
+  botDelay,
+  decide,
+  tauntReaction,
+  type Difficulty,
+} from '@truco/bots'
 import {
   createRandom,
   newGame,
@@ -115,7 +121,7 @@ export class LocalSession extends GameSession {
             difficulty: this.difficulty,
           }),
         ),
-      extraDelay + 450 + this.random() * 500,
+      extraDelay + botDelay(state, this.random),
     )
   }
 }
