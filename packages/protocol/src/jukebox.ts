@@ -153,3 +153,9 @@ export function nextTrack(current: TrackId | null): TrackId {
   const index = current ? TRACK_IDS.indexOf(current) : -1
   return TRACK_IDS[(index + 1) % TRACK_IDS.length]!
 }
+
+/** Previous track in the list, wrapping around at the start. */
+export function previousTrack(current: TrackId | null): TrackId {
+  const index = current ? TRACK_IDS.indexOf(current) : 0
+  return TRACK_IDS[(index - 1 + TRACK_IDS.length) % TRACK_IDS.length]!
+}

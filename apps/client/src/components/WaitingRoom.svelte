@@ -5,6 +5,7 @@
   import { t } from '../lib/strings'
   import { AUDIENCE } from '../lib/session.svelte'
   import Jukebox from './Jukebox.svelte'
+  import VolumeMenu from './VolumeMenu.svelte'
   import ShoutText from './ShoutText.svelte'
   import TauntBar from './TauntBar.svelte'
 
@@ -122,7 +123,10 @@
         <button class="mini" onclick={copyLink}>{copied ? t.copied : t.copyLink}</button>
       </p>
     </div>
-    <button class="btn" onclick={() => session.close()}>{t.leave}</button>
+    <div class="header-actions">
+      <VolumeMenu />
+      <button class="btn" onclick={() => session.close()}>{t.leave}</button>
+    </div>
   </header>
 
   <section class="teams">
@@ -285,6 +289,10 @@
     display: flex;
     justify-content: space-between;
     align-items: start;
+    gap: 8px;
+  }
+  .header-actions {
+    display: flex;
     gap: 8px;
   }
   h2 {

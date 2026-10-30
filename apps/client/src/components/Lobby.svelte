@@ -3,12 +3,13 @@
   import { t } from '../lib/strings'
 
   interface Props {
+    nick: string
     onjoin: (code: string) => void
     oncreate: () => void
     onback: () => void
   }
 
-  let { onjoin, oncreate, onback }: Props = $props()
+  let { nick = $bindable(), onjoin, oncreate, onback }: Props = $props()
 
   let rooms = $state<RoomSummary[] | null>(null)
   let code = $state('')
@@ -45,12 +46,17 @@
 
 <main class="lobby">
   <header>
-    <button class="btn" onclick={onback}>← {t.back}</button>
+    <button class="btn" onclick={onback}>{t.backToMenuShort}</button>
     <button class="btn primary" onclick={oncreate}>{t.createRoom}</button>
   </header>
 
+  <label class="field">
+    <span>{t.nickLabel}</span>
+    <input bind:value={nick} maxlength="16" placeholder={t.nickPlaceholder} />
+  </label>
+
   <form class="code" onsubmit={submitCode}>
-    <label for="code">{t.joinByCode}</label>
+    <label for="code"><h2>{t.joinByCode}</h2></label>
     <div class="row">
       <input
         id="code"
@@ -65,50 +71,74 @@
   </form>
 
   <h2>{t.rooms}</h2>
-  {#if rooms === null}
-    <p class="muted">{t.connecting}</p>
-  {:else if rooms.length === 0}
-    <p class="muted">{t.noRooms}</p>
-  {:else}
-    <ul class="rooms">
-      {#each rooms as room (room.code)}
-        <li>
-          <button class="room" onclick={() => onjoin(room.code)}>
-            <span class="name">{room.name}{room.hasPassword ? ' 🔒' : ''}</span>
-            <span class="meta">
-              {t.people(room.humans)} · {t.bots(room.bots)}{room.spectators
-                ? ''
-                : ` · ${t.noSpectators}`}
-            </span>
-            <span class="status" class:playing={room.status === 'playing'}>
-              {room.status === 'playing' ? t.playing : t.waitingStatus}
-            </span>
-          </button>
-        </li>
-      {/each}
-    </ul>
-  {/if}
+  <div class="list">
+    {#if rooms === null}
+      <p class="muted">{t.connecting}</p>
+    {:else if rooms.length === 0}
+      <p class="muted">{t.noRooms}</p>
+    {:else}
+      <ul class="rooms">
+        {#each rooms as room (room.code)}
+          <li>
+            <button class="room" onclick={() => onjoin(room.code)}>
+              <span class="name">{room.name}{room.hasPassword ? ' 🔒' : ''}</span>
+              <span class="meta">
+                {t.people(room.humans)} · {t.bots(room.bots)}{room.spectators
+                  ? ''
+                  : ` · ${t.noSpectators}`}
+              </span>
+              <span class="status" class:playing={room.status === 'playing'}>
+                {room.status === 'playing' ? t.playing : t.waitingStatus}
+              </span>
+            </button>
+          </li>
+        {/each}
+      </ul>
+    {/if}
+  </div>
 </main>
 
 <style>
   .lobby {
     display: grid;
-    gap: 14px;
-    max-width: 480px;
+    gap: 20px;
+    max-width: 900px;
     margin: 0 auto;
-    padding: 16px;
+    padding: clamp(16px, 8vh, 96px) 16px 32px;
   }
   header {
     display: flex;
     justify-content: space-between;
+    gap: 8px;
+  }
+  header :global(.btn) {
+    text-transform: uppercase;
   }
   h2 {
-    margin: 8px 0 0;
+    margin: 12px 0 0;
+    font-family: var(--display);
+    font-size: clamp(14px, 2vw, 20px);
+    font-weight: 400;
     color: var(--gold);
+    text-transform: uppercase;
+  }
+  .code label h2 {
+    margin: 0;
+  }
+  .list {
+    min-height: 240px;
+    max-height: 50vh;
+    overflow-y: auto;
+    background: rgb(0 0 0 / 0.25);
+    border: 3px solid var(--ink);
+    padding: 12px;
+  }
+  .list .muted {
+    margin: 0;
   }
   .code {
     display: grid;
-    gap: 6px;
+    gap: 10px;
   }
   .row {
     display: flex;

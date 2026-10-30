@@ -4,13 +4,13 @@ test.setTimeout(8 * 60_000)
 
 async function enter(page: Page, nick: string) {
   await page.goto('/')
-  await page.getByLabel('Seu apelido').fill(nick)
   await page.getByRole('button', { name: 'Jogar online' }).click()
+  await page.getByLabel('Seu apelido').fill(nick)
 }
 
 /** Makes whatever obvious move is available; returns true if it acted. */
 async function playIfMyTurn(page: Page): Promise<boolean> {
-  for (const name of ['Desce!', 'Jogar']) {
+  for (const name of ['Descer', 'Jogar']) {
     const button = page.getByRole('button', { name, exact: true })
     if (await button.isVisible().catch(() => false)) {
       await button.click().catch(() => {})

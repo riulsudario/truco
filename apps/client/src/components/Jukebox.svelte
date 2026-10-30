@@ -1,8 +1,6 @@
 <script lang="ts">
-  import { JUKEBOX_TRACKS, VOICES, type TrackId, type VoiceId } from '@truco/protocol'
-  import { music } from '../lib/music.svelte'
+  import { JUKEBOX_TRACKS, nextTrack, previousTrack, type TrackId } from '@truco/protocol'
   import type { GameSession } from '../lib/session.svelte'
-  import { sound } from '../lib/sound.svelte'
   import { t } from '../lib/strings'
   import JukeboxTV from './JukeboxTV.svelte'
 
@@ -15,96 +13,91 @@
   let { session, withTv = false }: Props = $props()
 
   let open = $state(false)
-  const VOICE_IDS = Object.keys(VOICES) as VoiceId[]
+  /** Last track played, so play after a pause picks it up again. */
+  let last = $state<TrackId | null>(null)
   const current = $derived(JUKEBOX_TRACKS.find((track) => track.id === session.jukebox.trackId))
+
+  $effect(() => {
+    if (current) last = current.id
+  })
+
+  function cover(youtube: string): string {
+    return `https://i.ytimg.com/vi/${youtube}/mqdefault.jpg`
+  }
 
   function choose(id: TrackId | null) {
     session.chooseTrack(id)
   }
 
-  function next() {
-    const id = session.jukebox.trackId
-    if (id) session.trackEnded(id)
+  // The music is the room's: pausing stops it for everyone and play starts the track over.
+  function toggle() {
+    choose(current ? null : (last ?? nextTrack(null)))
   }
 </script>
 
-<aside class="jukebox" class:playing={!!current}>
-  <header>
-    <button class="toggle" onclick={() => (open = !open)} aria-expanded={open}>
-      🎵 {current ? `${current.title}` : t.jukebox.title}
-    </button>
-  </header>
+{#snippet controls()}
+  <div class="now">
+    <span class="note" aria-hidden="true">♪</span>
+    <div class="what">
+      <b>{current?.title ?? t.jukebox.silence}</b>
+      {#if current}<span>{current.artist}</span>{/if}
+    </div>
+    <div class="buttons">
+      <button
+        class="icon"
+        aria-label={t.jukebox.previous}
+        onclick={() => choose(previousTrack(current?.id ?? last))}>⏮</button
+      >
+      <button class="icon" aria-label={current ? t.jukebox.pause : t.jukebox.play} onclick={toggle}
+        >{current ? '⏸' : '▶'}</button
+      >
+      <button
+        class="icon"
+        aria-label={t.jukebox.next}
+        onclick={() => choose(nextTrack(current?.id ?? last))}>⏭</button
+      >
+    </div>
+  </div>
+{/snippet}
+
+<aside class="jukebox" class:open>
+  {#if open}
+    <header>
+      <h2>{t.jukebox.title}</h2>
+      <button class="icon close" aria-label={t.jukebox.close} onclick={() => (open = false)}
+        >✕</button
+      >
+    </header>
+    <ol class="tracks">
+      {#each JUKEBOX_TRACKS as track (track.id)}
+        <li>
+          <button
+            class:on={track.id === current?.id}
+            aria-pressed={track.id === current?.id}
+            title="{track.title} · {track.artist}"
+            onclick={() => choose(track.id)}
+          >
+            <img src={cover(track.youtube)} alt="" loading="lazy" />
+            <span>{track.title}</span>
+          </button>
+        </li>
+      {/each}
+    </ol>
+    {@render controls()}
+    {#if session.sharedJukebox}<p class="hint">{t.jukebox.shared}</p>{/if}
+  {:else if current}
+    <div class="mini">
+      <button class="opener" aria-label={t.jukebox.open} onclick={() => (open = true)}></button>
+      {@render controls()}
+    </div>
+  {:else}
+    <button class="btn closed" onclick={() => (open = true)}>♪ {t.jukebox.title}</button>
+  {/if}
 
   {#if withTv}
     <!-- Without the bar TV the player lives here, visible (200×200) while playing. -->
     <div class="own-tv" class:hidden={!current}>
       <JukeboxTV {session} width={200} height={200} />
-    </div>
-  {/if}
-
-  {#if open}
-    <div class="panel">
-      {#if current}
-        <p class="now">{current.artist}</p>
-        <div class="row">
-          <button class="mini" onclick={() => choose(null)}>⏹ {t.jukebox.stop}</button>
-          <button class="mini" onclick={next}>⏭ {t.jukebox.next}</button>
-        </div>
-      {/if}
-      <ol class="tracks">
-        {#each JUKEBOX_TRACKS as track (track.id)}
-          <li>
-            <button class:on={track.id === current?.id} onclick={() => choose(track.id)}>
-              <b>{track.title}</b> <span>{track.artist}</span>
-            </button>
-          </li>
-        {/each}
-      </ol>
-      <label class="slider">
-        {t.jukebox.music}
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value={music.volume}
-          oninput={(e) => music.setVolume(Number(e.currentTarget.value))}
-        />
-      </label>
-      <label class="slider">
-        {t.jukebox.effects}
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.05"
-          value={sound.volume}
-          oninput={(e) => sound.setVolume(Number(e.currentTarget.value))}
-        />
-      </label>
-      <label class="slider">
-        {t.jukebox.voices}
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.05"
-          value={sound.voiceVolume}
-          oninput={(e) => sound.setVoiceVolume(Number(e.currentTarget.value))}
-        />
-      </label>
-      <fieldset class="voices">
-        <legend>{t.jukebox.mutedVoices}</legend>
-        {#each VOICE_IDS as id (id)}
-          <label>
-            <input
-              type="checkbox"
-              checked={!sound.mutedVoices.includes(id)}
-              onchange={() => sound.toggleVoice(id)}
-            />{VOICES[id].label}
-          </label>
-        {/each}
-      </fieldset>
-      {#if session.sharedJukebox}<p class="hint">{t.jukebox.shared}</p>{/if}
     </div>
   {/if}
 </aside>
@@ -113,32 +106,156 @@
   .jukebox {
     position: fixed;
     left: 16px;
-    top: 200px;
+    top: 16px;
     z-index: 20;
-    width: 220px;
-    background: rgb(0 0 0 / 0.65);
-    border: 3px solid var(--ink);
-    box-shadow: 3px 3px 0 var(--ink);
-    padding: 6px;
     display: grid;
-    gap: 6px;
+    gap: 8px;
     font-size: 14px;
   }
-  .toggle {
-    width: 100%;
-    font: inherit;
-    text-align: left;
+  .jukebox.open,
+  .mini {
+    width: 320px;
+    background: rgb(26 20 35 / 0.92);
+    border: 3px solid var(--ink);
+    box-shadow: 4px 4px 0 rgb(0 0 0 / 0.5);
+  }
+  .jukebox.open {
+    padding: 10px;
+  }
+  .closed {
+    font-size: 15px;
+    padding: 10px 16px;
+    text-transform: uppercase;
+  }
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  h2 {
+    margin: 0;
+    font-family: var(--display);
+    font-size: 13px;
+    font-weight: 400;
     color: var(--gold);
+  }
+  .tracks {
+    list-style: none;
+    margin: 0;
+    padding: 0 4px 0 0;
+    max-height: 270px;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .tracks button {
+    width: 100%;
+    display: grid;
+    gap: 4px;
+    font: inherit;
+    font-size: 12px;
+    color: var(--paper);
+    background: var(--panel);
+    border: 2px solid var(--ink);
+    padding: 4px;
+    cursor: pointer;
+  }
+  .tracks img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+    background: var(--ink);
+  }
+  .tracks span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+  }
+  .tracks button:hover {
+    border-color: var(--paper);
+  }
+  .tracks button.on {
+    background: var(--gold);
+    color: var(--ink);
+    border-color: var(--gold);
+  }
+  .mini {
+    position: relative;
+  }
+  /* The whole mini player opens the panel, except its buttons, which sit above. */
+  .opener {
+    position: absolute;
+    inset: 0;
     background: none;
     border: 0;
     cursor: pointer;
+  }
+  .now {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    background: var(--panel);
+    border: 2px solid var(--ink);
+  }
+  .mini .now {
+    border: 0;
+    background: none;
+  }
+  .note {
+    font-size: 22px;
+    color: var(--gold);
+  }
+  .what {
+    flex: 1;
+    min-width: 0;
+    display: grid;
+  }
+  .what b,
+  .what span {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  .what b {
+    font-weight: 400;
+  }
+  .what span {
+    font-size: 12px;
+    opacity: 0.7;
+  }
+  .buttons {
+    position: relative;
+    display: flex;
+    gap: 2px;
+  }
+  .icon {
+    font: inherit;
+    font-size: 16px;
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    color: var(--paper);
+    background: none;
+    border: 2px solid transparent;
+    cursor: pointer;
+  }
+  .icon:hover,
+  .icon:focus-visible {
+    border-color: var(--paper);
+  }
+  .hint {
+    margin: 0;
+    font-size: 12px;
+    text-align: center;
+    opacity: 0.7;
+  }
   .own-tv {
     width: 206px;
-    margin: 0 auto;
     border: 3px solid var(--ink);
   }
   /* With no music the player sits off screen but mounted (the API needs the element). */
@@ -146,84 +263,18 @@
     position: absolute;
     left: -9999px;
   }
-  .panel {
-    display: grid;
-    gap: 6px;
-  }
-  .now {
-    margin: 0;
-    opacity: 0.8;
-  }
-  .row {
-    display: flex;
-    gap: 6px;
-  }
-  .mini {
-    font: inherit;
-    font-size: 12px;
-    padding: 2px 6px;
-    border: 2px solid var(--ink);
-    background: var(--paper);
-    color: var(--ink);
-    cursor: pointer;
-  }
-  .tracks {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    max-height: 220px;
-    overflow-y: auto;
-    display: grid;
-    gap: 2px;
-  }
-  .tracks button {
-    width: 100%;
-    text-align: left;
-    font: inherit;
-    font-size: 13px;
-    color: var(--paper);
-    background: var(--panel);
-    border: 2px solid var(--ink);
-    padding: 3px 6px;
-    cursor: pointer;
-  }
-  .tracks button.on {
-    background: var(--gold);
-    color: var(--ink);
-  }
-  .tracks span {
-    display: block;
-    font-size: 11px;
-    opacity: 0.75;
-  }
-  .slider {
-    display: grid;
-    gap: 2px;
-    font-size: 12px;
-  }
-  .voices {
-    margin: 0;
-    padding: 2px 4px;
-    border: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    font-size: 12px;
-  }
-  .voices legend {
-    padding: 0;
-  }
-  .hint {
-    margin: 0;
-    font-size: 11px;
-    opacity: 0.7;
-  }
   /* Phone in portrait: bottom corner, over the table. */
   @media (max-aspect-ratio: 5/4), (max-width: 759px) {
     .jukebox {
       top: auto;
       left: auto;
       right: 8px;
-      bottom: 72px;
+      bottom: 8px;
+      justify-items: end;
+    }
+    .jukebox.open,
+    .mini {
+      width: min(320px, calc(100vw - 16px));
     }
   }
 </style>

@@ -7,9 +7,11 @@ export const t = {
   subtitle: 'baralho limpo',
   nickLabel: 'Seu apelido',
   nickPlaceholder: 'Ex.: Zé da Esquina',
-  practice: 'Treino contra bots',
+  practice: 'Partida local',
+  howToPlay: 'Como jogar?',
+  backToMenuShort: 'Voltar para o menu',
   online: 'Jogar online',
-  rooms: 'Salas abertas',
+  rooms: 'Lista de salas abertas',
   noRooms: 'Nenhuma sala pública agora. Crie a sua!',
   createRoom: 'Criar sala',
   joinByCode: 'Entrar com código',
@@ -110,7 +112,9 @@ export const t = {
   hide: 'Encobrir',
   yourTurn: 'Sua vez',
   waiting: (name: string) => `Vez de ${name}`,
-  accept: 'Desce!',
+  isPlaying: 'está jogando',
+  isDeciding: 'está decidindo',
+  accept: 'Descer',
   run: 'Correr',
   elevenTitle: 'Mão de onze!',
   elevenHint: 'Veja as cartas do parceiro. Jogar vale 3; correr dá 1 para eles.',
@@ -118,6 +122,7 @@ export const t = {
   elevenRun: 'Correr',
   iron: 'Mão de ferro: às cegas!',
   trucoAgainstUs: (stake: number) => `Pediram ${stakeName(stake)}!`,
+  called: (stake: number) => `pediu ${stakeName(stake)}!`,
   partnerWantsToRun: (name: string) => `${name} quer correr. Pra correr, os dois têm que querer.`,
   waitingPartnerRun: (name: string) => `Você quer correr. Esperando ${name} decidir.`,
   handWon: (points: number) => `Nós levamos ${points} ${points === 1 ? 'ponto' : 'pontos'}`,
@@ -132,7 +137,7 @@ export const t = {
   gameLost: 'Eles ganharam...',
   playAgain: 'Jogar de novo',
   backToMenu: 'Voltar ao início',
-  round: (n: number) => `${n}ª`,
+  round: (n: number) => `${n}ª rodada`,
   log: {
     handStarted: (n: number, kind: 'normal' | 'eleven' | 'iron') =>
       `Mão ${n}${kind === 'eleven' ? ' (mão de onze)' : kind === 'iron' ? ' (mão de ferro)' : ''}`,
@@ -142,13 +147,60 @@ export const t = {
   logTitle: 'Na mesa',
   jukebox: {
     title: 'Jukebox',
-    stop: 'Parar',
-    next: 'Próxima',
-    music: 'Volume da música',
-    effects: 'Volume dos efeitos',
-    voices: 'Volume das falas',
-    mutedVoices: 'Vozes que falam',
+    silence: 'Nada tocando',
+    open: 'Abrir a jukebox',
+    close: 'Fechar a jukebox',
+    previous: 'Música anterior',
+    pause: 'Pausar',
+    play: 'Tocar',
+    next: 'Próxima música',
     shared: 'A música vale para todo mundo da sala.',
+  },
+  volume: {
+    title: 'Volume',
+    music: 'Música',
+    effects: 'Efeitos',
+    voices: 'Vozes',
+    mute: (channel: string) => `Silenciar ${channel.toLowerCase()}`,
+    unmute: (channel: string) => `Ligar ${channel.toLowerCase()}`,
+  },
+  tutorial: {
+    title: 'Como jogar',
+    close: 'Fechar',
+    sections: [
+      {
+        title: 'A partida',
+        text: 'Duas duplas, com os parceiros sentados frente a frente. Ganha a dupla que fizer 12 pontos primeiro.',
+      },
+      {
+        title: 'As cartas',
+        text: 'Baralho limpo: só Q, J, K, A, 2 e 3. Da mais fraca para a mais forte: Q, J, K, A, 2, 3.',
+      },
+      {
+        title: 'Manilha',
+        text: 'Depois de dar as cartas, uma fica virada na mesa: a vira. A manilha é a carta seguinte a ela (vira 3, manilha Q). As quatro manilhas ganham de todas, nesta ordem: zap (paus), copas, espadas e ouros.',
+      },
+      {
+        title: 'A mão',
+        text: 'Cada um recebe 3 cartas e a mão vale 1 ponto. Leva quem ganhar 2 das 3 rodadas. Se uma rodada empatar (cangou), vale quem ganhou a primeira; se a primeira empatou, decide a seguinte.',
+      },
+      {
+        title: 'Truco',
+        text: 'Na sua vez, você pode pedir truco e a mão passa a valer 3. A outra dupla desce (aceita) ou corre e entrega o valor atual. Para descer basta um parceiro; para correr, os dois. Depois, quem aceitou pode pedir seis na vez dela, e assim até nove e doze.',
+      },
+      {
+        title: 'Mão de onze',
+        text: 'A dupla que chega a 11 vê as cartas do parceiro e decide se joga. Jogando, a mão vale 3; correndo, os adversários levam 1. Nessa mão não tem truco.',
+      },
+      {
+        title: 'Mão de ferro',
+        text: 'Se as duas duplas chegarem a 11, todo mundo joga às cegas, sem ver as próprias cartas.',
+      },
+      {
+        title: 'Encobrir',
+        text: 'Da segunda rodada em diante, dá para jogar a carta virada para baixo. Ela não vale nada na rodada, mas esconde o seu jogo.',
+      },
+    ],
   },
   avatar: {
     title: 'Seu boneco',
@@ -192,4 +244,9 @@ export function stakeName(stake: number): string {
 /** Label of the call/raise button for the next value on the ladder. */
 export function raiseLabel(stake: number): string {
   return `${stakeName(stake).toUpperCase()}!`
+}
+
+/** Label of the call/raise button next to your hand. */
+export function callLabel(stake: number): string {
+  return `Pedir ${stakeName(stake)}`
 }

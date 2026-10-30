@@ -15,6 +15,32 @@ export function pixelPath(rows: string[], on = '#'): string {
     .join('')
 }
 
+/** Main menu icons (9×9). */
+export const ICON_PIXELS = {
+  home: [
+    '....#....',
+    '...###...',
+    '..#####..',
+    '.#######.',
+    '#########',
+    '.#######.',
+    '.###.###.',
+    '.##...##.',
+    '.##...##.',
+  ],
+  globe: [
+    '..#####..',
+    '.#..#..#.',
+    '#..#.#..#',
+    '#########',
+    '#..#.#..#',
+    '#########',
+    '#..#.#..#',
+    '.#..#..#.',
+    '..#####..',
+  ],
+}
+
 export const isRed = (suit: Suit) => suit === 'diamonds' || suit === 'hearts'
 
 /** Colored bitmap: each character is a palette color; '.' is transparent. */

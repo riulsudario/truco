@@ -216,7 +216,9 @@
       style:left="{tag.left}px"
       style:top="{tag.top}px"
     >
-      {#if shouts[seat]}<span class="shout"><ShoutText text={shouts[seat]} /></span>{/if}
+      {#if shouts[seat]}<span class="shout" class:beside={position === 'far'}
+          ><ShoutText text={shouts[seat]} /></span
+        >{/if}
       <span class="name">{names[seat]}</span>
     </div>
   {/each}
@@ -382,6 +384,22 @@
     left: calc(50% - 5px);
     border: 5px solid transparent;
     border-top-color: var(--ink);
+  }
+  /*
+   * The partner across the table speaks to the side of their head: above it, the balloon would
+   * sit under the scoreboard and the truco buttons.
+   */
+  .shout.beside {
+    position: absolute;
+    left: calc(50% + 110px);
+    top: calc(100% + 210px);
+  }
+  .shout.beside::after {
+    top: 12px;
+    left: auto;
+    right: 100%;
+    border-top-color: transparent;
+    border-right-color: var(--ink);
   }
   .shout.mine,
   .shout.audience {

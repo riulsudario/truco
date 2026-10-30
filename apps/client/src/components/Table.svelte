@@ -1,12 +1,13 @@
 <script lang="ts">
   import { nextStake, teamOf, type Seat } from '@truco/engine'
   import type { GameSession } from '../lib/session.svelte'
-  import { raiseLabel, t } from '../lib/strings'
+  import { callLabel, t } from '../lib/strings'
   import Card from './Card.svelte'
   import Jukebox from './Jukebox.svelte'
   import JukeboxTV from './JukeboxTV.svelte'
   import Scene2D from './Scene2D.svelte'
   import TauntBar from './TauntBar.svelte'
+  import VolumeMenu from './VolumeMenu.svelte'
 
   interface Props {
     session: GameSession
@@ -46,9 +47,11 @@
     return [hand.turn]
   })
 
-  const raiseTo = $derived(nextStake(hand.truco?.stake ?? hand.stake))
+  const raiseTo = $derived(nextStake(hand.stake))
   const usScore = $derived(view.scores[myTeam])
   const themScore = $derived(view.scores[1 - myTeam]!)
+  /** The strongest manilha, the zap: the manilha rank in clubs. */
+  const zap = $derived({ rank: hand.manilha, suit: 'clubs' as const })
 
   const roundPips = $derived(
     [0, 1, 2].map((i) => {
@@ -58,6 +61,22 @@
       return result === myTeam ? { label: t.us, kind: 'us' } : { label: t.them, kind: 'them' }
     }),
   )
+
+  /** Headline under the scoreboard: whose move it is, or what is being asked of you. */
+  const status = $derived.by((): { name?: string; text: string; mine?: boolean } | null => {
+    if (view.phase !== 'playing') return null
+    if (view.legal.accept)
+      return { name: session.names[hand.truco!.caller] ?? '', text: t.called(hand.truco!.stake) }
+    if (view.legal.eleven) return { text: t.elevenTitle, mine: true }
+    if (hand.kind === 'iron') return { text: t.iron }
+    if (acting.includes(me)) return { text: t.yourTurn, mine: true }
+    if (hand.truco?.runVotes.includes(me))
+      return { text: t.waitingPartnerRun(session.names[(me + 2) % 4] ?? '') }
+    const seat = acting[0]
+    if (seat === undefined) return null
+    const deciding = hand.truco !== null || hand.elevenPending !== null
+    return { name: session.names[seat] ?? '', text: deciding ? t.isDeciding : t.isPlaying }
+  })
 
   const handBanner = $derived.by(() => {
     const last = view.lastHand
@@ -85,57 +104,47 @@
 
 <Jukebox {session} />
 <div class="table-screen">
-  <header class="hud">
-    <div class="score" aria-label="Placar">
-      <span class="team us">{t.us} <b>{usScore}</b></span>
-      <span class="x">×</span>
-      <span class="team them"><b>{themScore}</b> {t.them}</span>
+  <div class="top">
+    <ol class="pips" aria-label="Vazas">
+      {#each roundPips as pip, i (i)}
+        <li class={pip.kind}>{pip.label}</li>
+      {/each}
+    </ol>
+    <div class="board">
+      <div class="box stake">
+        <span class="label">{t.worth}</span>
+        <b>{hand.stake}</b>
+      </div>
+      <div class="box score" aria-label="Placar">
+        <span class="label">{t.us}</span>
+        <b class="us">{usScore}</b>
+        <span class="x">×</span>
+        <b class="them">{themScore}</b>
+        <span class="label">{t.them}</span>
+      </div>
+      <div class="box trumps">
+        <figure>
+          <Card card={hand.vira} size="sm" />
+          <figcaption>{t.vira}</figcaption>
+        </figure>
+        <figure aria-label="{t.manilha}: {t.ranks[hand.manilha]}">
+          <div class="manilhas" aria-hidden="true"><Card card={zap} size="sm" /></div>
+          <figcaption>{t.manilha}</figcaption>
+        </figure>
+      </div>
     </div>
-    <div class="stake">
-      {t.worth} <b>{hand.stake}</b>
-    </div>
-    <div class="vira">
-      <span>{t.vira}</span>
-      <Card card={hand.vira} size="sm" />
-      <span class="manilha-label">{t.manilha}: <b>{t.ranks[hand.manilha]}</b></span>
-    </div>
-  </header>
-
-  <ol class="pips" aria-label="Vazas">
-    {#each roundPips as pip, i (i)}
-      <li class={pip.kind}>{pip.label}</li>
-    {/each}
-  </ol>
-
-  <Scene2D
-    {hand}
-    {me}
-    {round}
-    names={session.names}
-    avatars={session.avatars}
-    shouts={session.shouts}
-    {acting}
-    banner={handBanner}
-    events={session.lastEvents}
-  >
-    {#snippet tv({ width, height })}<JukeboxTV {session} {width} {height} />{/snippet}
-  </Scene2D>
-
-  <section class="controls">
-    <div class="actions">
-      {#if view.phase === 'gameOver'}
-        <!-- Box in the middle of the screen, over the table, in both screen orientations. -->
-        <div class="game-over" role="dialog" aria-modal="true" aria-labelledby="game-over-title">
-          <h2 id="game-over-title">{view.winner === myTeam ? t.gameWon : t.gameLost}</h2>
-          <p class="final">{t.us} {usScore} × {themScore} {t.them}</p>
-          <div class="row">
-            {#if onrestart}<button class="btn primary" onclick={onrestart}>{t.playAgain}</button
-              >{/if}
-            <button class="btn" onclick={onexit}>{t.backToMenu}</button>
-          </div>
-        </div>
-      {:else if view.legal.eleven}
-        <p class="prompt"><b>{t.elevenTitle}</b> {t.elevenHint}</p>
+    {#if status}
+      <p class="status" class:mine={status.mine} aria-live="polite">
+        {#if status.name}<span class="who">{status.name}</span>{/if}
+        {status.text}
+        {#if secondsLeft !== null && acting.includes(me)}
+          <span class="clock" class:urgent={secondsLeft <= 5}>{t.timeLeft(secondsLeft)}</span>
+        {/if}
+      </p>
+    {/if}
+    {#if view.legal.eleven}
+      <div class="decision">
+        <p>{t.elevenHint}</p>
         <div class="partner-cards">
           {#each hand.partnerCards ?? [] as card, i (i)}
             <Card {card} manilha={hand.manilha} size="sm" />
@@ -153,50 +162,62 @@
             >{t.elevenRun}</button
           >
         </div>
-      {:else if view.legal.accept}
-        <p class="prompt alert">{t.trucoAgainstUs(hand.truco!.stake)}</p>
+      </div>
+    {:else if view.legal.accept}
+      <div class="decision">
         {#if hand.truco!.runVotes.length}
-          <p class="prompt">{t.partnerWantsToRun(session.names[hand.truco!.runVotes[0]!] ?? '')}</p>
+          <p>{t.partnerWantsToRun(session.names[hand.truco!.runVotes[0]!] ?? '')}</p>
         {/if}
         <div class="row">
+          <button class="btn" onclick={() => session.act({ type: 'run', seat: me })}>{t.run}</button
+          >
           <button class="btn primary" onclick={() => session.act({ type: 'accept', seat: me })}
             >{t.accept}</button
           >
-          {#if view.legal.truco && raiseTo}
-            <button class="btn hot" onclick={() => session.act({ type: 'truco', seat: me })}
-              >{raiseLabel(raiseTo)}</button
-            >
-          {/if}
-          <button class="btn" onclick={() => session.act({ type: 'run', seat: me })}>{t.run}</button
-          >
         </div>
-      {:else}
-        <div class="row">
-          <span class="status" class:mine={acting.includes(me)}>
-            {#if hand.kind === 'iron'}{t.iron}
-            {:else if acting.includes(me)}{t.yourTurn}
-            {:else if hand.truco?.runVotes.includes(me)}{t.waitingPartnerRun(
-                session.names[(me + 2) % 4] ?? '',
-              )}
-            {:else if acting.length}{t.waiting(session.names[acting[0]!] ?? '')}{/if}
-          </span>
-          {#if view.legal.hide}
-            <label class="toggle"><input type="checkbox" bind:checked={hideNext} /> {t.hide}</label>
-          {/if}
-          {#if view.legal.truco && raiseTo}
-            <button class="btn hot" onclick={() => session.act({ type: 'truco', seat: me })}
-              >{raiseLabel(raiseTo)}</button
-            >
-          {/if}
-        </div>
-      {/if}
+      </div>
+    {/if}
+  </div>
 
-      {#if secondsLeft !== null && acting.includes(me) && view.phase === 'playing'}
-        <div class="clock" class:urgent={secondsLeft <= 5}>{t.timeLeft(secondsLeft)}</div>
-      {/if}
+  <div class="corner">
+    <button class="btn" onclick={onexit}>🚪 {t.leaveTable}</button>
+    <VolumeMenu />
+  </div>
+
+  <Scene2D
+    {hand}
+    {me}
+    {round}
+    names={session.names}
+    avatars={session.avatars}
+    shouts={session.shouts}
+    {acting}
+    banner={handBanner}
+    events={session.lastEvents}
+  >
+    {#snippet tv({ width, height })}<JukeboxTV {session} {width} {height} />{/snippet}
+  </Scene2D>
+
+  {#if view.phase === 'gameOver'}
+    <!-- Box in the middle of the screen, over the table, in both screen orientations. -->
+    <div class="game-over" role="dialog" aria-modal="true" aria-labelledby="game-over-title">
+      <h2 id="game-over-title">{view.winner === myTeam ? t.gameWon : t.gameLost}</h2>
+      <p class="final">{t.us} {usScore} × {themScore} {t.them}</p>
+      <div class="row">
+        {#if onrestart}<button class="btn primary" onclick={onrestart}>{t.playAgain}</button>{/if}
+        <button class="btn" onclick={onexit}>{t.backToMenu}</button>
+      </div>
     </div>
+  {/if}
 
-    <div class="my-hand" class:hiding={hideNext} class:gone={view.phase === 'gameOver'}>
+  <div class="bottom" class:gone={view.phase === 'gameOver'}>
+    <div class="side left">
+      {#if view.legal.hide}
+        <label class="toggle"><input type="checkbox" bind:checked={hideNext} /> {t.hide}</label>
+      {/if}
+      {#if session.canTaunt}<TauntBar ontaunt={(id) => session.taunt(id)} />{/if}
+    </div>
+    <div class="my-hand" class:hiding={hideNext}>
       {#each hand.myCards as card, i (i)}
         <div class="fan" style:transform={fan(i, hand.myCards.length)}>
           <Card
@@ -209,13 +230,14 @@
         </div>
       {/each}
     </div>
-    {#if session.canTaunt}
-      <div class="footer">
-        <button class="btn small" onclick={onexit}>{t.leaveTable}</button>
-        <TauntBar ontaunt={(id) => session.taunt(id)} />
-      </div>
-    {/if}
-  </section>
+    <div class="side right">
+      {#if view.legal.truco && raiseTo}
+        <button class="btn hud-btn call" onclick={() => session.act({ type: 'truco', seat: me })}
+          >{callLabel(raiseTo)}</button
+        >
+      {/if}
+    </div>
+  </div>
 
   {#if session.log.length}
     <aside class="log" aria-label={t.logTitle}>
@@ -231,69 +253,38 @@
 
 <style>
   .table-screen {
+    --hud: rgb(26 20 35 / 0.88);
     display: grid;
-    grid-template-rows: auto auto 1fr auto;
+    grid-template-rows: auto auto 1fr auto auto;
     gap: 8px;
     min-height: 100dvh;
     max-width: 560px;
     margin: 0 auto;
     padding: 10px 12px calc(12px + env(safe-area-inset-bottom));
   }
-  .hud {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+
+  /* Scoreboard: rounds, then stake · score · vira and manilha, then whose move it is. */
+  .top {
+    display: grid;
+    justify-items: center;
     gap: 8px;
-    background: var(--panel);
-    border: 3px solid var(--ink);
-    box-shadow: 3px 3px 0 rgb(0 0 0 / 0.4);
-    padding: 6px 10px;
-  }
-  .score {
-    display: flex;
-    gap: 6px;
-    align-items: baseline;
-    font-size: 18px;
-  }
-  .score b,
-  .stake b {
-    font-family: var(--display);
-    font-size: 18px;
-  }
-  .us b {
-    color: var(--us);
-  }
-  .them b {
-    color: var(--them);
-  }
-  .stake b {
-    color: var(--gold);
-  }
-  .vira {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-  }
-  .manilha-label b {
-    color: var(--gold);
-    font-size: 16px;
   }
   .pips {
     display: flex;
     justify-content: center;
-    gap: 6px;
+    gap: 8px;
     list-style: none;
     margin: 0;
     padding: 0;
   }
   .pips li {
-    min-width: 64px;
+    min-width: 84px;
     text-align: center;
-    padding: 2px 8px;
+    padding: 3px 10px;
     border: 2px solid var(--ink);
-    background: var(--panel);
-    font-size: 13px;
+    background: var(--hud);
+    font-size: 12px;
+    text-transform: uppercase;
   }
   .pips .us {
     background: var(--us);
@@ -307,10 +298,143 @@
     background: var(--gold);
     color: var(--ink);
   }
-  .controls {
+  .board {
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--hud);
+    border: 3px solid var(--ink);
+    box-shadow: 3px 3px 0 rgb(0 0 0 / 0.45);
+    padding: 6px 14px;
+  }
+  .label {
+    font-size: 13px;
+    text-transform: uppercase;
+  }
+  .box b {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 22px;
+  }
+  .stake b {
+    color: var(--gold);
+  }
+  .score b.us {
+    color: var(--us);
+  }
+  .score b.them {
+    color: var(--them);
+  }
+  .x {
+    opacity: 0.7;
+  }
+  .trumps {
+    gap: 12px;
+    padding: 4px 10px;
+  }
+  figure {
+    margin: 0;
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+  }
+  figcaption {
+    font-size: 10px;
+    text-transform: uppercase;
+  }
+  .trumps :global(.card) {
+    --w: 26px;
+  }
+  /* The zap on top of a little stack: the four cards of the manilha rank. */
+  .manilhas {
+    position: relative;
+    display: flex;
+    margin-left: 6px;
+  }
+  .manilhas::before,
+  .manilhas::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--card-face);
+    border: 2px solid var(--ink);
+    border-radius: 3px;
+  }
+  .manilhas::before {
+    translate: -6px 4px;
+    rotate: -10deg;
+  }
+  .manilhas::after {
+    translate: -3px 2px;
+    rotate: -5deg;
+  }
+  .manilhas :global(.card) {
+    position: relative;
+    z-index: 1;
+  }
+  .status {
+    margin: 0;
+    font-family: var(--display);
+    font-size: 14px;
+    line-height: 1.4;
+    text-align: center;
+    text-transform: uppercase;
+    background: var(--hud);
+    padding: 4px 10px;
+  }
+  .status .who {
+    color: rgb(244 236 216 / 0.6);
+  }
+  .status.mine {
+    color: var(--gold);
+  }
+  .clock {
+    color: var(--gold);
+  }
+  .clock.urgent {
+    color: var(--them);
+    animation: blink 0.5s steps(2) infinite;
+  }
+  @keyframes blink {
+    50% {
+      opacity: 0.4;
+    }
+  }
+
+  .corner {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    order: -1;
+  }
+  .corner :global(.btn) {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  .decision {
+    justify-self: center;
     display: grid;
     gap: 10px;
     justify-items: center;
+    text-align: center;
+    background: var(--hud);
+    border: 3px solid var(--gold);
+    box-shadow: 4px 4px 0 rgb(0 0 0 / 0.5);
+    padding: 12px 16px;
+    max-width: 440px;
+  }
+  .decision p {
+    margin: 0;
+  }
+  .partner-cards {
+    display: flex;
+    gap: 6px;
   }
   .row {
     display: flex;
@@ -318,42 +442,47 @@
     justify-content: center;
     align-items: center;
     gap: 8px;
-    min-height: 44px;
   }
-  .prompt {
-    margin: 0;
-    text-align: center;
+
+  /* Bottom: taunts and the hide toggle left of your hand, the truco call right of it. */
+  .bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: end;
+    gap: 8px 16px;
   }
-  .alert {
-    color: var(--gold);
-    font-size: 20px;
+  .bottom.gone {
+    visibility: hidden;
   }
-  /* Text outside the table gets a background so it reads well over any floor. */
-  .status,
-  .prompt,
-  .clock {
-    background: var(--panel);
-    padding: 2px 8px;
+  .side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-bottom: 16px;
   }
-  .status:empty {
-    display: none;
+  .side.left {
+    align-items: end;
   }
-  .status.mine {
-    color: var(--gold);
+  .side.right {
+    align-items: start;
+  }
+  .bottom :global(.taunts .toggle),
+  .hud-btn {
+    font-size: 16px;
+    padding: 10px 16px;
+    text-transform: uppercase;
+  }
+  .call {
+    background: var(--gold);
   }
   .toggle {
     display: flex;
     gap: 4px;
     align-items: center;
-  }
-  .partner-cards {
-    display: flex;
-    gap: 6px;
-  }
-  .actions {
-    display: grid;
-    gap: 10px;
-    justify-items: center;
+    background: var(--hud);
+    padding: 2px 8px;
   }
   .my-hand {
     --card-w: 68px;
@@ -370,40 +499,16 @@
   .fan + .fan {
     margin-left: calc(var(--card-w) * -0.6);
   }
-  .log {
-    display: none;
-  }
   .fan {
     transform-origin: 50% 140%;
   }
   .my-hand.hiding :global(button.card:not(:disabled):hover) {
     filter: brightness(0.6);
   }
-  .clock {
-    font-size: 18px;
-    color: var(--gold);
+  .log {
+    display: none;
   }
-  .clock.urgent {
-    color: var(--them);
-    animation: blink 0.5s steps(2) infinite;
-  }
-  @keyframes blink {
-    50% {
-      opacity: 0.4;
-    }
-  }
-  /* Footer above your hands, so the buttons stay clickable. */
-  .footer {
-    position: relative;
-    z-index: 3;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-  }
-  .small {
-    font-size: 14px;
-    padding: 6px 10px;
-  }
+
   .game-over {
     position: fixed;
     left: 50%;
@@ -422,19 +527,9 @@
       8px 8px 0 4px rgb(0 0 0 / 0.5);
     padding: 20px 16px;
   }
-  .game-over .row {
-    flex-direction: row;
-  }
   .final {
     margin: 0;
     font-size: 18px;
-  }
-  .my-hand.gone {
-    visibility: hidden;
-  }
-  .alert {
-    font-family: var(--display);
-    font-size: 15px;
   }
   .game-over h2 {
     margin: 0;
@@ -443,10 +538,36 @@
     line-height: 1.3;
   }
 
+  /* Phone: the hand gets its own row, the buttons share the one below it. */
+  @media (max-aspect-ratio: 5/4), (max-width: 759px) {
+    /* Room for the jukebox button, docked in the bottom right corner. */
+    .table-screen {
+      padding-bottom: calc(64px + env(safe-area-inset-bottom));
+    }
+    .board {
+      gap: 6px;
+    }
+    .box {
+      padding: 4px 8px;
+      gap: 6px;
+    }
+    .box b {
+      font-size: 16px;
+    }
+    .my-hand {
+      order: -1;
+      flex-basis: 100%;
+      justify-content: center;
+    }
+    .side {
+      padding-bottom: 0;
+    }
+  }
+
   /*
-   * Landscape: the scene fills the whole screen and the rest becomes a HUD in the corners,
-   * like a first-person table game. Score top left, leave/taunt top right, log bottom left,
-   * buttons bottom right, your hand in the middle.
+   * Landscape: the scene fills the whole screen and the rest becomes a HUD over it, like a
+   * first-person table game. Scoreboard top center, music top left, leave and volume top
+   * right, log bottom left, your hand bottom center between taunts and the truco call.
    */
   @media (min-aspect-ratio: 5/4) and (min-width: 760px) {
     .table-screen {
@@ -457,76 +578,102 @@
       padding: 0;
       overflow: hidden;
     }
-    .hud,
-    .pips,
-    .actions,
-    .my-hand,
-    .footer,
+    .top,
+    .corner,
+    .bottom,
     .log {
       position: absolute;
       z-index: 10;
     }
-    .hud {
-      top: 16px;
-      left: 16px;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 6px;
-      min-width: 200px;
-    }
-    .score {
-      justify-content: space-between;
-      font-size: 20px;
-    }
-    .pips {
+    .top {
       top: 16px;
       left: 50%;
       translate: -50% 0;
+      gap: 12px;
     }
-    .controls {
-      display: contents;
+    .pips li {
+      min-width: 110px;
     }
-    .actions {
+    .box {
+      padding: 10px 22px;
+      min-height: 76px;
+    }
+    .label {
+      font-size: 16px;
+    }
+    .box b {
+      font-size: 30px;
+    }
+    .score {
+      gap: 14px;
+    }
+    .score b {
+      font-size: 40px;
+    }
+    .trumps :global(.card) {
+      --w: 32px;
+    }
+    .status {
+      margin-top: 12px;
+      font-size: clamp(18px, 1.7vw, 30px);
+      background: none;
+      text-shadow:
+        3px 3px 0 var(--ink),
+        0 0 12px rgb(0 0 0 / 0.8);
+    }
+    .corner {
+      top: 16px;
       right: 16px;
-      bottom: 16px;
-      width: 230px;
-      justify-items: stretch;
-      background: rgb(0 0 0 / 0.55);
-      border: 3px solid var(--ink);
-      padding: 10px;
+      align-items: start;
     }
-    .actions .row {
-      flex-direction: column;
-      align-items: stretch;
+    .corner :global(.btn) {
+      font-size: 15px;
+      padding: 10px 16px;
+      text-transform: uppercase;
     }
-    .actions :global(.btn) {
+    .decision {
+      max-width: 640px;
+      background: none;
+      border: 0;
+      box-shadow: none;
+      padding: 0;
+      text-shadow: 2px 2px 0 var(--ink);
+    }
+    .decision p {
       font-size: 18px;
     }
-    .my-hand {
+    .decision .row {
+      flex-wrap: nowrap;
+      gap: 16px;
+    }
+    .decision :global(.btn) {
+      min-width: 220px;
+      font-size: 18px;
+      padding: 12px 20px;
+      text-transform: uppercase;
+      text-shadow: none;
+    }
+    .bottom {
       left: 50%;
       bottom: 0;
       translate: -50% 0;
-      padding-bottom: 24px;
+      width: min(1100px, calc(100vw - 2 * 300px));
+      flex-wrap: nowrap;
+      gap: 40px;
+    }
+    .side {
+      padding-bottom: 72px;
     }
     .my-hand {
       --card-w: clamp(90px, 10vw, 150px);
-    }
-    .footer {
-      top: 16px;
-      right: 16px;
-      width: auto;
-      gap: 8px;
-    }
-    .footer :global(.menu) {
-      top: calc(100% + 6px);
-      bottom: auto;
+      padding-bottom: 24px;
     }
     .log {
       display: block;
       left: 16px;
       bottom: 16px;
-      width: 240px;
-      background: rgb(0 0 0 / 0.55);
+      width: 280px;
+      background: var(--hud);
       border: 3px solid var(--ink);
       padding: 8px 10px;
       font-size: 15px;

@@ -13,7 +13,7 @@ pnpm install
 pnpm dev          # Vite on :5173 + Worker (wrangler dev) on :8787
 ```
 
-Open http://localhost:5173. "Treino contra bots" (practice) runs entirely in the browser; "Jogar
+Open http://localhost:5173. "Partida local" (practice) runs entirely in the browser; "Jogar
 online" uses the local Worker.
 
 ## Commands
@@ -45,7 +45,8 @@ sends each seat only what it is allowed to see (`toPlayerView`). The room logic 
 - Order 3 > 2 > A > K > J > Q; the manilha is the rank after the vira, wrapping around (vira 3 → Q).
   Manilha suits: clubs (zap) > hearts > spades > diamonds.
 - Best of 3 rounds with the tie rules; face-down cards from the 2nd round on.
-- Truco → six → nine → twelve, with accept, run and raise. Running takes both partners;
+- Truco → six → nine → twelve, with accept and run; raising only on your own turn to play,
+  never as the answer to a call. Running takes both partners;
   accepting takes one.
 - Hand of eleven (the team sees the partner's cards, worth 3, running gives 1) and iron hand
   (played blind, no truco). Game to 12.
