@@ -52,228 +52,198 @@
     }
   },
   "parts": {
-    "base:masculino": [
+    "base:male": [
       { "file": "body_bodies_male_sit.png", "z": 10, "material": "body" },
       { "file": "head_heads_human_male_sit.png", "z": 100, "material": "body" },
       { "file": "eyes_human_adult_default_sit.png", "z": 105, "material": "eye" }
     ],
-    "hair:careca:masculino": [],
-    "hair:liso:masculino": [{ "file": "hair_plain_adult_sit.png", "z": 120, "material": "hair" }],
-    "hair:raspado:masculino": [
-      { "file": "hair_buzzcut_adult_sit.png", "z": 120, "material": "hair" }
-    ],
-    "hair:calvo:masculino": [
-      { "file": "hair_balding_adult_sit.png", "z": 120, "material": "hair" }
-    ],
-    "hair:espetado:masculino": [
-      { "file": "hair_spiked_adult_sit.png", "z": 120, "material": "hair" }
-    ],
-    "hair:baguncado:masculino": [
-      { "file": "hair_messy1_adult_sit.png", "z": 120, "material": "hair" }
-    ],
-    "hair:joaozinho:masculino": [
-      { "file": "hair_pixie_adult_sit.png", "z": 120, "material": "hair" }
-    ],
-    "hair:chanel:masculino": [{ "file": "hair_bob_adult_sit.png", "z": 120, "material": "hair" }],
-    "hair:coque:masculino": [
-      { "file": "hair_bangs_bun_adult_sit.png", "z": 120, "material": "hair" }
-    ],
-    "hair:rabo:masculino": [
+    "hair:bald:male": [],
+    "hair:straight:male": [{ "file": "hair_plain_adult_sit.png", "z": 120, "material": "hair" }],
+    "hair:buzzcut:male": [{ "file": "hair_buzzcut_adult_sit.png", "z": 120, "material": "hair" }],
+    "hair:balding:male": [{ "file": "hair_balding_adult_sit.png", "z": 120, "material": "hair" }],
+    "hair:spiky:male": [{ "file": "hair_spiked_adult_sit.png", "z": 120, "material": "hair" }],
+    "hair:messy:male": [{ "file": "hair_messy1_adult_sit.png", "z": 120, "material": "hair" }],
+    "hair:pixie:male": [{ "file": "hair_pixie_adult_sit.png", "z": 120, "material": "hair" }],
+    "hair:bob:male": [{ "file": "hair_bob_adult_sit.png", "z": 120, "material": "hair" }],
+    "hair:bun:male": [{ "file": "hair_bangs_bun_adult_sit.png", "z": 120, "material": "hair" }],
+    "hair:ponytail:male": [
       { "file": "hair_ponytail_adult_fg_sit.png", "z": 120, "material": "hair" },
       { "file": "hair_ponytail_adult_bg_sit.png", "z": 9, "material": "hair" }
     ],
-    "hair:comprido:masculino": [
-      { "file": "hair_long_adult_sit.png", "z": 120, "material": "hair" }
-    ],
-    "hair:cacheado:masculino": [
-      { "file": "hair_curly_short_adult_sit.png", "z": 120, "material": "hair" }
-    ],
-    "hair:cachos:masculino": [
+    "hair:long:male": [{ "file": "hair_long_adult_sit.png", "z": 120, "material": "hair" }],
+    "hair:curly:male": [{ "file": "hair_curly_short_adult_sit.png", "z": 120, "material": "hair" }],
+    "hair:long-curls:male": [
       { "file": "hair_curly_long_adult_sit.png", "z": 120, "material": "hair" }
     ],
-    "hair:blackpower:masculino": [
-      { "file": "hair_afro_adult_sit.png", "z": 120, "material": "hair" }
-    ],
-    "shirt:camiseta:masculino": [
+    "hair:afro:male": [{ "file": "hair_afro_adult_sit.png", "z": 120, "material": "hair" }],
+    "shirt:tshirt:male": [
       { "file": "torso_clothes_shortsleeve_tshirt_male_sit.png", "z": 35, "material": "cloth" }
     ],
-    "shirt:gola-v:masculino": [
+    "shirt:vneck:male": [
       {
         "file": "torso_clothes_shortsleeve_tshirt_vneck_male_sit.png",
         "z": 35,
         "material": "cloth"
       }
     ],
-    "shirt:regata:masculino": [
+    "shirt:tank:male": [
       { "file": "torso_clothes_sleeveless_sleeveless1_male_sit.png", "z": 35, "material": "cloth" }
     ],
-    "shirt:polo:masculino": [
+    "shirt:polo:male": [
       {
         "file": "torso_clothes_longsleeve_longsleeve2_polo_male_sit.png",
         "z": 35,
         "material": "cloth"
       }
     ],
-    "shirt:cardiga:masculino": [
+    "shirt:cardigan:male": [
       {
         "file": "torso_clothes_longsleeve_longsleeve2_cardigan_male_sit.png",
         "z": 35,
         "material": "cloth"
       }
     ],
-    "pants:calca:masculino": [{ "file": "legs_pants_male_sit.png", "z": 20, "material": "cloth" }],
-    "pants:bermuda:masculino": [
+    "pants:pants:male": [{ "file": "legs_pants_male_sit.png", "z": 20, "material": "cloth" }],
+    "pants:shorts:male": [
       { "file": "legs_shorts_shorts_male_sit.png", "z": 20, "material": "cloth" }
     ],
-    "facialHair:nenhum:masculino": [],
-    "facialHair:bigode:masculino": [
+    "facialHair:none:male": [],
+    "facialHair:mustache:male": [
       { "file": "beards_mustache_basic_sit.png", "z": 111, "material": "hair" }
     ],
-    "facialHair:bigodao:masculino": [
+    "facialHair:big-mustache:male": [
       { "file": "beards_mustache_bigstache_sit.png", "z": 111, "material": "hair" }
     ],
-    "facialHair:aparada:masculino": [
+    "facialHair:trimmed:male": [
       { "file": "beards_beard_trimmed_sit.png", "z": 110, "material": "hair" }
     ],
-    "facialHair:barba:masculino": [
+    "facialHair:beard:male": [
       { "file": "beards_beard_basic_sit.png", "z": 110, "material": "hair" }
     ],
-    "facialHair:barbudo:masculino": [
+    "facialHair:full-beard:male": [
       { "file": "beards_beard_medium_sit.png", "z": 110, "material": "hair" }
     ],
-    "glasses:nenhum:masculino": [],
-    "glasses:oculos:masculino": [
+    "glasses:none:male": [],
+    "glasses:glasses:male": [
       { "file": "facial_glasses_glasses_adult_sit_black.png", "z": 115, "material": null }
     ],
-    "glasses:redondo:masculino": [
+    "glasses:round:male": [
       { "file": "facial_glasses_round_adult_sit_brown.png", "z": 115, "material": null }
     ],
-    "glasses:nerd:masculino": [
+    "glasses:nerd:male": [
       { "file": "facial_glasses_nerd_adult_sit_black.png", "z": 115, "material": null }
     ],
-    "glasses:escuro:masculino": [
+    "glasses:sunglasses:male": [
       { "file": "facial_glasses_sunglasses_adult_sit_sunglasses.png", "z": 115, "material": null }
     ],
-    "hat:nenhum:masculino": [],
-    "hat:chapeu-preto:masculino": [
+    "hat:none:male": [],
+    "hat:black-hat:male": [
       { "file": "hat_formal_bowler_adult_sit_black.png", "z": 130, "material": null }
     ],
-    "hat:chapeu-marrom:masculino": [
+    "hat:brown-hat:male": [
       { "file": "hat_formal_bowler_adult_sit_brown.png", "z": 130, "material": null }
     ],
-    "hat:bandana:masculino": [
+    "hat:bandana:male": [
       { "file": "hat_cloth_bandana_adult_sit.png", "z": 120, "material": "cloth" }
     ],
-    "base:feminino": [
+    "base:female": [
       { "file": "body_bodies_female_sit.png", "z": 10, "material": "body" },
       { "file": "head_heads_human_female_sit.png", "z": 100, "material": "body" },
       { "file": "eyes_human_adult_default_sit.png", "z": 105, "material": "eye" }
     ],
-    "hair:careca:feminino": [],
-    "hair:liso:feminino": [{ "file": "hair_plain_adult_sit.png", "z": 120, "material": "hair" }],
-    "hair:raspado:feminino": [
-      { "file": "hair_buzzcut_adult_sit.png", "z": 120, "material": "hair" }
-    ],
-    "hair:calvo:feminino": [{ "file": "hair_balding_adult_sit.png", "z": 120, "material": "hair" }],
-    "hair:espetado:feminino": [
-      { "file": "hair_spiked_adult_sit.png", "z": 120, "material": "hair" }
-    ],
-    "hair:baguncado:feminino": [
-      { "file": "hair_messy1_adult_sit.png", "z": 120, "material": "hair" }
-    ],
-    "hair:joaozinho:feminino": [
-      { "file": "hair_pixie_adult_sit.png", "z": 120, "material": "hair" }
-    ],
-    "hair:chanel:feminino": [{ "file": "hair_bob_adult_sit.png", "z": 120, "material": "hair" }],
-    "hair:coque:feminino": [
-      { "file": "hair_bangs_bun_adult_sit.png", "z": 120, "material": "hair" }
-    ],
-    "hair:rabo:feminino": [
+    "hair:bald:female": [],
+    "hair:straight:female": [{ "file": "hair_plain_adult_sit.png", "z": 120, "material": "hair" }],
+    "hair:buzzcut:female": [{ "file": "hair_buzzcut_adult_sit.png", "z": 120, "material": "hair" }],
+    "hair:balding:female": [{ "file": "hair_balding_adult_sit.png", "z": 120, "material": "hair" }],
+    "hair:spiky:female": [{ "file": "hair_spiked_adult_sit.png", "z": 120, "material": "hair" }],
+    "hair:messy:female": [{ "file": "hair_messy1_adult_sit.png", "z": 120, "material": "hair" }],
+    "hair:pixie:female": [{ "file": "hair_pixie_adult_sit.png", "z": 120, "material": "hair" }],
+    "hair:bob:female": [{ "file": "hair_bob_adult_sit.png", "z": 120, "material": "hair" }],
+    "hair:bun:female": [{ "file": "hair_bangs_bun_adult_sit.png", "z": 120, "material": "hair" }],
+    "hair:ponytail:female": [
       { "file": "hair_ponytail_adult_fg_sit.png", "z": 120, "material": "hair" },
       { "file": "hair_ponytail_adult_bg_sit.png", "z": 9, "material": "hair" }
     ],
-    "hair:comprido:feminino": [{ "file": "hair_long_adult_sit.png", "z": 120, "material": "hair" }],
-    "hair:cacheado:feminino": [
+    "hair:long:female": [{ "file": "hair_long_adult_sit.png", "z": 120, "material": "hair" }],
+    "hair:curly:female": [
       { "file": "hair_curly_short_adult_sit.png", "z": 120, "material": "hair" }
     ],
-    "hair:cachos:feminino": [
+    "hair:long-curls:female": [
       { "file": "hair_curly_long_adult_sit.png", "z": 120, "material": "hair" }
     ],
-    "hair:blackpower:feminino": [
-      { "file": "hair_afro_adult_sit.png", "z": 120, "material": "hair" }
-    ],
-    "shirt:camiseta:feminino": [
+    "hair:afro:female": [{ "file": "hair_afro_adult_sit.png", "z": 120, "material": "hair" }],
+    "shirt:tshirt:female": [
       { "file": "torso_clothes_shortsleeve_tshirt_female_sit.png", "z": 35, "material": "cloth" }
     ],
-    "shirt:gola-v:feminino": [
+    "shirt:vneck:female": [
       {
         "file": "torso_clothes_shortsleeve_tshirt_vneck_female_sit.png",
         "z": 35,
         "material": "cloth"
       }
     ],
-    "shirt:regata:feminino": [
+    "shirt:tank:female": [
       {
         "file": "torso_clothes_sleeveless_sleeveless1_female_sit.png",
         "z": 35,
         "material": "cloth"
       }
     ],
-    "shirt:polo:feminino": [
+    "shirt:polo:female": [
       {
         "file": "torso_clothes_longsleeve_longsleeve2_polo_female_sit.png",
         "z": 35,
         "material": "cloth"
       }
     ],
-    "shirt:cardiga:feminino": [
+    "shirt:cardigan:female": [
       {
         "file": "torso_clothes_longsleeve_longsleeve2_cardigan_female_sit.png",
         "z": 35,
         "material": "cloth"
       }
     ],
-    "pants:calca:feminino": [{ "file": "legs_pants_thin_sit.png", "z": 20, "material": "cloth" }],
-    "pants:bermuda:feminino": [
+    "pants:pants:female": [{ "file": "legs_pants_thin_sit.png", "z": 20, "material": "cloth" }],
+    "pants:shorts:female": [
       { "file": "legs_shorts_shorts_thin_sit.png", "z": 20, "material": "cloth" }
     ],
-    "facialHair:nenhum:feminino": [],
-    "facialHair:bigode:feminino": [
+    "facialHair:none:female": [],
+    "facialHair:mustache:female": [
       { "file": "beards_mustache_basic_sit.png", "z": 111, "material": "hair" }
     ],
-    "facialHair:bigodao:feminino": [
+    "facialHair:big-mustache:female": [
       { "file": "beards_mustache_bigstache_sit.png", "z": 111, "material": "hair" }
     ],
-    "facialHair:aparada:feminino": [
+    "facialHair:trimmed:female": [
       { "file": "beards_beard_trimmed_sit.png", "z": 110, "material": "hair" }
     ],
-    "facialHair:barba:feminino": [
+    "facialHair:beard:female": [
       { "file": "beards_beard_basic_sit.png", "z": 110, "material": "hair" }
     ],
-    "facialHair:barbudo:feminino": [
+    "facialHair:full-beard:female": [
       { "file": "beards_beard_medium_sit.png", "z": 110, "material": "hair" }
     ],
-    "glasses:nenhum:feminino": [],
-    "glasses:oculos:feminino": [
+    "glasses:none:female": [],
+    "glasses:glasses:female": [
       { "file": "facial_glasses_glasses_adult_sit_black.png", "z": 115, "material": null }
     ],
-    "glasses:redondo:feminino": [
+    "glasses:round:female": [
       { "file": "facial_glasses_round_adult_sit_brown.png", "z": 115, "material": null }
     ],
-    "glasses:nerd:feminino": [
+    "glasses:nerd:female": [
       { "file": "facial_glasses_nerd_adult_sit_black.png", "z": 115, "material": null }
     ],
-    "glasses:escuro:feminino": [
+    "glasses:sunglasses:female": [
       { "file": "facial_glasses_sunglasses_adult_sit_sunglasses.png", "z": 115, "material": null }
     ],
-    "hat:nenhum:feminino": [],
-    "hat:chapeu-preto:feminino": [
+    "hat:none:female": [],
+    "hat:black-hat:female": [
       { "file": "hat_formal_bowler_adult_sit_black.png", "z": 130, "material": null }
     ],
-    "hat:chapeu-marrom:feminino": [
+    "hat:brown-hat:female": [
       { "file": "hat_formal_bowler_adult_sit_brown.png", "z": 130, "material": null }
     ],
-    "hat:bandana:feminino": [
+    "hat:bandana:female": [
       { "file": "hat_cloth_bandana_adult_sit.png", "z": 120, "material": "cloth" }
     ]
   }

@@ -1,4 +1,4 @@
-import { AvatarSchema, BOT_AVATARS, DEFAULT_AVATAR, VOICES } from '@truco/protocol'
+import { AVATAR_OPTIONS, AvatarSchema, BOT_AVATARS, DEFAULT_AVATAR, VOICES } from '@truco/protocol'
 import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 import * as v from 'valibot'
@@ -31,6 +31,26 @@ describe('player looks', () => {
       const name = `player ${i}`
       expect(VOICES[voiceFor(name, null)].gender).toBe(fromName(name).body)
       expect(voiceFor(name, null)).toBe(voiceFor(name, null))
+    }
+  })
+
+  it('the generated manifest knows every option of the catalog (rerun build-avatar after renaming ids)', () => {
+    const parts = sheets.parts as Record<string, unknown>
+    const fields = ['hair', 'shirt', 'pants', 'facialHair', 'glasses', 'hat'] as const
+    for (const body of Object.keys(AVATAR_OPTIONS.body)) {
+      expect(parts).toHaveProperty([`base:${body}`])
+      for (const field of fields) {
+        for (const id of Object.keys(AVATAR_OPTIONS[field])) {
+          expect(parts).toHaveProperty([`${field}:${id}:${body}`])
+        }
+      }
+    }
+    for (const field of ['skin', 'hairColor', 'shirtColor'] as const) {
+      const material = { skin: 'body', hairColor: 'hair', shirtColor: 'cloth' }[field]
+      const colors = sheets.palettes[material as keyof typeof sheets.palettes].colors
+      for (const option of Object.values(AVATAR_OPTIONS[field])) {
+        expect(colors).toHaveProperty([option.palette])
+      }
     }
   })
 
