@@ -12,6 +12,9 @@ export default tseslint.config(
       '**/.venv-*/',
       'test-results/',
       'playwright-report/',
+      // Downloaded asset packs and the local (Python) asset generator.
+      'assets-src/',
+      'asset-generator/',
     ],
   },
   js.configs.recommended,

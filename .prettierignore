@@ -8,4 +8,4 @@ playwright-report/
 .venv/
 **/.venv/
 audio-pipeline/
-audio-pipeline/
+asset-generator/
