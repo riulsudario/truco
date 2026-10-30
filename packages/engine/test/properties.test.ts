@@ -14,7 +14,7 @@ import {
   type Seat,
 } from '../src'
 
-/** Joga uma partida inteira escolhendo ações legais ao acaso. Devolve todos os estados. */
+/** Plays a whole game picking legal actions at random. Returns every state. */
 function randomGame(seed: number, maxSteps = 2000): GameState[] {
   const random = createRandom(seed ^ 0x9e3779b9)
   let state = newGame({ seed })
@@ -26,7 +26,7 @@ function randomGame(seed: number, maxSteps = 2000): GameState[] {
         : seatsToAct(state).flatMap((seat) => legalActions(state, seat))
     const action = actions[Math.floor(random() * actions.length)]!
     const result = reduce(state, action)
-    if (!result.ok) throw new Error(`ação listada como legal falhou: ${result.error}`)
+    if (!result.ok) throw new Error(`action listed as legal failed: ${result.error}`)
     state = result.state
     history.push(state)
   }
@@ -35,8 +35,8 @@ function randomGame(seed: number, maxSteps = 2000): GameState[] {
 
 const seeds = fc.integer({ min: 0, max: 2 ** 31 - 1 })
 
-describe('propriedades da partida', () => {
-  it('toda partida aleatória termina com um time em 12', () => {
+describe('game properties', () => {
+  it('every random game ends with a team at 12', () => {
     fc.assert(
       fc.property(seeds, (seed) => {
         const last = randomGame(seed).at(-1)!
@@ -47,7 +47,7 @@ describe('propriedades da partida', () => {
     )
   })
 
-  it('cada mão usa 13 cartas distintas do baralho limpo, sem sumir nem duplicar', () => {
+  it('each hand uses 13 distinct cards from the clean deck, none lost or duplicated', () => {
     fc.assert(
       fc.property(seeds, (seed) => {
         for (const state of randomGame(seed)) {
@@ -63,7 +63,7 @@ describe('propriedades da partida', () => {
     )
   })
 
-  it('a visão de uma cadeira nunca mostra cartas que ela não deveria ver', () => {
+  it("a seat's view never shows cards it should not see", () => {
     fc.assert(
       fc.property(seeds, (seed) => {
         for (const state of randomGame(seed)) {
@@ -95,7 +95,7 @@ describe('propriedades da partida', () => {
     )
   })
 
-  it('ações fora da lista de legais são recusadas sem mexer no estado', () => {
+  it('actions outside the legal list are rejected without touching the state', () => {
     const anyAction = fc.oneof(
       fc.record({
         type: fc.constant('play' as const),
@@ -108,7 +108,7 @@ describe('propriedades da partida', () => {
         seat: fc.constantFrom(...SEATS),
       }),
       fc.record({
-        type: fc.constant('onze' as const),
+        type: fc.constant('eleven' as const),
         seat: fc.constantFrom(...SEATS),
         accept: fc.boolean(),
       }),
@@ -123,7 +123,7 @@ describe('propriedades da partida', () => {
         const before = structuredClone(state)
         const result = reduce(state, action)
         if (!legal && action.type === 'play' && !action.hidden) {
-          // play com hidden false equivale a play sem hidden na lista de legais.
+          // play with hidden false is the same as play without hidden in the legal list.
           const plain = legalActions(state, action.seat).some(
             (a) => a.type === 'play' && !a.hidden && a.index === action.index,
           )

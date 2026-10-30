@@ -8,7 +8,7 @@ async function enter(page: Page, nick: string) {
   await page.getByRole('button', { name: 'Jogar online' }).click()
 }
 
-/** Faz a jogada óbvia que estiver disponível; devolve true se agiu. */
+/** Makes whatever obvious move is available; returns true if it acted. */
 async function playIfMyTurn(page: Page): Promise<boolean> {
   for (const name of ['Desce!', 'Jogar']) {
     const button = page.getByRole('button', { name, exact: true })
@@ -25,8 +25,8 @@ async function playIfMyTurn(page: Page): Promise<boolean> {
   return false
 }
 
-test('duas pessoas e dois bots jogam uma partida inteira', async ({ browser }) => {
-  // Nome único: o teste também roda contra produção, onde o lobby é compartilhado.
+test('two people and two bots play a full game', async ({ browser }) => {
+  // Unique name: the test also runs against production, where the lobby is shared.
   const room = `Mesa E2E ${Date.now().toString(36)}`
   const riul = await (await browser.newContext()).newPage()
   const ana = await (await browser.newContext()).newPage()
@@ -53,7 +53,7 @@ test('duas pessoas e dois bots jogam uma partida inteira', async ({ browser }) =
     await (acted ? riul.waitForTimeout(150) : riul.waitForTimeout(300))
   }
 
-  // Riul e Ana caem em times opostos: o "Nós × Eles" de um é o inverso do outro.
+  // Riul and Ana land on opposite teams: one's "Nós × Eles" is the reverse of the other's.
   const score = async (page: Page) => (await page.locator('.score b').allInnerTexts()).map(Number)
   await expect(ana.getByRole('heading', { name: finished })).toBeVisible()
   const [riulUs, riulThem] = await score(riul)

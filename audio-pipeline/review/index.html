@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Revisão das vozes</title>
+<title>Voice review</title>
 <style>
   :root {
     --bg: #f6f3ee; --panel: #fff; --ink: #1f1b16; --muted: #6b6359; --line: #e2dbd0;
@@ -59,23 +59,23 @@
 </head>
 <body>
 <header>
-  <h1>Revisão das vozes</h1>
+  <h1>Voice review</h1>
   <div class="tabs" role="group">
-    <button data-view="list" aria-pressed="true">Por fala</button>
-    <button data-view="compare" aria-pressed="false">Comparar vozes</button>
+    <button data-view="list" aria-pressed="true">By line</button>
+    <button data-view="compare" aria-pressed="false">Compare voices</button>
   </div>
-  <label>Origem <select id="root"></select></label>
-  <label>Personagem <select id="character"></select></label>
-  <label>Categoria/estilo <select id="folder"></select></label>
-  <label>Fala <select id="line"></select></label>
+  <label>Source <select id="root"></select></label>
+  <label>Character <select id="character"></select></label>
+  <label>Category/style <select id="folder"></select></label>
+  <label>Line <select id="line"></select></label>
   <label>Status <select id="status">
-    <option value="">todos</option><option value="pending">pendentes</option>
-    <option value="approved">aprovadas</option><option value="rejected">rejeitadas</option>
+    <option value="">all</option><option value="pending">pending</option>
+    <option value="approved">approved</option><option value="rejected">rejected</option>
   </select></label>
-  <label><input type="checkbox" id="processed"> ouvir tratado</label>
+  <label><input type="checkbox" id="processed"> play processed</label>
   <span class="stats" id="stats"></span>
 </header>
-<main id="main"><div class="empty">Carregando…</div></main>
+<main id="main"><div class="empty">Loading…</div></main>
 <script>
 const state = { view: 'list', data: null }
 const $ = (id) => document.getElementById(id)
@@ -91,7 +91,7 @@ async function load() {
 
 function fill(id, options, withAll = true) {
   const el = $(id), prev = el.value
-  el.innerHTML = (withAll ? '<option value="">todos</option>' : '') +
+  el.innerHTML = (withAll ? '<option value="">all</option>' : '') +
     options.map(([v, l]) => `<option value="${esc(v)}">${esc(l)}</option>`).join('')
   if ([...el.options].some((o) => o.value === prev)) el.value = prev
 }
@@ -119,20 +119,20 @@ function filtered() {
 
 function takeCard(t) {
   const src = $('processed').checked && t.processed ? t.processed : t.path
-  const asr = t.asr ? `<div class="meta">ouvido pelo Whisper: “${esc(t.asr.text)}” (${Math.round(t.asr.cer * 100)}% de diferença)</div>` : ''
+  const asr = t.asr ? `<div class="meta">heard by Whisper: “${esc(t.asr.text)}” (${Math.round(t.asr.cer * 100)}% difference)</div>` : ''
   const warn = t.warnings.map((w) => `<div class="warn">⚠ ${esc(w)}</div>`).join('')
-  const spoken = t.spoken_text !== t.text ? `<div class="meta">texto falado: ${esc(t.spoken_text)}</div>` : ''
+  const spoken = t.spoken_text !== t.text ? `<div class="meta">spoken text: ${esc(t.spoken_text)}</div>` : ''
   return `<div class="take ${t.status}" data-path="${esc(t.path)}">
     <div class="head"><strong>#${t.variant}${t.style ? ' · ' + esc(t.style) : ''}</strong>
-      <span class="meta">${t.duration_s.toFixed(1)}s${t.processed ? ' · tratado' : ''}</span></div>
+      <span class="meta">${t.duration_s.toFixed(1)}s${t.processed ? ' · processed' : ''}</span></div>
     <audio controls preload="none" src="/audio/${encodeURI(src)}"></audio>
     ${spoken}${asr}${warn}
     <div class="actions">
-      <button class="ok ${t.status === 'approved' ? 'on' : ''}" data-act="approved">✓ aprovar</button>
-      <button class="bad ${t.status === 'rejected' ? 'on' : ''}" data-act="rejected">✗ rejeitar</button>
-      <button class="best ${t.best ? 'on' : ''}" data-act="best">★ melhor</button>
+      <button class="ok ${t.status === 'approved' ? 'on' : ''}" data-act="approved">✓ approve</button>
+      <button class="bad ${t.status === 'rejected' ? 'on' : ''}" data-act="rejected">✗ reject</button>
+      <button class="best ${t.best ? 'on' : ''}" data-act="best">★ best</button>
     </div>
-    <details><summary>parâmetros</summary><pre>${esc(JSON.stringify({ ...t.params, seed: t.seed, model: t.model, reference: t.reference }, null, 1))}</pre></details>
+    <details><summary>parameters</summary><pre>${esc(JSON.stringify({ ...t.params, seed: t.seed, model: t.model, reference: t.reference }, null, 1))}</pre></details>
   </div>`
 }
 
@@ -141,8 +141,8 @@ function render() {
   const total = state.data.takes.filter((t) => t.root === $('root').value)
   const approved = total.filter((t) => t.status === 'approved').length
   const rejected = total.filter((t) => t.status === 'rejected').length
-  $('stats').textContent = `${total.length} tomadas · ${approved} aprovadas · ${rejected} rejeitadas`
-  if (!takes.length) { $('main').innerHTML = '<div class="empty">Nada com esses filtros.</div>'; return }
+  $('stats').textContent = `${total.length} takes · ${approved} approved · ${rejected} rejected`
+  if (!takes.length) { $('main').innerHTML = '<div class="empty">Nothing matches these filters.</div>'; return }
   $('main').innerHTML = state.view === 'list' ? renderList(takes) : renderCompare(takes)
 }
 
@@ -162,15 +162,15 @@ function renderList(takes) {
 }
 
 function renderCompare(takes) {
-  // Uma fala por vez: linhas = personagens, colunas = variações (ou estilos na fase B).
+  // One line at a time: rows = characters, columns = variants (or styles in phase B).
   const lineId = $('line').value || takes[0].line_id
   const subset = takes.filter((t) => t.line_id === lineId)
   const chars = [...new Set(subset.map((t) => t.character))]
   const cols = [...new Set(subset.map((t) => (t.style ? t.style : `#${t.variant}`)))]
   const line = state.data.lines.find((l) => l.id === lineId)
   const cell = (c, col) => subset.filter((t) => t.character === c && (t.style ? t.style : `#${t.variant}`) === col).map(takeCard).join('')
-  return `<section class="group"><h2>${esc(line?.text)}</h2><div class="meta">mesma fala em todas as vozes</div></section>
-    <div class="grid"><table><thead><tr><th>Voz</th>${cols.map((c) => `<th>${esc(c)}</th>`).join('')}</tr></thead>
+  return `<section class="group"><h2>${esc(line?.text)}</h2><div class="meta">same line in every voice</div></section>
+    <div class="grid"><table><thead><tr><th>Voice</th>${cols.map((c) => `<th>${esc(c)}</th>`).join('')}</tr></thead>
     <tbody>${chars.map((c) => `<tr><th>${esc(state.data.characters[c] ?? c)}</th>${cols.map((col) => `<td>${cell(c, col)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`
 }
 
@@ -193,7 +193,7 @@ document.addEventListener('click', async (e) => {
   await load()
 })
 
-// Tocar uma toca só: pausa as outras.
+// Playing one pauses the others.
 document.addEventListener('play', (e) => {
   document.querySelectorAll('audio').forEach((a) => { if (a !== e.target) a.pause() })
 }, true)

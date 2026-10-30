@@ -10,18 +10,18 @@ import {
 import { describe, expect, it } from 'vitest'
 import { decide } from '../src'
 
-const SUITS: Record<string, Suit> = { o: 'ouros', e: 'espadas', c: 'copas', p: 'paus' }
+const SUITS: Record<string, Suit> = { d: 'diamonds', s: 'spades', h: 'hearts', c: 'clubs' }
 const c = (code: string): Card => ({
   rank: code.slice(0, -1) as Rank,
   suit: SUITS[code.slice(-1)]!,
 })
 const never = () => 0.99
 
-/** Mão com vira K (manilha A). Cadeira 1 começa; plays são as cartas já jogadas na vaza. */
+/** Hand with a K vira (A manilha). Seat 1 leads; plays are the cards already played in the round. */
 function scenario(myCards: string[], plays: [number, string][], turn: 0 | 1 | 2 | 3): GameState {
   const state = newGame({ seed: 1 })
-  state.hand.vira = c('Ko')
-  state.hand.manilha = manilhaFor(c('Ko'))
+  state.hand.vira = c('Kd')
+  state.hand.manilha = manilhaFor(c('Kd'))
   state.hand.cards[turn] = myCards.map(c)
   state.hand.rounds = [
     {
@@ -36,56 +36,56 @@ function scenario(myCards: string[], plays: [number, string][], turn: 0 | 1 | 2 
 const choose = (state: GameState, seat: 0 | 1 | 2 | 3) =>
   decide({ view: toPlayerView(state, seat), random: never })
 
-/** Regra gulosa do bot fácil, com o truco travado para isolar a escolha da carta. */
+/** The easy bot's greedy rule, with truco locked to isolate the card choice. */
 const chooseCard = (state: GameState, seat: 0 | 1 | 2 | 3) => {
   state.hand.raisedBy = (seat % 2) as 0 | 1
-  return decide({ view: toPlayerView(state, seat), random: never, difficulty: 'facil' })
+  return decide({ view: toPlayerView(state, seat), random: never, difficulty: 'easy' })
 }
 
-describe('escolha de carta', () => {
-  it('descarta a menor quando o parceiro já ganha a vaza e ele é o último', () => {
+describe('card choice', () => {
+  it('discards the lowest when the partner is already winning the round and it plays last', () => {
     const state = scenario(
-      ['3e', 'Qo', 'Ac'],
+      ['3s', 'Qd', 'Ah'],
       [
-        [1, 'Jo'],
-        [2, '2p'],
-        [3, 'Ke'],
+        [1, 'Jd'],
+        [2, '2c'],
+        [3, 'Ks'],
       ],
       0,
     )
     expect(chooseCard(state, 0)).toEqual({ type: 'play', seat: 0, index: 1 })
   })
 
-  it('ganha com a menor carta que serve', () => {
-    const state = scenario(['Ac', '3e', 'Qo'], [[1, '2o']], 2)
+  it('wins with the lowest card that does', () => {
+    const state = scenario(['Ah', '3s', 'Qd'], [[1, '2d']], 2)
     expect(chooseCard(state, 2)).toEqual({ type: 'play', seat: 2, index: 1 })
   })
 
-  it('abre a mão guardando as manilhas', () => {
-    const state = scenario(['Ap', '3e', 'Qo'], [], 1)
+  it('leads the hand while saving the manilhas', () => {
+    const state = scenario(['Ac', '3s', 'Qd'], [], 1)
     expect(chooseCard(state, 1)).toEqual({ type: 'play', seat: 1, index: 1 })
   })
 
-  it('quando não ganha, joga fora a menor', () => {
-    const state = scenario(['Jo', 'Qe', 'Ko'], [[1, 'Ap']], 2)
+  it('throws away the lowest when it cannot win', () => {
+    const state = scenario(['Jd', 'Qs', 'Kd'], [[1, 'Ac']], 2)
     expect(chooseCard(state, 2)).toEqual({ type: 'play', seat: 2, index: 1 })
   })
 })
 
 describe('truco', () => {
-  it('pede com mão forte', () => {
-    const state = scenario(['Ap', 'Ac', '3e'], [], 1)
+  it('calls with a strong hand', () => {
+    const state = scenario(['Ac', 'Ah', '3s'], [], 1)
     expect(choose(state, 1)).toEqual({ type: 'truco', seat: 1 })
   })
 
-  it('corre de truco com mão fraca', () => {
-    const state = scenario(['Qo', 'Jo', 'Qe'], [], 1)
+  it('runs from truco with a weak hand', () => {
+    const state = scenario(['Qd', 'Jd', 'Qs'], [], 1)
     state.hand.truco = { team: 0, caller: 0, stake: 3, runVotes: [] }
     expect(choose(state, 1)).toEqual({ type: 'run', seat: 1 })
   })
 
-  it('aceita quando correr já entregaria o jogo', () => {
-    const state = scenario(['Qo', 'Jo', 'Qe'], [], 1)
+  it('accepts when running would already give away the game', () => {
+    const state = scenario(['Qd', 'Jd', 'Qs'], [], 1)
     state.scores = [11, 3]
     state.hand.kind = 'normal'
     state.hand.truco = { team: 0, caller: 0, stake: 3, runVotes: [] }

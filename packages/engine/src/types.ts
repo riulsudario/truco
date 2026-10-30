@@ -1,12 +1,12 @@
 import type { Card, Rank } from './cards'
 
 export type Seat = 0 | 1 | 2 | 3
-/** Time 0 são as cadeiras 0 e 2; time 1 são as cadeiras 1 e 3. */
+/** Team 0 is seats 0 and 2; team 1 is seats 1 and 3. */
 export type Team = 0 | 1
 
 export const SEATS: readonly Seat[] = [0, 1, 2, 3]
 export const WINNING_SCORE = 12
-/** Escada do truco: vale 1, truco (3), seis, nove, doze. */
+/** Truco stake ladder: 1, truco (3), six, nine, twelve. */
 export const STAKES = [1, 3, 6, 9, 12] as const
 
 export const teamOf = (seat: Seat): Team => (seat % 2) as Team
@@ -17,7 +17,7 @@ export const otherTeam = (team: Team): Team => (1 - team) as Team
 export interface Play {
   seat: Seat
   card: Card
-  /** Carta jogada encoberta (só a partir da segunda vaza). */
+  /** Card played face down (only from the second round on). */
   hidden: boolean
 }
 
@@ -31,39 +31,39 @@ export interface Round {
 export interface TrucoCall {
   team: Team
   caller: Seat
-  /** Valor proposto, ainda não aceito. */
+  /** Proposed stake, not accepted yet. */
   stake: number
   /**
-   * Quem do time desafiado já disse que quer correr. Para descer (ou aumentar) basta um da
-   * dupla; para correr, os dois precisam querer.
+   * Who on the challenged team already said they want to run. Accepting (or raising) takes
+   * just one partner; running takes both.
    */
   runVotes: Seat[]
 }
 
-/** Mão de onze: um time com 11. Mão de ferro: os dois com 11, cartas às cegas. */
-export type HandKind = 'normal' | 'onze' | 'ferro'
+/** Hand of eleven: one team at 11. Iron hand: both at 11, cards played blind. */
+export type HandKind = 'normal' | 'eleven' | 'iron'
 
 export interface HandState {
   number: number
   dealer: Seat
   vira: Card
   manilha: Rank
-  /** Cartas que cada cadeira ainda tem, indexado pela cadeira. */
+  /** Cards each seat still holds, indexed by seat. */
   cards: Card[][]
-  /** A última é a vaza em andamento enquanto o resultado for null. */
+  /** The last one is the round in progress while its result is null. */
   rounds: Round[]
   turn: Seat
-  /** Valor aceito da mão. */
+  /** Accepted stake of the hand. */
   stake: number
-  /** Time que fez o último aumento aceito; ele não pode aumentar de novo. */
+  /** Team that made the last accepted raise; it can't raise again. */
   raisedBy: Team | null
   truco: TrucoCall | null
   kind: HandKind
-  /** Time com 11 decidindo se joga a mão de onze. */
-  onzePending: Team | null
+  /** Team at 11 deciding whether to play the hand of eleven. */
+  elevenPending: Team | null
 }
 
-export type HandEndReason = 'rounds' | 'ran' | 'onzeRan'
+export type HandEndReason = 'rounds' | 'ran' | 'elevenRan'
 
 export interface HandResult {
   winner: Team | null
@@ -84,24 +84,24 @@ export interface GameState {
 
 export type Action =
   | { type: 'play'; seat: Seat; index: number; hidden?: boolean }
-  /** Pedir truco na sua vez ou aumentar ao responder. */
+  /** Call truco on your turn or raise when responding. */
   | { type: 'truco'; seat: Seat }
   | { type: 'accept'; seat: Seat }
   | { type: 'run'; seat: Seat }
-  | { type: 'onze'; seat: Seat; accept: boolean }
+  | { type: 'eleven'; seat: Seat; accept: boolean }
   | { type: 'nextHand' }
 
 export type GameEvent =
   | { type: 'handStarted'; number: number; dealer: Seat; kind: HandKind }
-  /** card é null quando a carta foi jogada encoberta. */
+  /** card is null when the card was played face down. */
   | { type: 'cardPlayed'; seat: Seat; card: Card | null }
   | { type: 'roundEnded'; result: RoundResult }
   | { type: 'trucoCalled'; seat: Seat; stake: number }
   | { type: 'trucoAccepted'; seat: Seat; stake: number }
-  /** Um da dupla quer correr; falta o parceiro decidir. */
+  /** One partner wants to run; the other still has to decide. */
   | { type: 'runVoted'; seat: Seat }
   | { type: 'ran'; seat: Seat }
-  | { type: 'onzeDecided'; seat: Seat; accept: boolean }
+  | { type: 'elevenDecided'; seat: Seat; accept: boolean }
   | { type: 'handEnded'; result: HandResult; scores: [number, number] }
   | { type: 'gameEnded'; winner: Team }
 
@@ -117,8 +117,8 @@ export type GameError =
   | 'no_truco_pending'
   | 'already_voted'
   | 'not_your_team'
-  | 'onze_pending'
-  | 'no_onze_pending'
+  | 'eleven_pending'
+  | 'no_eleven_pending'
 
 export type ReduceResult =
   { ok: true; state: GameState; events: GameEvent[] } | { ok: false; error: GameError }

@@ -1,4 +1,4 @@
-/** Carrega a API do player do YouTube uma vez, só quando a jukebox é aberta. */
+/** Loads the YouTube player API once, only when the jukebox is opened. */
 interface YouTubeApi {
   Player: new (element: HTMLElement, options: Record<string, unknown>) => YouTubePlayer
   PlayerState: { ENDED: number }

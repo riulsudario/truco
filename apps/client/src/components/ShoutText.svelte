@@ -7,16 +7,16 @@
 
   let { text }: Props = $props()
 
-  /** Cada emoji tem um jeito de se mexer; frases ficam paradas. */
+  /** Each emoji has its own motion; phrases stay still. */
   const MOTION: Record<string, string> = {
-    risada: 'shake',
-    raiva: 'tremble',
-    choro: 'sob',
-    fogo: 'flicker',
-    coracao: 'pulse',
-    caveira: 'wobble',
-    olhos: 'glance',
-    palmas: 'clap',
+    laugh: 'shake',
+    angry: 'tremble',
+    cry: 'sob',
+    fire: 'flicker',
+    heart: 'pulse',
+    skull: 'wobble',
+    eyes: 'glance',
+    clap: 'clap',
   }
 
   const motion = $derived.by(() => {
@@ -37,7 +37,7 @@
     font-size: 28px;
     line-height: 1.1;
   }
-  /* Passos secos em vez de transição suave, para combinar com o pixel art. */
+  /* Hard steps instead of smooth transitions, to match the pixel art. */
   .shake {
     animation: shake 0.5s steps(4) infinite;
   }

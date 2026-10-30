@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { PLAYED } from './scene'
 
-describe('cartas jogadas no feltro', () => {
-  it('nenhuma carta fica esticada: a largura na tela é parecida com a altura', () => {
+describe('cards played on the felt', () => {
+  it('no card gets stretched: its on-screen width is close to its height', () => {
     for (const quad of Object.values(PLAYED)) {
       const [a, b, , d] = quad
       const side = (p: readonly number[], q: readonly number[]) =>

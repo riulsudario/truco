@@ -2,8 +2,8 @@
   "$schema": "../../node_modules/wrangler/config-schema.json",
   "name": "truco",
   "main": "src/index.ts",
-  // Domínio próprio: no deploy a Cloudflare cria o DNS e o certificado de truco.riul.dev
-  // (a zona riul.dev está na mesma conta). O endereço *.workers.dev continua valendo.
+  // Custom domain: on deploy Cloudflare creates the DNS record and certificate for
+  // truco.riul.dev (the riul.dev zone is in the same account). *.workers.dev keeps working.
   "routes": [{ "pattern": "truco.riul.dev", "custom_domain": true }],
   "compatibility_date": "2026-10-01",
   "assets": {

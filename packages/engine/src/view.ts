@@ -15,7 +15,7 @@ import {
 
 export interface PlayView {
   seat: Seat
-  /** null para quem não pode ver a carta (encoberta jogada por outra cadeira). */
+  /** null for whoever can't see the card (face down, played by another seat). */
   card: Card | null
   hidden: boolean
 }
@@ -31,10 +31,10 @@ export interface LegalMoves {
   truco: boolean
   accept: boolean
   run: boolean
-  onze: boolean
+  eleven: boolean
 }
 
-/** O que uma cadeira (ou espectador, seat null) pode saber do jogo. É o que vai pela rede. */
+/** What a seat (or a spectator, seat null) may know about the game. This is what goes over the wire. */
 export interface PlayerView {
   seat: Seat | null
   phase: GamePhase
@@ -51,13 +51,13 @@ export interface PlayerView {
     stake: number
     raisedBy: Team | null
     truco: TrucoCall | null
-    onzePending: Team | null
+    elevenPending: Team | null
     rounds: RoundView[]
-    /** Cartas na mão de cada cadeira. */
+    /** Cards in each seat's hand. */
     cardCounts: number[]
-    /** Cartas próprias; null na mão de ferro, que é jogada às cegas. */
+    /** Own cards; null in the iron hand, which is played blind. */
     myCards: (Card | null)[]
-    /** Na mão de onze, o time com 11 vê as cartas do parceiro antes de decidir. */
+    /** In the hand of eleven, the team at 11 sees the partner's cards before deciding. */
     partnerCards: Card[] | null
   }
   legal: LegalMoves
@@ -69,14 +69,14 @@ const NO_MOVES: LegalMoves = {
   truco: false,
   accept: false,
   run: false,
-  onze: false,
+  eleven: false,
 }
 
 export function toPlayerView(state: GameState, seat: Seat | null): PlayerView {
   const { hand } = state
   const ownCards = seat === null ? [] : hand.cards[seat]!
   const seesPartner =
-    seat !== null && hand.onzePending !== null && teamOf(seat) === hand.onzePending
+    seat !== null && hand.elevenPending !== null && teamOf(seat) === hand.elevenPending
 
   return {
     seat,
@@ -94,7 +94,7 @@ export function toPlayerView(state: GameState, seat: Seat | null): PlayerView {
       stake: hand.stake,
       raisedBy: hand.raisedBy,
       truco: hand.truco,
-      onzePending: hand.onzePending,
+      elevenPending: hand.elevenPending,
       rounds: hand.rounds.map((round) => ({
         result: round.result,
         plays: round.plays.map((play) => ({
@@ -104,7 +104,7 @@ export function toPlayerView(state: GameState, seat: Seat | null): PlayerView {
         })),
       })),
       cardCounts: hand.cards.map((cards) => cards.length),
-      myCards: hand.kind === 'ferro' ? ownCards.map(() => null) : [...ownCards],
+      myCards: hand.kind === 'iron' ? ownCards.map(() => null) : [...ownCards],
       partnerCards: seesPartner ? [...hand.cards[partnerOf(seat)]!] : null,
     },
     legal: seat === null ? NO_MOVES : legalMoves(state, seat),
@@ -119,6 +119,6 @@ function legalMoves(state: GameState, seat: Seat): LegalMoves {
     truco: actions.some((a) => a.type === 'truco'),
     accept: actions.some((a) => a.type === 'accept'),
     run: actions.some((a) => a.type === 'run'),
-    onze: actions.some((a) => a.type === 'onze'),
+    eleven: actions.some((a) => a.type === 'eleven'),
   }
 }

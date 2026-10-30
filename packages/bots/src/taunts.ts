@@ -1,7 +1,7 @@
 import { teamOf, type GameEvent, type Seat } from '@truco/engine'
 import type { TauntId } from '@truco/protocol'
 
-/** Intervalo mínimo entre provocações do mesmo bot, para não virar spam. */
+/** Minimum interval between taunts from the same bot, so it doesn't turn into spam. */
 export const BOT_TAUNT_COOLDOWN_MS = 8000
 
 interface Reaction {
@@ -10,8 +10,8 @@ interface Reaction {
 }
 
 /**
- * Como um bot reage ao que acabou de acontecer na mesa. Devolve a provocação ou null.
- * Só olha eventos públicos, igual a qualquer jogador.
+ * How a bot reacts to what just happened at the table. Returns the taunt or null.
+ * It only looks at public events, like any player.
  */
 export function tauntReaction(
   events: GameEvent[],
@@ -31,30 +31,30 @@ export function tauntReaction(
 function react(event: GameEvent, seat: Seat, team: 0 | 1): Reaction | null {
   switch (event.type) {
     case 'trucoCalled':
-      // Quem pediu já grita a fala gravada; o parceiro dele põe pilha, o outro time se assusta.
+      // The caller already shouts the recorded line; their partner cheers, the other team gets scared.
       if (event.seat === seat) return null
       return teamOf(event.seat) === team
-        ? { chance: 0.25, options: ['truco-ladrao', 'medinho', 'fogo'] }
-        : { chance: 0.15, options: ['olhos', 'pede-musica'] }
+        ? { chance: 0.25, options: ['truco-thief', 'scared', 'fire'] }
+        : { chance: 0.15, options: ['eyes', 'ask-for-music'] }
     case 'ran':
       return teamOf(event.seat) === team
         ? null
-        : { chance: 0.45, options: ['medinho', 'vai-chorar', 'risada'] }
+        : { chance: 0.45, options: ['scared', 'gonna-cry', 'laugh'] }
     case 'gameEnded':
       return event.winner === team
-        ? { chance: 0.8, options: ['palmas', 'pede-musica', 'risada'] }
-        : { chance: 0.5, options: ['fui-roubado', 'choro', 'raiva'] }
+        ? { chance: 0.8, options: ['clap', 'ask-for-music', 'laugh'] }
+        : { chance: 0.5, options: ['robbed', 'cry', 'angry'] }
     case 'handEnded': {
       const { winner, points } = event.result
-      if (winner === null) return { chance: 0.2, options: ['cangou'] }
-      // Mão valendo mais rende mais reação.
+      if (winner === null) return { chance: 0.2, options: ['tied'] }
+      // A hand worth more draws more reaction.
       const weight = points >= 3 ? 2 : 1
       return winner === team
-        ? { chance: 0.15 * weight, options: ['risada', 'tamo-junto', 'mao-de-alface'] }
-        : { chance: 0.1 * weight, options: ['fui-roubado', 'raiva', 'caveira'] }
+        ? { chance: 0.15 * weight, options: ['laugh', 'got-your-back', 'butterfingers'] }
+        : { chance: 0.1 * weight, options: ['robbed', 'angry', 'skull'] }
     }
     case 'roundEnded':
-      return event.result === 'tie' ? { chance: 0.15, options: ['cangou'] } : null
+      return event.result === 'tie' ? { chance: 0.15, options: ['tied'] } : null
     default:
       return null
   }

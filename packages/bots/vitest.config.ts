@@ -1,4 +1,4 @@
 import { defineConfig } from 'vitest/config'
 
-// As simulações jogam centenas de partidas com Monte Carlo; levam alguns segundos cada.
+// The simulations play hundreds of games with Monte Carlo; each takes a few seconds.
 export default defineConfig({ test: { testTimeout: 60_000 } })

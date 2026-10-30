@@ -1,21 +1,21 @@
-/** Provocações pré-definidas: o servidor só repassa o id, nunca texto livre. */
+/** Predefined taunts: the server only relays the id, never free text. */
 export const TAUNTS = [
-  { id: 'truco-ladrao', kind: 'frase', text: 'Truco, ladrão!' },
-  { id: 'pede-musica', kind: 'frase', text: 'Pede música!' },
-  { id: 'medinho', kind: 'frase', text: 'Tá com medinho?' },
-  { id: 'cangou', kind: 'frase', text: 'Cangou!' },
-  { id: 'mao-de-alface', kind: 'frase', text: 'Mão de alface!' },
-  { id: 'vai-chorar', kind: 'frase', text: 'Vai chorar?' },
-  { id: 'tamo-junto', kind: 'frase', text: 'Tamo junto, parceiro!' },
-  { id: 'fui-roubado', kind: 'frase', text: 'Fui roubado!' },
-  { id: 'risada', kind: 'emoji', text: '😂' },
-  { id: 'raiva', kind: 'emoji', text: '😡' },
-  { id: 'choro', kind: 'emoji', text: '😭' },
-  { id: 'fogo', kind: 'emoji', text: '🔥' },
-  { id: 'coracao', kind: 'emoji', text: '❤️' },
-  { id: 'caveira', kind: 'emoji', text: '💀' },
-  { id: 'olhos', kind: 'emoji', text: '👀' },
-  { id: 'palmas', kind: 'emoji', text: '👏' },
+  { id: 'truco-thief', kind: 'phrase', text: 'Truco, ladrão!' },
+  { id: 'ask-for-music', kind: 'phrase', text: 'Pede música!' },
+  { id: 'scared', kind: 'phrase', text: 'Tá com medinho?' },
+  { id: 'tied', kind: 'phrase', text: 'Cangou!' },
+  { id: 'butterfingers', kind: 'phrase', text: 'Mão de alface!' },
+  { id: 'gonna-cry', kind: 'phrase', text: 'Vai chorar?' },
+  { id: 'got-your-back', kind: 'phrase', text: 'Tamo junto, parceiro!' },
+  { id: 'robbed', kind: 'phrase', text: 'Fui roubado!' },
+  { id: 'laugh', kind: 'emoji', text: '😂' },
+  { id: 'angry', kind: 'emoji', text: '😡' },
+  { id: 'cry', kind: 'emoji', text: '😭' },
+  { id: 'fire', kind: 'emoji', text: '🔥' },
+  { id: 'heart', kind: 'emoji', text: '❤️' },
+  { id: 'skull', kind: 'emoji', text: '💀' },
+  { id: 'eyes', kind: 'emoji', text: '👀' },
+  { id: 'clap', kind: 'emoji', text: '👏' },
 ] as const
 
 export type TauntId = (typeof TAUNTS)[number]['id']

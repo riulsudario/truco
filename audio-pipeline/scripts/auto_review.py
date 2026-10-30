@@ -1,9 +1,9 @@
-"""Pré-aprovação automática, para ter uma biblioteca jogável antes da revisão de ouvido: aprova a
-tomada que o Whisper entendeu (CER até --max-cer) e que passa nas checagens de arquivo do
-validate.py. Não toca em decisão feita na revisão (review.py); as automáticas ficam marcadas com
-"by": "auto" e a revisão pode trocar qualquer uma.
+"""Automatic pre-approval, to have a playable library before listening: approves the take that
+Whisper understood (CER up to --max-cer) and that passes validate.py's file checks. It never
+touches a decision made in the review (review.py); automatic ones are marked "by": "auto" and the
+review can change any of them.
 
-Precisa da transcrição gravada nos JSON das tomadas:
+Needs the transcription stored in the takes' JSON:
 
     python scripts/validate.py --asr --stage candidates
     python scripts/auto_review.py
@@ -25,7 +25,7 @@ from validate import check_file  # noqa: E402
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--max-cer", type=float, default=0.15, help="distância máxima para o texto (0 a 1)")
+    parser.add_argument("--max-cer", type=float, default=0.15, help="maximum distance to the text (0 to 1)")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
@@ -61,7 +61,7 @@ def main() -> int:
         review["takes"][key] = {
             "status": status,
             "best": False,
-            "note": f"auto: Whisper ouviu \"{asr['text'].strip()}\" (CER {asr['cer']:.0%})"
+            "note": f"auto: Whisper heard \"{asr['text'].strip()}\" (CER {asr['cer']:.0%})"
                     + (f"; {'; '.join(errors)}" if errors else ""),
             "by": "auto",
             "updated_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
@@ -69,12 +69,12 @@ def main() -> int:
 
     if not args.dry_run:
         save_review(review)
-    print(f"{counts['approved']} aprovadas, {counts['pending']} para ouvir, "
-          f"{counts['manual']} já revisadas à mão, {counts['no_asr']} sem transcrição")
+    print(f"{counts['approved']} approved, {counts['pending']} to listen to, "
+          f"{counts['manual']} already reviewed by hand, {counts['no_asr']} without transcription")
     for char_id, line_ids in sorted(uncovered.items()):
         missing = sorted(lid for lid in line_ids if (char_id, lid) not in covered)
         if missing:
-            print(f"  {char_id}: sem nenhuma tomada aprovada em {', '.join(missing)}")
+            print(f"  {char_id}: no approved take for {', '.join(missing)}")
     return 0
 
 

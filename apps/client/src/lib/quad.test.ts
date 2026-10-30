@@ -7,7 +7,7 @@ describe('quadToMatrix3d', () => {
     expect(a[1]).toBeCloseTo(b[1], 2)
   }
 
-  it('leva os quatro cantos do elemento aos cantos do quadrilátero em perspectiva', () => {
+  it('maps the four element corners to the corners of the perspective quad', () => {
     const quad: [Point, Point, Point, Point] = [
       [120, 80],
       [170, 82],
@@ -21,7 +21,7 @@ describe('quadToMatrix3d', () => {
     near(applyMatrix3d(matrix, 0, 30), quad[3])
   })
 
-  it('um retângulo vira só translação e escala', () => {
+  it('a rectangle becomes just translation and scale', () => {
     const matrix = quadToMatrix3d(10, 10, [
       [5, 5],
       [25, 5],

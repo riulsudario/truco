@@ -4,10 +4,10 @@ import { AVATAR_OPTIONS, type Avatar } from './avatar'
 import { TRACK_IDS, type JukeboxState } from './jukebox'
 import { TAUNT_IDS, type TauntId } from './taunts'
 
-export const DIFFICULTIES = ['facil', 'normal'] as const
+export const DIFFICULTIES = ['easy', 'normal'] as const
 
 export type Difficulty = (typeof DIFFICULTIES)[number]
-export type Visibility = 'publica' | 'privada'
+export type Visibility = 'public' | 'private'
 
 const seat = v.picklist([0, 1, 2, 3])
 const playerId = v.pipe(v.string(), v.maxLength(32))
@@ -33,12 +33,12 @@ export const AvatarSchema = v.object({
 
 const roomName = v.pipe(v.string(), v.trim(), v.minLength(1), v.maxLength(32))
 const password = v.pipe(v.string(), v.maxLength(32))
-/** Token secreto do navegador; identifica o jogador para reconectar. */
+/** Secret browser token; identifies the player for reconnecting. */
 const token = v.pipe(v.string(), v.minLength(16), v.maxLength(64))
 
 export const RoomSettingsSchema = v.object({
   name: roomName,
-  visibility: v.picklist(['publica', 'privada']),
+  visibility: v.picklist(['public', 'private']),
   password: v.nullable(password),
   difficulty: v.picklist(DIFFICULTIES),
 })
@@ -55,7 +55,7 @@ const GameActionSchema = v.variant('type', [
   v.object({ type: v.literal('truco') }),
   v.object({ type: v.literal('accept') }),
   v.object({ type: v.literal('run') }),
-  v.object({ type: v.literal('onze'), accept: v.boolean() }),
+  v.object({ type: v.literal('eleven'), accept: v.boolean() }),
 ])
 export type GameAction = v.InferOutput<typeof GameActionSchema>
 
@@ -82,7 +82,7 @@ export const ClientMessageSchema = v.variant('t', [
   v.object({ t: v.literal('game'), action: GameActionSchema }),
   v.object({ t: v.literal('taunt'), id: v.picklist(TAUNT_IDS) }),
   v.object({ t: v.literal('ping') }),
-  /** Escolhe a faixa (null desliga). Com `after`, só troca se ainda estiver tocando essa: é o "acabou, próxima". */
+  /** Picks the track (null stops). With `after`, it only switches if that one is still playing: the "ended, next" case. */
   v.object({
     t: v.literal('jukebox'),
     trackId: v.nullable(v.picklist(TRACK_IDS)),
@@ -103,21 +103,21 @@ export function parseClientMessage(raw: string): ClientMessage | null {
 }
 
 export type SeatInfo =
-  { kind: 'vazia' } | { kind: 'humano'; playerId: string } | { kind: 'bot'; name: string }
+  { kind: 'empty' } | { kind: 'human'; playerId: string } | { kind: 'bot'; name: string }
 
 export interface PlayerInfo {
   id: string
   nick: string
-  /** Visual escolhido no editor; null para quem entrou sem (cai num visual pelo apelido). */
+  /** Look picked in the editor; null for whoever joined without one (falls back to a look based on the nickname). */
   avatar: Avatar | null
   seat: Seat | null
   connected: boolean
   ready: boolean
 }
 
-export type RoomStatus = 'esperando' | 'jogando'
+export type RoomStatus = 'waiting' | 'playing'
 
-/** Estado público da sala. Nunca leva token nem senha. */
+/** Public room state. Never carries a token or password. */
 export interface RoomSnapshot {
   code: string
   name: string
@@ -129,11 +129,11 @@ export interface RoomSnapshot {
   seats: SeatInfo[]
   players: PlayerInfo[]
   jukebox: JukeboxState
-  /** Relógio do servidor quando o estado foi enviado, para sincronizar a música. */
+  /** Server clock when the state was sent, to sync the music. */
   serverTime: number
 }
 
-/** Linha da lista de salas públicas. */
+/** Row of the public room list. */
 export interface RoomSummary {
   code: string
   name: string
@@ -167,12 +167,12 @@ export type ServerMessage =
       t: 'game'
       view: PlayerView
       events: GameEvent[]
-      /** Até quando (epoch ms) as cadeiras em `waitingOn` têm para agir. */
+      /** Until when (epoch ms) the seats in `waitingOn` have to act. */
       deadline: number | null
       waitingOn: Seat[]
     }
   | { t: 'gameStopped' }
-  /** seat null: quem provocou está só assistindo. */
+  /** seat null: whoever taunted is only watching. */
   | { t: 'taunt'; seat: Seat | null; nick: string; id: TauntId }
   | { t: 'error'; code: ErrorCode }
   | { t: 'kicked' }

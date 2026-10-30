@@ -4,8 +4,8 @@ import { describe, expect, it } from 'vitest'
 
 const BASE = 'https://truco.test'
 const settings = (patch: Partial<RoomSettings> = {}): RoomSettings => ({
-  name: 'Mesa de teste',
-  visibility: 'publica',
+  name: 'Test table',
+  visibility: 'public',
   password: null,
   difficulty: 'normal',
   ...patch,
@@ -20,7 +20,7 @@ async function createRoom(token: string, patch: Partial<RoomSettings> = {}): Pro
   return ((await response.json()) as { code: string }).code
 }
 
-/** Abre um WebSocket e devolve um leitor que espera a próxima mensagem que casar. */
+/** Opens a WebSocket and returns a reader that waits for the next matching message. */
 async function connect<M extends { t: string }>(path: string) {
   const response = await SELF.fetch(`${BASE}${path}`, { headers: { Upgrade: 'websocket' } })
   expect(response.status).toBe(101)
@@ -43,20 +43,20 @@ async function connect<M extends { t: string }>(path: string) {
 }
 
 describe('worker', () => {
-  it('cria sala, consulta pelo código e recusa código inexistente', async () => {
-    const code = await createRoom('token-criador-aaaaaa')
+  it('creates a room, looks it up by code and rejects an unknown code', async () => {
+    const code = await createRoom('token-creator-aaaaaa')
     expect(code).toMatch(/^[A-HJ-NP-Z]{4}$/)
     const info = await SELF.fetch(`${BASE}/api/rooms/${code.toLowerCase()}`)
-    expect(await info.json()).toEqual({ code, name: 'Mesa de teste', hasPassword: false })
+    expect(await info.json()).toEqual({ code, name: 'Test table', hasPassword: false })
     expect((await SELF.fetch(`${BASE}/api/rooms/ZZZZ`)).status).toBe(404)
   })
 
-  it('limita quantas salas um mesmo IP cria em pouco tempo', async () => {
+  it('limits how many rooms the same IP creates in a short time', async () => {
     const create = () =>
       SELF.fetch(`${BASE}/api/rooms`, {
         method: 'POST',
         headers: { 'CF-Connecting-IP': '203.0.113.9' },
-        body: JSON.stringify({ settings: settings(), token: 'token-limite-aaaaaa' }),
+        body: JSON.stringify({ settings: settings(), token: 'token-limit-aaaaaa' }),
       })
     const statuses: number[] = []
     for (let i = 0; i < 7; i++) statuses.push((await create()).status)
@@ -64,18 +64,18 @@ describe('worker', () => {
     expect(statuses[6]).toBe(429)
   })
 
-  it('recusa criação com dados inválidos', async () => {
+  it('rejects creation with invalid data', async () => {
     const response = await SELF.fetch(`${BASE}/api/rooms`, {
       method: 'POST',
-      body: JSON.stringify({ settings: settings({ name: '' }), token: 'curto' }),
+      body: JSON.stringify({ settings: settings({ name: '' }), token: 'short' }),
     })
     expect(response.status).toBe(400)
   })
 
-  it('entra pela WebSocket, vira dono e começa a partida', async () => {
-    const code = await createRoom('token-criador-bbbbbb')
+  it('joins through the WebSocket, becomes owner and starts the game', async () => {
+    const code = await createRoom('token-creator-bbbbbb')
     const player = await connect<ServerMessage>(`/ws/room/${code}`)
-    player.send({ t: 'hello', nick: 'Riul', token: 'token-criador-bbbbbb' })
+    player.send({ t: 'hello', nick: 'Riul', token: 'token-creator-bbbbbb' })
     const welcome = await player.next('welcome')
     expect(welcome.room.ownerId).toBe(welcome.playerId)
 
@@ -86,36 +86,36 @@ describe('worker', () => {
     player.ws.close()
   })
 
-  it('recusa visual de boneco com peça que não existe no catálogo', async () => {
-    const code = await createRoom('token-criador-ffffff')
+  it('rejects an avatar with a part that is not in the catalog', async () => {
+    const code = await createRoom('token-creator-ffffff')
     const player = await connect<ServerMessage>(`/ws/room/${code}`)
     player.send({
       t: 'hello',
       nick: 'Riul',
-      token: 'token-criador-ffffff',
-      avatar: { hair: 'moicano-de-fogo' },
+      token: 'token-creator-ffffff',
+      avatar: { hair: 'flaming-mohawk' },
     })
     expect(await player.next('error')).toEqual({ t: 'error', code: 'invalid_message' })
     player.ws.close()
   })
 
-  it('mensagem fora do protocolo volta como erro', async () => {
-    const code = await createRoom('token-criador-cccccc')
+  it('a message outside the protocol comes back as an error', async () => {
+    const code = await createRoom('token-creator-cccccc')
     const player = await connect<ServerMessage>(`/ws/room/${code}`)
-    player.send({ t: 'hackear', tudo: true })
+    player.send({ t: 'hack', everything: true })
     expect(await player.next('error')).toEqual({ t: 'error', code: 'invalid_message' })
     player.ws.close()
   })
 
-  it('lobby lista sala pública e esconde a privada', async () => {
+  it('the lobby lists the public room and hides the private one', async () => {
     const lobby = await connect<LobbyMessage>('/ws/lobby')
     await lobby.next('rooms')
-    const publicCode = await createRoom('token-criador-dddddd', { name: 'Aberta' })
-    const privateCode = await createRoom('token-criador-eeeeee', { visibility: 'privada' })
+    const publicCode = await createRoom('token-creator-dddddd', { name: 'Open' })
+    const privateCode = await createRoom('token-creator-eeeeee', { visibility: 'private' })
 
     let rooms = (await lobby.next('rooms')).rooms
     while (!rooms.some((r) => r.code === publicCode)) rooms = (await lobby.next('rooms')).rooms
-    expect(rooms.find((r) => r.code === publicCode)).toMatchObject({ name: 'Aberta', humans: 0 })
+    expect(rooms.find((r) => r.code === publicCode)).toMatchObject({ name: 'Open', humans: 0 })
     expect(rooms.some((r) => r.code === privateCode)).toBe(false)
     lobby.ws.close()
   })

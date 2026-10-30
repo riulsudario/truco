@@ -27,7 +27,7 @@
         {/each}
       </div>
       <div class="phrases">
-        {#each TAUNTS.filter((x) => x.kind === 'frase') as taunt (taunt.id)}
+        {#each TAUNTS.filter((x) => x.kind === 'phrase') as taunt (taunt.id)}
           <button class="phrase" role="menuitem" onclick={() => pick(taunt.id)}>{taunt.text}</button
           >
         {/each}

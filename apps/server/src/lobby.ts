@@ -2,13 +2,13 @@ import type { LobbyMessage, RoomSummary } from '@truco/protocol'
 import { DurableObject } from 'cloudflare:workers'
 import type { Env } from './env'
 
-/** Instância única com a lista de salas públicas, empurrada ao vivo para quem está olhando. */
-/** Quantas salas um mesmo IP pode criar por janela de tempo. */
+/** Single instance holding the list of public rooms, pushed live to whoever is watching. */
+/** How many rooms the same IP can create per time window. */
 export const ROOM_CREATION_LIMIT = { max: 6, windowMs: 10 * 60_000 }
 
 export class Lobby extends DurableObject<Env> {
   private rooms = new Map<string, RoomSummary>()
-  /** Horários das últimas criações por IP; só em memória, basta para frear abuso. */
+  /** Times of the latest creations per IP; memory only, enough to curb abuse. */
   private creations = new Map<string, number[]>()
 
   constructor(ctx: DurableObjectState, env: Env) {
@@ -29,7 +29,7 @@ export class Lobby extends DurableObject<Env> {
     await this.publish()
   }
 
-  /** Registra uma criação de sala; falso se o IP passou do limite. */
+  /** Records a room creation; false if the IP went over the limit. */
   async allowCreate(ip: string, now = Date.now()): Promise<boolean> {
     const since = now - ROOM_CREATION_LIMIT.windowMs
     const recent = (this.creations.get(ip) ?? []).filter((at) => at > since)
@@ -47,7 +47,7 @@ export class Lobby extends DurableObject<Env> {
 
   override async fetch(request: Request): Promise<Response> {
     if (request.headers.get('Upgrade') !== 'websocket') {
-      return new Response('esperava WebSocket', { status: 426 })
+      return new Response('expected WebSocket', { status: 426 })
     }
     const { 0: client, 1: server } = new WebSocketPair()
     this.ctx.acceptWebSocket(server)
@@ -56,7 +56,7 @@ export class Lobby extends DurableObject<Env> {
   }
 
   override async webSocketMessage(): Promise<void> {
-    // O lobby só transmite; nada a fazer com o que chega.
+    // The lobby only broadcasts; nothing to do with what comes in.
   }
 
   private async publish(): Promise<void> {
@@ -66,7 +66,7 @@ export class Lobby extends DurableObject<Env> {
       try {
         ws.send(payload)
       } catch {
-        // conexão caindo
+        // connection dropping
       }
     }
   }
@@ -75,11 +75,11 @@ export class Lobby extends DurableObject<Env> {
     return { t: 'rooms', rooms: this.sorted() }
   }
 
-  /** Salas esperando gente primeiro, depois as mais cheias. */
+  /** Rooms waiting for people first, then the fullest ones. */
   private sorted(): RoomSummary[] {
     return [...this.rooms.values()].sort(
       (a, b) =>
-        Number(a.status === 'jogando') - Number(b.status === 'jogando') || b.humans - a.humans,
+        Number(a.status === 'playing') - Number(b.status === 'playing') || b.humans - a.humans,
     )
   }
 }

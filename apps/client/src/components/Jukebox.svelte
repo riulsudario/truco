@@ -8,7 +8,7 @@
 
   interface Props {
     session: GameSession
-    /** Onde não há a TV do bar (sala de espera), o painel mostra o próprio player. */
+    /** Where there is no bar TV (waiting room), the panel shows its own player. */
     withTv?: boolean
   }
 
@@ -36,7 +36,7 @@
   </header>
 
   {#if withTv}
-    <!-- Sem a TV do bar, o player fica aqui, visível (200×200) enquanto toca. -->
+    <!-- Without the bar TV the player lives here, visible (200×200) while playing. -->
     <div class="own-tv" class:hidden={!current}>
       <JukeboxTV {session} width={200} height={200} />
     </div>
@@ -141,7 +141,7 @@
     margin: 0 auto;
     border: 3px solid var(--ink);
   }
-  /* Sem música o player fica fora da tela, mas montado (a API precisa do elemento). */
+  /* With no music the player sits off screen but mounted (the API needs the element). */
   .own-tv.hidden {
     position: absolute;
     left: -9999px;
@@ -217,7 +217,7 @@
     font-size: 11px;
     opacity: 0.7;
   }
-  /* Celular em pé: canto de baixo, por cima da mesa. */
+  /* Phone in portrait: bottom corner, over the table. */
   @media (max-aspect-ratio: 5/4), (max-width: 759px) {
     .jukebox {
       top: auto;

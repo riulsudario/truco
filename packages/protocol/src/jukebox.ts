@@ -1,7 +1,7 @@
 /**
- * Músicas da jukebox: vídeos dos canais oficiais no YouTube (VEVO, "Topic" e canais das
- * duplas), conferidos pelo oEmbed. Tocam pelo player embutido do YouTube, que fica
- * visível como manda o termo de uso; nada é baixado.
+ * Jukebox songs: videos from the official YouTube channels (VEVO, "Topic" and the duos'
+ * channels), checked through oEmbed. They play in the embedded YouTube player, which stays
+ * visible as the terms of service require; nothing is downloaded.
  */
 export const JUKEBOX_TRACKS = [
   {
@@ -140,7 +140,7 @@ export const JUKEBOX_TRACKS = [
 export type TrackId = (typeof JUKEBOX_TRACKS)[number]['id']
 export const TRACK_IDS = JUKEBOX_TRACKS.map((track) => track.id) as [TrackId, ...TrackId[]]
 
-/** O que a jukebox da sala está tocando; startedAt é o relógio do servidor (epoch ms). */
+/** What the room's jukebox is playing; startedAt is the server clock (epoch ms). */
 export interface JukeboxState {
   trackId: TrackId | null
   startedAt: number | null
@@ -148,7 +148,7 @@ export interface JukeboxState {
 
 export const JUKEBOX_COOLDOWN_MS = 3000
 
-/** Próxima faixa da lista, dando a volta no fim. */
+/** Next track in the list, wrapping around at the end. */
 export function nextTrack(current: TrackId | null): TrackId {
   const index = current ? TRACK_IDS.indexOf(current) : -1
   return TRACK_IDS[(index + 1) % TRACK_IDS.length]!

@@ -22,42 +22,42 @@
     acting: Seat[]
     banner: string | null
     events: GameEvent[]
-    /** O que passa na TV da parede (a jukebox); recebe a largura e a altura da tela. */
+    /** What plays on the wall TV (the jukebox); receives the screen's width and height. */
     tv?: Snippet<[{ width: number; height: number }]>
   }
 
   let { hand, me, round, names, avatars, shouts, acting, banner, events, tv }: Props = $props()
 
   /**
-   * A mesa vista da sua cadeira, em camadas: o bar (imagem inteira), os bonecos de pixel
-   * art (montados no navegador com o visual de cada um), a frente da mesa por cima
-   * escondendo o colo e as cartas jogadas deitadas no feltro. Tudo em pixels da imagem.
+   * The table seen from your seat, in layers: the bar (whole image), the pixel-art avatars
+   * (assembled in the browser with each one's look), the front of the table on top hiding
+   * the laps, and the played cards lying on the felt. Everything in image pixels.
    */
   const POSITIONS = ['near', 'right', 'far', 'left'] as const
   const SEATED: Seated[] = ['left', 'far', 'right']
-  /** Onde fica o colo dentro do quadro 64×64 do boneco sentado. */
+  /** Where the lap is inside the seated avatar's 64×64 frame. */
   const LAP = { x: 32, y: 44 }
   /**
-   * Centro do leque dentro do quadro do boneco, conforme a direção: de frente, na altura
-   * das mãos; de perfil, mais à frente do rosto e mais alto, já em direção ao centro da
-   * mesa (mais longe de você).
+   * Center of the fan inside the avatar's frame, by facing: from the front, at hand height;
+   * in profile, further ahead of the face and higher, already toward the center of the
+   * table (further from you).
    */
   const HELD_AT = {
     front: { x: 32, y: 40 },
     right: { x: 40, y: 39 },
     left: { x: 24, y: 39 },
   } as const
-  /** Do colo ao topo da cabeça, em pixels do quadro. */
+  /** From the lap to the top of the head, in frame pixels. */
   const SEATED_PX = 32
   const SIZE = SCENE_SIZE
-  /** Tamanho em que o player é criado antes de ser encaixado na TV (16:9 aproximado). */
+  /** Size the player is created at before being fitted into the TV (roughly 16:9). */
   const TV = { w: 160, h: 116 }
 
   const seatOf = (position: (typeof POSITIONS)[number]) =>
     ((me + POSITIONS.indexOf(position)) % 4) as Seat
   const positionOf = (seat: Seat) => POSITIONS[(seat - me + 4) % 4]!
 
-  /** Canto do boneco de cada cadeira, a partir do colo mapeado na imagem. */
+  /** Corner of each seat's avatar, from the lap mapped on the image. */
   function place(position: Seated) {
     const { lap, scale } = SEATS[position]
     return {
@@ -68,12 +68,12 @@
     }
   }
 
-  // ---- encaixe da cena na tela ------------------------------------------------------------
+  // ---- fitting the scene to the screen ---------------------------------------------------
   let element = $state<HTMLElement>()
   let fit = $state({ scale: 1, x: 0, y: 0, w: SIZE.w as number, h: SIZE.h as number })
   /**
-   * Zoom numa tela estreita (corta um pouco as laterais em vez de sobrar tarja). Pouco:
-   * quem senta nas pontas está na borda da imagem.
+   * Zoom on a narrow screen (crops the sides a little instead of leaving bars). Just a bit:
+   * whoever sits at the ends is at the edge of the image.
    */
   const NARROW_ZOOM = 1.08
 
@@ -81,7 +81,7 @@
     if (!element) return
     const observer = new ResizeObserver(() => {
       const { clientWidth: w, clientHeight: h } = element!
-      // Tela larga: a cena cobre tudo. Estreita: aparece inteira (com um pouco de zoom).
+      // Wide screen: the scene covers everything. Narrow: it shows whole (slightly zoomed).
       const cover = w >= 760 && w / h >= 1.25
       const scale = cover
         ? Math.max(w / SIZE.w, h / SIZE.h)
@@ -98,7 +98,7 @@
     return () => observer.disconnect()
   })
 
-  /** Etiqueta do nome em cima da cabeça, sempre dentro da tela. */
+  /** Name tag above the head, always inside the screen. */
   function tagPosition(head: Point) {
     const margin = 90
     return {
@@ -107,7 +107,7 @@
     }
   }
 
-  // ---- gestos -----------------------------------------------------------------------------
+  // ---- gestures ---------------------------------------------------------------------------
   let gestures = $state<Partial<Record<Seated, 'play' | 'yes' | 'no'>>>({})
   const GESTURE_MS = 520
 
@@ -130,8 +130,8 @@
     }
   })
 
-  // ---- cartas -----------------------------------------------------------------------------
-  // Cache das imagens das cartas; não precisa ser reativo.
+  // ---- cards ------------------------------------------------------------------------------
+  // Card image cache; it doesn't need to be reactive.
   const art: Record<string, string> = {}
   function cardImage(card: CardData | null): string {
     const key = card ? `${card.rank}-${card.suit}` : 'back'
@@ -147,9 +147,9 @@
     style:height="{SIZE.h}px"
     style:transform="translate({fit.x}px, {fit.y}px) scale({fit.scale})"
   >
-    <img class="layer" src="/scene/bar-fundo.webp" alt="" />
+    <img class="layer" src="/scene/bar-back.webp" alt="" />
     {#if tv}
-      <!-- Clipe da jukebox encaixado na tela da TV, com a mesma perspectiva do desenho. -->
+      <!-- Jukebox clip fitted into the TV screen, with the same perspective as the drawing. -->
       <div class="tv-screen" style:transform={quadToMatrix3d(TV.w, TV.h, TV_SCREEN)}>
         {@render tv({ width: TV.w, height: TV.h })}
       </div>
@@ -167,7 +167,7 @@
         style:top="{at.y}px"
       >
         <AvatarSprite {avatar} facing={SEATS[position].facing} scale={at.scale} />
-        <!-- Leque nas mãos, na altura do peito; nas pontas, virado para o centro da mesa. -->
+        <!-- Fan in hand, at chest height; at the ends, turned toward the center of the table. -->
         <div
           class="held {SEATS[position].facing}"
           style:left="{HELD_AT[SEATS[position].facing].x * at.scale}px"
@@ -183,7 +183,7 @@
             />
           {/each}
           {#if count > 0}
-            <!-- Mãos fechadas na base do leque, por cima das cartas. -->
+            <!-- Closed hands at the base of the fan, over the cards. -->
             <div class="grip">
               <PixelHands tones={skinTones(avatar)} scale={at.scale} single={position !== 'far'} />
             </div>
@@ -192,7 +192,7 @@
       </div>
     {/each}
 
-    <img class="layer" src="/scene/bar-frente.webp" alt="" />
+    <img class="layer" src="/scene/bar-front.webp" alt="" />
 
     {#each round?.plays ?? [] as play (play.seat)}
       {@const quad = PLAYED[positionOf(play.seat)]}
@@ -228,7 +228,7 @@
 </section>
 
 <style>
-  /* Em pé, a caixa tem a proporção do recorte com zoom (largura / NARROW_ZOOM): sem tarja. */
+  /* In portrait the box has the zoomed crop's ratio (width / NARROW_ZOOM): no bars. */
   .scene {
     position: relative;
     align-self: center;
@@ -244,7 +244,7 @@
     top: 0;
     transform-origin: 0 0;
   }
-  /* Ampliação sem filtro: é isso que mantém a cara de pixel art. */
+  /* Unfiltered upscaling: that's what keeps the pixel-art look. */
   .stage,
   .stage * {
     image-rendering: pixelated;
@@ -269,21 +269,21 @@
     translate: -50% -50%;
     display: flex;
   }
-  /* As mãos ficam na base do leque, um pouco abaixo, centralizadas. */
+  /* The hands sit at the base of the fan, a little below, centered. */
   .grip {
     position: absolute;
     left: 50%;
     bottom: 0;
     translate: -50% 55%;
   }
-  /* Mesmo leque da sua mão: cartas sobrepostas, girando em volta de um ponto abaixo. */
+  /* Same fan as your hand: overlapping cards rotating around a point below. */
   .held img {
     transform-origin: 50% 140%;
   }
   /*
-   * Quem senta de lado segura o leque virado para o centro da mesa: daqui vemos o verso
-   * de quina. Encurtamento chapado, como em pixel art: estreita na horizontal e sobe um
-   * pouco do lado que está mais longe (o do centro da mesa).
+   * Side players hold the fan turned toward the center of the table: from here we see the
+   * backs edge-on. Flat foreshortening, as in pixel art: narrower horizontally and a bit
+   * higher on the far side (the one toward the center of the table).
    */
   .held.right {
     transform: scaleX(0.55) skewY(-12deg);
@@ -304,7 +304,7 @@
     }
   }
 
-  /* Gestos em passos secos, no ritmo da pixel art. */
+  /* Gestures in hard steps, in the pixel-art rhythm. */
   .person.acting {
     animation: breathe 0.8s steps(2) infinite;
   }
@@ -368,13 +368,13 @@
     border: 3px solid var(--ink);
     padding: 2px 8px;
     font-size: 16px;
-    /* Falas gravadas são frases inteiras: quebram linha em vez de vazar da tela. */
+    /* Recorded lines are whole sentences: they wrap instead of overflowing the screen. */
     width: max-content;
     max-width: 280px;
     text-align: center;
     animation: pop 160ms steps(3);
   }
-  /* Rabicho do balão apontando para quem falou. */
+  /* Balloon tail pointing at whoever spoke. */
   .shout::after {
     content: '';
     position: absolute;
@@ -390,7 +390,7 @@
     translate: -50% 0;
     z-index: 5;
   }
-  /* Seu balão fica acima da sua mão, que na tela deitada cobre a parte de baixo da cena. */
+  /* Your balloon sits above your hand, which in landscape covers the bottom of the scene. */
   .shout.mine {
     bottom: 4%;
   }
@@ -425,7 +425,7 @@
     z-index: 4;
   }
 
-  /* Tela deitada: a mesa ocupa a tela inteira, atrás do HUD. */
+  /* Landscape: the table fills the whole screen, behind the HUD. */
   @media (min-aspect-ratio: 5/4) and (min-width: 760px) {
     .scene {
       position: absolute;

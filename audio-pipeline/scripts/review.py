@@ -1,5 +1,5 @@
-"""Servidor local da revisão: serve review/index.html, os áudios de output/ e grava as decisões
-em manifests/review.json. Só escuta em 127.0.0.1 e não usa nada externo.
+"""Local review server: serves review/index.html and the audio in output/, and stores decisions
+in manifests/review.json. Listens on 127.0.0.1 only and uses nothing external.
 
     python scripts/review.py              # http://127.0.0.1:8765
     python scripts/review.py --port 9000
@@ -18,7 +18,7 @@ from urllib.parse import unquote, urlparse
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import OUTPUT, ROOT, SELECTED, characters, load_lines, load_review, rel, save_review  # noqa: E402
 
-ROOTS = {"candidates": "Biblioteca", "phase_b": "Fase B (estilos)", "smoke": "Teste (voz embutida)"}
+ROOTS = {"candidates": "Library", "phase_b": "Phase B (styles)", "smoke": "Test (built-in voice)"}
 STATUSES = {"pending", "approved", "rejected"}
 
 
@@ -60,14 +60,14 @@ def catalog() -> dict:
                 "best": state.get("best", False),
                 "note": state.get("note", ""),
             })
-    names = {cid: c["name"] for cid, c in cast.items()} | {"padrao": "Voz embutida"}
+    names = {cid: c["name"] for cid, c in cast.items()} | {"builtin": "Built-in voice"}
     return {"roots": ROOTS, "characters": names, "categories": lines["categories"],
             "lines": [{k: l[k] for k in ("id", "category", "text", "number")} for l in lines["lines"]],
             "takes": takes}
 
 
 class Handler(SimpleHTTPRequestHandler):
-    def log_message(self, *args) -> None:  # silencioso
+    def log_message(self, *args) -> None:  # quiet
         pass
 
     def send_json(self, data, status=200) -> None:
@@ -113,13 +113,13 @@ class Handler(SimpleHTTPRequestHandler):
         body = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
         path = body["path"]
         if not (ROOT / path).is_file() or not path.startswith("output/"):
-            self.send_json({"error": "tomada desconhecida"}, 400)
+            self.send_json({"error": "unknown take"}, 400)
             return
         review = load_review()
         entry = review["takes"].setdefault(path, {})
         if "status" in body:
             if body["status"] not in STATUSES:
-                self.send_json({"error": "status inválido"}, 400)
+                self.send_json({"error": "invalid status"}, 400)
                 return
             entry["status"] = body["status"]
             if body["status"] == "rejected":
@@ -127,7 +127,7 @@ class Handler(SimpleHTTPRequestHandler):
         if "note" in body:
             entry["note"] = body["note"]
         if body.get("best"):
-            # Só uma melhor por personagem, fala e pasta (estilo ou categoria).
+            # Only one best per character, line and folder (style or category).
             folder = str(Path(path).parent)
             prefix = Path(path).stem.rsplit("_", 1)[0]
             for other, state in review["takes"].items():
@@ -147,7 +147,7 @@ def main() -> int:
     parser.add_argument("--port", type=int, default=8765)
     args = parser.parse_args()
     server = ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
-    print(f"revisão em http://127.0.0.1:{args.port}  (Ctrl+C para sair)")
+    print(f"review at http://127.0.0.1:{args.port}  (Ctrl+C to quit)")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

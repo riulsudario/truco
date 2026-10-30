@@ -2,7 +2,7 @@ import { teamOf, type GameEvent, type Seat } from '@truco/engine'
 import type { TauntId, VoiceId } from '@truco/protocol'
 import { load, save } from './storage'
 
-/** Efeitos sonoros (Kenney, CC0): cartas e fichas do pack de cassino, avisos do de interface. */
+/** Sound effects (Kenney, CC0): cards and chips from the casino pack, cues from the interface one. */
 const SFX = {
   play: ['card-place-1', 'card-place-2', 'card-place-3', 'card-place-4'],
   deal: ['card-shuffle'],
@@ -20,22 +20,22 @@ const SFX = {
 
 export type SoundName = keyof typeof SFX
 
-/** Som de cada emoji, conforme a emoção; frases usam o som padrão de provocação. */
+/** Each emoji's sound, matching its emotion; phrases use the default taunt sound. */
 const EMOJI_SOUND: Partial<Record<TauntId, string>> = {
-  risada: 'emoji/risada',
-  raiva: 'emoji/raiva',
-  choro: 'emoji/choro',
-  fogo: 'emoji/fogo',
-  coracao: 'emoji/coracao',
-  caveira: 'emoji/caveira',
-  olhos: 'emoji/olhos',
-  palmas: 'emoji/palmas',
+  laugh: 'emoji/laugh',
+  angry: 'emoji/angry',
+  cry: 'emoji/cry',
+  fire: 'emoji/fire',
+  heart: 'emoji/heart',
+  skull: 'emoji/skull',
+  eyes: 'emoji/eyes',
+  clap: 'emoji/clap',
 }
 
-/** Falas ao mesmo tempo, no máximo: com mais que isso a mesa vira barulho e ninguém entende. */
+/** Max simultaneous lines: any more and the table turns into noise nobody understands. */
 const MAX_VOICES = 2
 
-/** Opus é menor; Safari antigo não toca, então as falas gravadas também saem em MP3. */
+/** Opus is smaller; old Safari can't play it, so recorded lines also ship as MP3. */
 const VOICE_EXT =
   typeof Audio !== 'undefined' && new Audio().canPlayType('audio/ogg; codecs=opus') ? 'ogg' : 'mp3'
 
@@ -49,12 +49,12 @@ function loadList(key: string): VoiceId[] {
 }
 
 class Sound {
-  /** Volume dos efeitos, de 0 a 1; 0 é mudo. Fica salvo neste navegador. */
+  /** Effects volume, 0 to 1; 0 is mute. Saved in this browser. */
   volume = $state(Number(load('truco:sfx', '0.6')) || 0)
-  /** Volume das falas gravadas, separado dos efeitos. */
-  voiceVolume = $state(Number(load('truco:voz', '0.8')) || 0)
-  /** Personagens silenciados por quem joga neste navegador. */
-  mutedVoices = $state<VoiceId[]>(loadList('truco:voz-mudas'))
+  /** Recorded lines volume, separate from the effects. */
+  voiceVolume = $state(Number(load('truco:voice-volume', '0.8')) || 0)
+  /** Characters muted by whoever plays in this browser. */
+  mutedVoices = $state<VoiceId[]>(loadList('truco:muted-voices'))
   private cache = new Map<string, HTMLAudioElement>()
   private speaking = new Set<HTMLAudioElement>()
 
@@ -65,19 +65,19 @@ class Sound {
 
   setVoiceVolume(volume: number): void {
     this.voiceVolume = volume
-    save('truco:voz', String(volume))
+    save('truco:voice-volume', String(volume))
   }
 
   toggleVoice(voice: VoiceId): void {
     this.mutedVoices = this.mutedVoices.includes(voice)
       ? this.mutedVoices.filter((id) => id !== voice)
       : [...this.mutedVoices, voice]
-    save('truco:voz-mudas', JSON.stringify(this.mutedVoices))
+    save('truco:muted-voices', JSON.stringify(this.mutedVoices))
   }
 
   /**
-   * Fala gravada. As do pacote do time só existem em OGG; as dos personagens, em OGG e MP3.
-   * Passando do limite de falas simultâneas, a nova não toca (o balão aparece igual).
+   * Recorded line. The team pack's lines only exist as OGG; the characters', as OGG and MP3.
+   * Past the simultaneous-lines limit, the new one doesn't play (the balloon shows anyway).
    */
   playVoice(file: string, voice?: VoiceId): void {
     if (this.voiceVolume <= 0 || typeof Audio === 'undefined') return
@@ -92,7 +92,7 @@ class Sound {
     void audio.play().catch(done)
   }
 
-  /** Baixa antes as falas que mais tocam, para o grito não chegar atrasado no primeiro truco. */
+  /** Preloads the most played lines, so the shout isn't late on the first truco. */
   preloadVoices(files: string[]): void {
     if (typeof Audio === 'undefined') return
     for (const file of files) this.base(`${file}.${VOICE_EXT}`)
@@ -108,12 +108,12 @@ class Sound {
     return base
   }
 
-  /** Um clone por toque, para sons repetidos poderem se sobrepor. */
+  /** One clone per play, so repeated sounds can overlap. */
   private element(path: string): HTMLAudioElement {
     return this.base(path).cloneNode() as HTMLAudioElement
   }
 
-  /** Som da provocação: o emoji tem o seu; frase usa o padrão. */
+  /** Taunt sound: emojis have their own; phrases use the default. */
   taunt(id: TauntId): void {
     const file = EMOJI_SOUND[id]
     if (file) this.playFile(file)
@@ -129,11 +129,11 @@ class Sound {
     if (this.volume <= 0 || typeof Audio === 'undefined') return
     const audio = this.element(`${file}.ogg`)
     audio.volume = this.volume
-    // Sem gesto do usuário o navegador pode bloquear; o jogo segue em silêncio.
+    // Without a user gesture the browser may block it; the game carries on silently.
     void audio.play().catch(() => {})
   }
 
-  /** Som de cada acontecimento do lote, do ponto de vista de quem senta em `me`. */
+  /** Sound for each happening in the batch, from the point of view of whoever sits in `me`. */
   forEvents(events: GameEvent[], me: Seat | null): void {
     const ours = (team: 0 | 1) => me !== null && teamOf(me) === team
     for (const event of events) {

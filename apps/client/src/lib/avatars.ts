@@ -13,17 +13,17 @@ import { load, save } from './storage'
 const KEY = 'truco:avatar'
 
 /**
- * Visual de quem senta numa cadeira: bots da casa têm o seu (e quem vira bot no lugar de
- * alguém mantém o da pessoa); quem escolheu no editor usa o escolhido; o resto ganha um
- * visual sorteado pelo apelido, sempre o mesmo para o mesmo nome.
+ * Look of whoever sits in a seat: house bots have their own (and a bot taking someone's
+ * seat keeps that person's); whoever picked one in the editor uses it; everyone else gets a
+ * look picked from the nickname, always the same for the same name.
  */
 export function avatarFor(name: string, chosen: Avatar | null | undefined): Avatar {
   return BOT_AVATARS[name] ?? chosen ?? BOT_AVATARS[name.replace(/ \(bot\)$/, '')] ?? fromName(name)
 }
 
 /**
- * Voz de quem senta numa cadeira: a do visual (escolhida ou do bot da casa) ou, sem escolha,
- * uma do mesmo gênero do corpo, sorteada pelo nome para ser sempre a mesma.
+ * Voice of whoever sits in a seat: the look's voice (chosen or the house bot's) or, without
+ * a choice, one matching the body gender, picked from the name so it is always the same.
  */
 export function voiceFor(name: string, chosen: Avatar | null | undefined): VoiceId {
   const avatar = avatarFor(name, chosen)
@@ -53,15 +53,15 @@ export function fromName(name: string): Avatar {
     shirtColor: pick('shirtColor'),
     pants: pick('pants'),
     pantsColor: pick('pantsColor'),
-    // Acessórios só às vezes, para a mesa não virar um baile de fantasia.
-    facialHair: hash % 3 === 0 ? pick('facialHair') : 'nenhum',
-    glasses: hash % 4 === 0 ? pick('glasses') : 'nenhum',
-    hat: hash % 5 === 0 ? pick('hat') : 'nenhum',
+    // Accessories only sometimes, so the table doesn't turn into a costume party.
+    facialHair: hash % 3 === 0 ? pick('facialHair') : 'none',
+    glasses: hash % 4 === 0 ? pick('glasses') : 'none',
+    hat: hash % 5 === 0 ? pick('hat') : 'none',
     hatColor: pick('hatColor'),
   }
 }
 
-/** Visual salvo neste navegador (ou o padrão, se nunca editou ou se o salvo é inválido). */
+/** Look saved in this browser (or the default, if never edited or the saved one is invalid). */
 export function loadMyAvatar(): Avatar {
   try {
     const result = v.safeParse(AvatarSchema, JSON.parse(load(KEY, 'null')))

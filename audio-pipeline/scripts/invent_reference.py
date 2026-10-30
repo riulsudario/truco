@@ -1,11 +1,11 @@
-"""Cria uma referência sintética para o personagem, sem pessoa real: fala um texto em pt-BR com
-o Kokoro-82M (Apache-2.0, local), numa voz que mistura voicepacks dele (bloco `synthetic` em
-characters.yaml). Serve para apresentar o elenco enquanto não houver gravações autorizadas; a
-gravação de verdade substitui o arquivo com prepare_reference.py.
+"""Creates a synthetic reference for the character, with no real person: speaks a pt-BR text with
+Kokoro-82M (Apache-2.0, local) in a voice that blends its voicepacks (`synthetic` block in
+characters.yaml). It lets the cast be shown while there are no authorized recordings; a real
+recording replaces the file through prepare_reference.py.
 
-Roda na venv própria (.venv-kokoro, torch CPU), para não misturar dependências com o Chatterbox:
+Runs in its own venv (.venv-kokoro, CPU torch) to keep its dependencies apart from Chatterbox:
 
-    .venv-kokoro/bin/python scripts/invent_reference.py            # todos com bloco synthetic
+    .venv-kokoro/bin/python scripts/invent_reference.py            # everyone with a synthetic block
     .venv-kokoro/bin/python scripts/invent_reference.py tonhao
 """
 
@@ -39,7 +39,7 @@ def main() -> int:
     for cid in chosen:
         spec = cast[cid].get("synthetic")
         if not spec:
-            raise SystemExit(f"{cid} não tem bloco synthetic em characters.yaml")
+            raise SystemExit(f"{cid} has no synthetic block in characters.yaml")
         total = sum(spec["blend"].values())
         voice = sum(w / total * pipeline.load_voice(name) for name, w in spec["blend"].items())
         torch.manual_seed(0)
@@ -47,7 +47,7 @@ def main() -> int:
                   if r.audio is not None]
         raw = RAW / f"{cid}.wav"
         sf.write(raw, np.concatenate(chunks), 24000)
-        # Mesmo tratamento de uma gravação de verdade.
+        # Same processing as a real recording.
         subprocess.run([sys.executable.replace(".venv-kokoro", ".venv"), str(ROOT / "scripts" / "prepare_reference.py"),
                         cid, str(raw)], check=True)
     return 0

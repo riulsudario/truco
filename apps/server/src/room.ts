@@ -8,8 +8,8 @@ interface Attachment {
 }
 
 /**
- * Uma sala = um Durable Object. Usa WebSocket Hibernation: entre mensagens o objeto pode
- * dormir; o estado volta do storage e as conexões continuam abertas.
+ * One room = one Durable Object. Uses WebSocket Hibernation: between messages the object can
+ * sleep; the state comes back from storage and the connections stay open.
  */
 export class Room extends DurableObject<Env> {
   private core: RoomCore | null = null
@@ -23,7 +23,7 @@ export class Room extends DurableObject<Env> {
     })
   }
 
-  /** Inicializa a sala. Falso se o código já está em uso. */
+  /** Initializes the room. False if the code is already in use. */
   async create(code: string, settings: RoomSettings, creatorToken: string): Promise<boolean> {
     if (this.core) return false
     this.core = new RoomCore(
@@ -42,9 +42,9 @@ export class Room extends DurableObject<Env> {
 
   override async fetch(request: Request): Promise<Response> {
     if (request.headers.get('Upgrade') !== 'websocket') {
-      return new Response('esperava WebSocket', { status: 426 })
+      return new Response('expected WebSocket', { status: 426 })
     }
-    if (!this.core) return new Response('sala não encontrada', { status: 404 })
+    if (!this.core) return new Response('room not found', { status: 404 })
     const { 0: client, 1: server } = new WebSocketPair()
     this.ctx.acceptWebSocket(server)
     server.serializeAttachment({ playerId: null } satisfies Attachment)
@@ -72,7 +72,7 @@ export class Room extends DurableObject<Env> {
         ws.close(4001, result.error)
         return
       }
-      // Uma conexão por jogador: a aba antiga cede lugar à nova.
+      // One connection per player: the old tab gives way to the new one.
       for (const other of this.ctx.getWebSockets()) {
         if (other !== ws && attachment(other).playerId === result.playerId) {
           other.serializeAttachment({ playerId: null } satisfies Attachment)
@@ -115,7 +115,7 @@ export class Room extends DurableObject<Env> {
     }
   }
 
-  /** Entrega as mensagens geradas, persiste, reprograma o alarme e avisa o lobby. */
+  /** Delivers the queued messages, persists, reschedules the alarm and notifies the lobby. */
   private async flush(): Promise<void> {
     const core = this.core!
     const sockets = new Map<string, WebSocket>()
@@ -147,17 +147,17 @@ export class Room extends DurableObject<Env> {
 
     await this.ctx.storage.put('room', core.data)
     const alarm = core.nextAlarm()
-    // Nunca no passado: um alarme para um horário que já passou pode não disparar de novo.
+    // Never in the past: an alarm for a time that already passed may not fire again.
     if (alarm === null) await this.ctx.storage.deleteAlarm()
     else await this.ctx.storage.setAlarm(Math.max(alarm, Date.now() + 10))
     await this.syncLobby(core)
   }
 
-  /** Mantém a lista pública em dia; sala privada ou fechada sai da lista. */
+  /** Keeps the public list up to date; a private or closed room leaves the list. */
   private async syncLobby(core: RoomCore, closed = false): Promise<void> {
-    const listed = !closed && core.data.settings.visibility === 'publica'
+    const listed = !closed && core.data.settings.visibility === 'public'
     const summary = listed ? JSON.stringify(core.summary()) : ''
-    // Depois de hibernar não sabemos o que o lobby tem; na dúvida, manda de novo.
+    // After hibernating we don't know what the lobby has; when in doubt, send it again.
     if (summary === this.lastSummary && this.lastSummary !== '') return
     this.lastSummary = summary
     const lobby = this.env.LOBBY.get(this.env.LOBBY.idFromName('lobby'))
@@ -174,7 +174,7 @@ function send(ws: WebSocket, msg: ServerMessage): void {
   try {
     ws.send(JSON.stringify(msg))
   } catch {
-    // conexão já fechando; o close handler cuida do resto
+    // connection already closing; the close handler takes care of the rest
   }
 }
 

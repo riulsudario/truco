@@ -1,175 +1,175 @@
 {
   "truco": [
     {
-      "file": "falas/truco/01",
+      "file": "lines/truco/01",
       "text": "SUBI NO MURO, CAÍ DE COSTAS! TRUCO, SEU BOSTA!"
     },
     {
-      "file": "falas/truco/02",
+      "file": "lines/truco/02",
       "text": "TRUUUUUCO, DESGRAÇA!"
     },
     {
-      "file": "falas/truco/03",
+      "file": "lines/truco/03",
       "text": "TRUCO, LADRÃO! AQUI NÃO TEM MOLEZA!"
     },
     {
-      "file": "falas/truco/04",
+      "file": "lines/truco/04",
       "text": "TRUCO, FI DUMA ÉGUA!"
     },
     {
-      "file": "falas/truco/05",
+      "file": "lines/truco/05",
       "text": "CÊ ACHA QUE EU TÔ BRINCANDO? TRUUUCO!"
     },
     {
-      "file": "falas/truco/06",
+      "file": "lines/truco/06",
       "text": "TRUCO, SEU PÉ DE RATO!"
     },
     {
-      "file": "falas/truco/07",
+      "file": "lines/truco/07",
       "text": "TRUCO, MISERÁVEL! AGORA EU QUERO VER!"
     },
     {
-      "file": "falas/truco/08",
+      "file": "lines/truco/08",
       "text": "ÔÔÔ, MEU CONSAGRADO! TRUCO NESSA BAGAÇA!"
     }
   ],
-  "seis": [
+  "six": [
     {
-      "file": "falas/seis/01",
+      "file": "lines/six/01",
       "text": "SEIS, LADRÃO!"
     },
     {
-      "file": "falas/seis/02",
+      "file": "lines/six/02",
       "text": "SEEEEEIS, SEU CORNO!"
     },
     {
-      "file": "falas/seis/07",
+      "file": "lines/six/07",
       "text": "SEIS, SEU PÉ DE CHINELO!"
     }
   ],
-  "nove": [
+  "nine": [
     {
-      "file": "falas/nove/03",
+      "file": "lines/nine/03",
       "text": "NOVE, DESGRAÇADO! AGORA AGUENTA!"
     },
     {
-      "file": "falas/nove/05",
+      "file": "lines/nine/05",
       "text": "PEDIU SEIS? ENTÃO TOMA NOVE, INFELIZ!"
     },
     {
-      "file": "falas/nove/08",
+      "file": "lines/nine/08",
       "text": "NOVE! QUERO VER SE TEM CORAGEM!"
     }
   ],
-  "doze": [
+  "twelve": [
     {
-      "file": "falas/doze/04",
+      "file": "lines/twelve/04",
       "text": "DOZE! DOZE! DOZE! CÊ TÁ LASCADO!"
     },
     {
-      "file": "falas/doze/06",
+      "file": "lines/twelve/06",
       "text": "AQUI É DOZE, MEU FILHO! DOZE!"
     }
   ],
-  "provocacao": [
+  "taunt": [
     {
-      "file": "falas/provocacao/01",
+      "file": "lines/taunt/01",
       "text": "CÊ JOGA TRUCO OU TÁ APRENDENDO A CONTAR?"
     },
     {
-      "file": "falas/provocacao/02",
+      "file": "lines/taunt/02",
       "text": "ESSA CARTA AÍ NUM MATA NEM MOSQUITO!"
     },
     {
-      "file": "falas/provocacao/03",
+      "file": "lines/taunt/03",
       "text": "MINHA VÓ JOGA MELHOR QUE VOCÊ, RAPAZ!"
     },
     {
-      "file": "falas/provocacao/04",
+      "file": "lines/taunt/04",
       "text": "Ô MÃO RUIM DA DESGRAÇA!"
     },
     {
-      "file": "falas/provocacao/05",
+      "file": "lines/taunt/05",
       "text": "CÊ TÁ COM MEDO? CHAMA SUA MÃE!"
     },
     {
-      "file": "falas/provocacao/06",
+      "file": "lines/taunt/06",
       "text": "TÁ TREMENDO POR QUÊ, FILHO?"
     },
     {
-      "file": "falas/provocacao/07",
+      "file": "lines/taunt/07",
       "text": "VAI CORRER? ENTÃO CORRE DIREITO!"
     },
     {
-      "file": "falas/provocacao/08",
+      "file": "lines/taunt/08",
       "text": "ISSO AQUI É TRUCO, NÃO É REUNIÃO DE CONDOMÍNIO!"
     }
   ],
-  "vitoria": [
+  "win": [
     {
-      "file": "falas/vitoria/01",
+      "file": "lines/win/01",
       "text": "CHUPAAAA, DESGRAÇADO!"
     },
     {
-      "file": "falas/vitoria/02",
+      "file": "lines/win/02",
       "text": "AQUI TEM CARTA, MEU PATRÃO!"
     },
     {
-      "file": "falas/vitoria/03",
+      "file": "lines/win/03",
       "text": "RESPEITA O PAI, RAPAZ!"
     },
     {
-      "file": "falas/vitoria/04",
+      "file": "lines/win/04",
       "text": "É O TREM! É O TREM!"
     },
     {
-      "file": "falas/vitoria/05",
+      "file": "lines/win/05",
       "text": "ESSA FOI PRA ACABAR COM A AMIZADE!"
     },
     {
-      "file": "falas/vitoria/06",
+      "file": "lines/win/06",
       "text": "PODE CHORAR QUE HOJE EU TÔ SEM LENÇO!"
     },
     {
-      "file": "falas/vitoria/07",
+      "file": "lines/win/07",
       "text": "É TRUCO, NÃO É PRA QUALQUER UM!"
     },
     {
-      "file": "falas/vitoria/08",
+      "file": "lines/win/08",
       "text": "EU AVISEI, SEU ANIMAL!"
     }
   ],
-  "derrota": [
+  "loss": [
     {
-      "file": "falas/derrota/01",
+      "file": "lines/loss/01",
       "text": "AH, VAI TOMAR BANHO, RAPAZ!"
     },
     {
-      "file": "falas/derrota/02",
+      "file": "lines/loss/02",
       "text": "NÃO É POSSÍVEL UMA DESGRAÇA DESSA!"
     },
     {
-      "file": "falas/derrota/03",
+      "file": "lines/loss/03",
       "text": "Ô PARCEIRO BURRO DA PESTE!"
     },
     {
-      "file": "falas/derrota/04",
+      "file": "lines/loss/04",
       "text": "CÊ TINHA O ZAP E NÃO JOGOU?!"
     },
     {
-      "file": "falas/derrota/05",
+      "file": "lines/loss/05",
       "text": "EU VOU EMBORA DESSA MESA!"
     },
     {
-      "file": "falas/derrota/06",
+      "file": "lines/loss/06",
       "text": "ESSE BARALHO TÁ MARCADO, SÓ PODE!"
     },
     {
-      "file": "falas/derrota/07",
+      "file": "lines/loss/07",
       "text": "NUNCA MAIS JOGO COM ESSE INFELIZ!"
     },
     {
-      "file": "falas/derrota/08",
+      "file": "lines/loss/08",
       "text": "QUE JOGO DESGRAÇADO, SÔ!"
     }
   ]

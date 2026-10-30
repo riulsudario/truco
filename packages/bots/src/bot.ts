@@ -10,26 +10,26 @@ import {
 import { winProbability } from './montecarlo'
 import { greedyPick, trickOf } from './policy'
 
-export type Difficulty = 'facil' | 'normal'
+export type Difficulty = 'easy' | 'normal'
 
 interface Profile {
-  /** Chance mínima de levar a mão para pedir truco. */
+  /** Minimum chance of winning the hand to call truco. */
   callTruco: number
-  /** Chance mínima para aumentar em resposta a um pedido. */
+  /** Minimum chance to raise in response to a call. */
   raise: number
-  /** Folga somada ao limiar de valor esperado para aceitar; quanto maior, mais medroso. */
+  /** Margin added to the expected-value threshold to accept; the higher, the more timid. */
   caution: number
-  /** Probabilidade de blefar pedindo truco com mão média. */
+  /** Probability of bluffing a truco call with an average hand. */
   bluff: number
   samples: number
-  /** Monte Carlo também na escolha da carta; senão joga pela regra gulosa. */
+  /** Monte Carlo for card choice too; otherwise plays by the greedy rule. */
   searchCards: boolean
-  /** Chance de errar de propósito: carta ao acaso ou resposta ao truco trocada. */
+  /** Chance of a deliberate mistake: a random card or a flipped truco answer. */
   blunder: number
 }
 
 export const PROFILES: Record<Difficulty, Profile> = {
-  facil: {
+  easy: {
     callTruco: 0.8,
     raise: 0.92,
     caution: 0.2,
@@ -55,17 +55,17 @@ export interface BotInput {
   difficulty?: Difficulty
 }
 
-/** Escolhe a ação do bot para a cadeira da view. Só chame quando houver jogada legal. */
+/** Picks the bot's action for the view's seat. Only call it when a legal move exists. */
 export function decide({ view, random, difficulty = 'normal' }: BotInput): Action {
   const seat = view.seat
-  if (seat === null) throw new Error('espectador não joga')
+  if (seat === null) throw new Error('spectators do not play')
   const profile = PROFILES[difficulty]
   const { legal } = view
   const chance = () => winProbability(view, random, profile.samples)
 
-  if (legal.onze) {
-    // Jogar vale 3 para quem ganhar; correr entrega 1. Compensa com chance acima de 1/3.
-    return { type: 'onze', seat, accept: chance() >= 1 / 3 + profile.caution }
+  if (legal.eleven) {
+    // Playing is worth 3 to the winner; running gives away 1. Worth it above a 1/3 chance.
+    return { type: 'eleven', seat, accept: chance() >= 1 / 3 + profile.caution }
   }
   if (legal.accept) return respond(view, seat, profile, chance(), random)
   if (legal.truco) {
@@ -75,7 +75,7 @@ export function decide({ view, random, difficulty = 'normal' }: BotInput): Actio
     }
   }
   if (legal.play) return chooseCard(view, seat, profile, random)
-  throw new Error('bot chamado sem jogada legal')
+  throw new Error('bot called without a legal move')
 }
 
 function respond(
@@ -88,11 +88,11 @@ function respond(
   const proposed = view.hand.truco!.stake
   const current = view.hand.stake
   const opponentScore = view.scores[1 - teamOf(seat)]!
-  // Correr dá o valor atual ao adversário; se isso já fecha o jogo, não há o que perder.
+  // Running gives the current stake to the opponents; if that already ends the game, there is nothing to lose.
   if (opponentScore + current >= WINNING_SCORE) return { type: 'accept', seat }
   if (view.legal.truco && p >= profile.raise) return { type: 'truco', seat }
 
-  // Aceitar vale p·s − (1−p)·s; correr vale −atual. Aceita quando o primeiro é maior.
+  // Accepting is worth p·s − (1−p)·s; running is worth −current. Accept when the former is higher.
   const breakEven = (proposed - current) / (2 * proposed)
   const accepts = p >= breakEven + profile.caution || random() < profile.bluff / 2
   const flipped = random() < profile.blunder ? !accepts : accepts
@@ -101,7 +101,7 @@ function respond(
 
 function chooseCard(view: PlayerView, seat: Seat, profile: Profile, random: () => number): Action {
   const { hand } = view
-  // Mão de ferro: às cegas, qualquer carta serve.
+  // Iron hand: playing blind, any card will do.
   if (hand.myCards.some((card) => card === null)) {
     return { type: 'play', seat, index: Math.floor(random() * hand.myCards.length) }
   }
@@ -113,7 +113,7 @@ function chooseCard(view: PlayerView, seat: Seat, profile: Profile, random: () =
   if (random() < profile.blunder) {
     index = Math.floor(random() * powers.length)
   } else if (profile.searchCards && powers.length > 1) {
-    // Avalia cada carta e prefere, no empate, gastar a mais fraca.
+    // Evaluates each card and, on a tie, prefers spending the weakest.
     let bestScore = -Infinity
     powers.forEach((power, candidate) => {
       const score = winProbability(view, random, profile.samples, candidate) - power * 0.002

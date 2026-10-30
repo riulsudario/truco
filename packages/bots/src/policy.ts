@@ -1,10 +1,10 @@
 import type { RoundResult, Team } from '@truco/engine'
 
-/** Resumo da vaza em andamento do ponto de vista de quem vai jogar. */
+/** Summary of the round in progress from the point of view of whoever plays next. */
 export interface Trick {
-  /** Maior força na mesa (-Infinity se ninguém jogou). */
+  /** Highest power on the table (-Infinity if nobody has played). */
   best: number
-  /** Time com a maior carta; null se ninguém jogou ou se está cangado. */
+  /** Team holding the highest card; null if nobody has played or it is tied. */
   winningTeam: Team | null
   plays: number
   roundIndex: number
@@ -32,9 +32,9 @@ export function trickOf(
 export type Pick = { index: number; discard: boolean }
 
 /**
- * Jogada gulosa de quem conhece só as próprias cartas: abre guardando manilha, deixa o
- * parceiro levar, ganha com a menor carta que serve e joga fora a menor quando não dá.
- * Usada pelo bot fácil e nas simulações do Monte Carlo.
+ * Greedy play for someone who only knows their own cards: leads while saving manilhas, lets
+ * the partner take it, wins with the lowest card that does and throws away the lowest when
+ * it can't. Used by the easy bot and in the Monte Carlo simulations.
  */
 export function greedyPick(powers: readonly number[], trick: Trick, myTeam: Team): Pick {
   const order = powers.map((power, index) => ({ power, index })).sort((a, b) => a.power - b.power)
@@ -53,7 +53,7 @@ export function greedyPick(powers: readonly number[], trick: Trick, myTeam: Team
   const beater = order.find((c) => c.power > trick.best)
   if (beater) return { index: beater.index, discard: false }
 
-  // Já fizemos a primeira: cangar a vaza também nos dá a mão.
+  // We already took the first round: tying this one also gives us the hand.
   const tie = order.find((c) => c.power === trick.best)
   if (tie && trick.firstResult === myTeam && trick.roundIndex > 0) {
     return { index: tie.index, discard: false }

@@ -6,8 +6,8 @@
   import { loadYouTube, type YouTubePlayer } from '../lib/youtube'
 
   /**
-   * Player do YouTube da jukebox. Fica visível enquanto toca (é o que pedem os termos do
-   * YouTube); na mesa, dentro da TV do bar. Sem música, some e a TV volta ao desenho.
+   * The jukebox YouTube player. It stays visible while playing (as YouTube's terms require);
+   * at the table, inside the bar's TV. With no music it hides and the TV shows the drawing.
    */
   interface Props {
     session: GameSession
@@ -35,7 +35,7 @@
           onStateChange: (event: { data: number }) => {
             if (event.data === YT.PlayerState.ENDED) finished()
           },
-          // Vídeo que não deixa tocar embutido: pula para a próxima.
+          // A video that can't be played embedded: skip to the next one.
           onError: () => finished(),
         },
       })
@@ -51,7 +51,7 @@
     if (id) session.trackEnded(id)
   }
 
-  // Toca a faixa da sala a partir do ponto em que ela está para todo mundo.
+  // Plays the room's track from the point where it is for everyone.
   $effect(() => {
     const { trackId, startedAt } = session.jukebox
     if (!ready || !player) return

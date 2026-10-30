@@ -1,9 +1,8 @@
-# Assets de origem (cache, fora do git)
+# Source assets (cache, not in git)
 
-`pnpm assets` baixa aqui o que precisa e regenera as imagens em `apps/client/public/`:
+`pnpm assets` downloads what it needs here and regenerates the images in `apps/client/public/`:
 
-- `lpc/`: camadas do Universal LPC Spritesheet Character Generator, num commit fixo
-  (ver `scripts/build-people.mjs`).
-- `styloo-bar.png`: capa do FREE Bar asset pack, da Styl0o (ver `scripts/build-backdrop.mjs`).
+- `lpc/`: layers from the Universal LPC Spritesheet Character Generator, at a pinned commit
+  (see `apps/client/scripts/build-avatar.mjs`).
 
-Créditos e licenças em `CREDITS.md`.
+Credits and licenses in `CREDITS.md`.

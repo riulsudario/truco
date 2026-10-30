@@ -12,24 +12,24 @@ import { playerToken } from './identity'
 import { AUDIENCE, GameSession, tauntText } from './session.svelte'
 import { sound } from './sound.svelte'
 
-export type ConnectionStatus = 'conectando' | 'aberta' | 'reconectando' | 'encerrada'
+export type ConnectionStatus = 'connecting' | 'open' | 'reconnecting' | 'closed'
 export type EndReason = 'kicked' | 'closed' | 'left' | ErrorCode
 
 const RETRY_DELAYS = [500, 1000, 2000, 4000, 8000]
-/** Códigos de fechamento em que não adianta reconectar. */
+/** Close codes where reconnecting is pointless. */
 const FINAL_CLOSE_CODES = new Set([1000, 4000, 4001, 4002, 4004])
 const ERROR_TOAST_MS = 3000
 
-/** Sala online: fala com o Durable Object da sala por WebSocket. */
+/** Online room: talks to the room's Durable Object over WebSocket. */
 export class OnlineSession extends GameSession {
   override readonly canTaunt = true
   override readonly sharedJukebox = true
   room = $state.raw<RoomSnapshot | null>(null)
   playerId = $state<string | null>(null)
-  status = $state<ConnectionStatus>('conectando')
+  status = $state<ConnectionStatus>('connecting')
   endReason = $state<EndReason | null>(null)
   error = $state<ErrorCode | null>(null)
-  /** Cadeiras que o servidor está esperando agir. */
+  /** Seats the server is waiting on to act. */
   waitingOn = $state<Seat[]>([])
 
   private ws: WebSocket | null = null
@@ -60,7 +60,7 @@ export class OnlineSession extends GameSession {
 
   act(action: Action): void {
     if (action.type === 'nextHand') return
-    // O servidor sabe a cadeira de quem mandou; não confia na que viria daqui.
+    // The server knows the sender's seat; it doesn't trust one coming from here.
     const { seat: _seat, ...rest } = action
     this.send({ t: 'game', action: rest })
   }
@@ -80,7 +80,7 @@ export class OnlineSession extends GameSession {
   retryWithPassword(password: string): void {
     this.password = password
     this.endReason = null
-    this.status = 'conectando'
+    this.status = 'connecting'
     this.connect()
   }
 
@@ -107,12 +107,12 @@ export class OnlineSession extends GameSession {
     }
     ws.onmessage = (event) => this.onMessage(JSON.parse(event.data as string) as ServerMessage)
     ws.onclose = (event) => {
-      if (this.ws !== ws || this.status === 'encerrada') return
+      if (this.ws !== ws || this.status === 'closed') return
       if (FINAL_CLOSE_CODES.has(event.code) || this.attempts >= RETRY_DELAYS.length) {
         this.finish(this.endReason ?? 'room_not_found')
         return
       }
-      this.status = 'reconectando'
+      this.status = 'reconnecting'
       this.retryTimer = setTimeout(() => this.connect(), RETRY_DELAYS[this.attempts++])
     }
   }
@@ -121,7 +121,7 @@ export class OnlineSession extends GameSession {
     switch (msg.t) {
       case 'welcome':
         this.playerId = msg.playerId
-        this.status = 'aberta'
+        this.status = 'open'
         this.setRoom(msg.room)
         break
       case 'room':
@@ -142,8 +142,8 @@ export class OnlineSession extends GameSession {
         else this.shout(msg.seat, tauntText(msg.id))
         break
       case 'error':
-        // Erro antes do welcome encerra a tentativa (senha errada, banido, sala fechada).
-        if (this.status !== 'aberta') this.endReason = msg.code
+        // An error before welcome ends the attempt (wrong password, banned, room closed).
+        if (this.status !== 'open') this.endReason = msg.code
         else this.toast(msg.code)
         break
       case 'kicked':
@@ -157,7 +157,7 @@ export class OnlineSession extends GameSession {
 
   private setRoom(room: RoomSnapshot): void {
     this.room = room
-    // Converte o início da música para o relógio deste navegador.
+    // Converts the track start to this browser's clock.
     const skew = Date.now() - room.serverTime
     const { trackId, startedAt } = room.jukebox
     if (
@@ -167,14 +167,13 @@ export class OnlineSession extends GameSession {
       this.jukebox = { trackId, startedAt: startedAt === null ? null : startedAt + skew }
     }
     this.avatars = room.seats.map((seat) =>
-      seat.kind === 'humano'
+      seat.kind === 'human'
         ? (room.players.find((p) => p.id === seat.playerId)?.avatar ?? null)
         : null,
     )
     this.names = room.seats.map((seat) => {
       if (seat.kind === 'bot') return seat.name
-      if (seat.kind === 'humano')
-        return room.players.find((p) => p.id === seat.playerId)?.nick ?? ''
+      if (seat.kind === 'human') return room.players.find((p) => p.id === seat.playerId)?.nick ?? ''
       return ''
     })
   }
@@ -186,7 +185,7 @@ export class OnlineSession extends GameSession {
   }
 
   private finish(reason: EndReason): void {
-    this.status = 'encerrada'
+    this.status = 'closed'
     this.endReason = reason
     clearTimeout(this.retryTimer)
     this.ws?.close(1000)

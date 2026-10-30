@@ -78,8 +78,8 @@
             <span class="meta">
               {t.people(room.humans)} · {t.bots(room.bots)}
             </span>
-            <span class="status" class:playing={room.status === 'jogando'}>
-              {room.status === 'jogando' ? t.playing : t.waitingStatus}
+            <span class="status" class:playing={room.status === 'playing'}>
+              {room.status === 'playing' ? t.playing : t.waitingStatus}
             </span>
           </button>
         </li>

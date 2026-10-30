@@ -1,24 +1,24 @@
-# Elenco de vozes. A identidade vem da gravação de referência em references/<id>/;
-# os números abaixo só ajustam a interpretação. Ver references/README.md para o que gravar.
+# Voice cast. The identity comes from the reference recording in references/<id>/;
+# the numbers below only tune the delivery. See references/README.md for what to record.
 #
-# Parâmetros aceitos (os mesmos do ChatterboxMultilingualTTS.generate):
-#   exaggeration  intensidade emocional, 0.25 a 2.0 (0.5 = neutro)
-#   cfg_weight    aderência ao ritmo da referência; menor = mais solto e rápido, 0 tira o sotaque herdado
-#   temperature   variação entre tomadas
-# `by_category` sobrescreve por categoria de fala (truco, seis, nove, doze, provocacao, vitoria, derrota).
-# `consent` registra quem é a pessoa da gravação de referência e que ela autorizou; sem isso o
-# generate.py se recusa a usar a referência.
-# `tts_overrides` troca o texto falado de uma linha só para este personagem (o original fica no manifesto).
+# Accepted parameters (the same as ChatterboxMultilingualTTS.generate):
+#   exaggeration  emotional intensity, 0.25 to 2.0 (0.5 = neutral)
+#   cfg_weight    adherence to the reference's pacing; lower = looser and faster, 0 drops the inherited accent
+#   temperature   variation between takes
+# `by_category` overrides per line category (truco, six, nine, twelve, taunt, win, loss).
+# `consent` records who the person in the reference recording is and that they authorized it;
+# without it generate.py refuses to use the reference.
+# `tts_overrides` changes the spoken text of a line for this character only (the original stays in the manifest).
 
 characters:
   tiao:
     name: Tião
-    gender: masculino
-    description: Veterano do boteco. Maduro, grave, levemente rouco, sotaque do interior de Goiás. Debochado e confiante, grita do nada.
+    gender: male
+    description: Bar veteran. Mature, deep, slightly hoarse, countryside Goiás accent. Mocking and confident, shouts out of nowhere.
     reference: references/tiao/reference.wav
-    consent: "sintética, sem pessoa real: Kokoro-82M (Apache-2.0), mistura pm_alex×0.6 + am_echo×0.4; provisória até haver gravação autorizada"
-    # Voz inventada para a apresentação (scripts/invent_reference.py). Uma gravação autorizada
-    # substitui a referência; aí este bloco e o consent acima mudam.
+    consent: "synthetic, no real person: Kokoro-82M (Apache-2.0), blend pm_alex×0.6 + am_echo×0.4; provisional until there is an authorized recording"
+    # Voice invented for the presentation (scripts/invent_reference.py). An authorized recording
+    # replaces the reference; then this block and the consent above change.
     synthetic:
       blend: { pm_alex: 0.6, am_echo: 0.4 }
       speed: 0.95
@@ -26,40 +26,40 @@ characters:
     params: { exaggeration: 0.7, cfg_weight: 0.35, temperature: 0.8 }
     by_category:
       truco: { exaggeration: 0.95, cfg_weight: 0.3 }
-      seis: { exaggeration: 0.95, cfg_weight: 0.3 }
-      nove: { exaggeration: 1.0, cfg_weight: 0.3 }
-      doze: { exaggeration: 1.05, cfg_weight: 0.3 }
-      provocacao: { exaggeration: 0.6, cfg_weight: 0.4 }
+      six: { exaggeration: 0.95, cfg_weight: 0.3 }
+      nine: { exaggeration: 1.0, cfg_weight: 0.3 }
+      twelve: { exaggeration: 1.05, cfg_weight: 0.3 }
+      taunt: { exaggeration: 0.6, cfg_weight: 0.4 }
     tts_overrides: {}
 
   juninho:
     name: Juninho
-    gender: masculino
-    description: Fanfarrão. Jovem, agudo e acelerado. Provoca, ri dos adversários, exagera nas comemorações.
+    gender: male
+    description: Show-off. Young, high-pitched and fast. Taunts, laughs at opponents, overdoes the celebrations.
     reference: references/juninho/reference.wav
-    consent: "sintética, sem pessoa real: Kokoro-82M (Apache-2.0), mistura pm_santa×0.6 + am_eric×0.4; provisória até haver gravação autorizada"
-    # Voz inventada para a apresentação (scripts/invent_reference.py). Uma gravação autorizada
-    # substitui a referência; aí este bloco e o consent acima mudam.
+    consent: "synthetic, no real person: Kokoro-82M (Apache-2.0), blend pm_santa×0.6 + am_eric×0.4; provisional until there is an authorized recording"
+    # Voice invented for the presentation (scripts/invent_reference.py). An authorized recording
+    # replaces the reference; then this block and the consent above change.
     synthetic:
       blend: { pm_santa: 0.6, am_eric: 0.4 }
       speed: 1.15
       text: "Aê, aê, olha a cara dele! Perdeu de novo, hein? Eu falei que hoje era meu dia! Pode chorar, pode chorar à vontade, que essa mão aqui é minha e ninguém tira. Bora, bora, joga logo essa carta!"
     params: { exaggeration: 0.85, cfg_weight: 0.3, temperature: 0.85 }
     by_category:
-      seis: { exaggeration: 1.1, cfg_weight: 0.25 }
-      nove: { exaggeration: 1.1, cfg_weight: 0.25 }
-      doze: { exaggeration: 1.15, cfg_weight: 0.25 }
-      vitoria: { exaggeration: 1.15, cfg_weight: 0.25 }
+      six: { exaggeration: 1.1, cfg_weight: 0.25 }
+      nine: { exaggeration: 1.1, cfg_weight: 0.25 }
+      twelve: { exaggeration: 1.15, cfg_weight: 0.25 }
+      win: { exaggeration: 1.15, cfg_weight: 0.25 }
     tts_overrides: {}
 
   ze:
     name: Zé
-    gender: masculino
-    description: Caipira debochado. Adulto, voz média ou grave, fala arrastada. Irônico e tranquilo, provoca sem gritar.
+    gender: male
+    description: Mocking country guy. Adult, medium or deep voice, drawling speech. Ironic and calm, taunts without shouting.
     reference: references/ze/reference.wav
-    consent: "sintética, sem pessoa real: Kokoro-82M (Apache-2.0), mistura pm_santa×0.6 + bm_daniel×0.4; provisória até haver gravação autorizada"
-    # Voz inventada para a apresentação (scripts/invent_reference.py). Uma gravação autorizada
-    # substitui a referência; aí este bloco e o consent acima mudam.
+    consent: "synthetic, no real person: Kokoro-82M (Apache-2.0), blend pm_santa×0.6 + bm_daniel×0.4; provisional until there is an authorized recording"
+    # Voice invented for the presentation (scripts/invent_reference.py). An authorized recording
+    # replaces the reference; then this block and the consent above change.
     synthetic:
       blend: { pm_santa: 0.6, bm_daniel: 0.4 }
       speed: 0.85
@@ -67,17 +67,17 @@ characters:
     params: { exaggeration: 0.45, cfg_weight: 0.55, temperature: 0.75 }
     by_category:
       truco: { exaggeration: 0.65, cfg_weight: 0.45 }
-      doze: { exaggeration: 0.75, cfg_weight: 0.45 }
+      twelve: { exaggeration: 0.75, cfg_weight: 0.45 }
     tts_overrides: {}
 
   tonhao:
     name: Tonhão
-    gender: masculino
-    description: Competitivo explosivo. Grave, potente, intenso. Grita ao pedir truco e fica indignado quando perde.
+    gender: male
+    description: Explosive competitor. Deep, powerful, intense. Shouts when calling truco and gets outraged when he loses.
     reference: references/tonhao/reference.wav
-    consent: "sintética, sem pessoa real: Kokoro-82M (Apache-2.0), mistura pm_santa×0.55 + am_onyx×0.45; provisória até haver gravação autorizada"
-    # Voz inventada para a apresentação (scripts/invent_reference.py). Uma gravação autorizada
-    # substitui a referência; aí este bloco e o consent acima mudam.
+    consent: "synthetic, no real person: Kokoro-82M (Apache-2.0), blend pm_santa×0.55 + am_onyx×0.45; provisional until there is an authorized recording"
+    # Voice invented for the presentation (scripts/invent_reference.py). An authorized recording
+    # replaces the reference; then this block and the consent above change.
     synthetic:
       blend: { pm_santa: 0.55, am_onyx: 0.45 }
       speed: 1.0
@@ -85,20 +85,20 @@ characters:
     params: { exaggeration: 1.0, cfg_weight: 0.3, temperature: 0.8 }
     by_category:
       truco: { exaggeration: 1.2, cfg_weight: 0.25 }
-      seis: { exaggeration: 1.2, cfg_weight: 0.25 }
-      nove: { exaggeration: 1.2, cfg_weight: 0.25 }
-      doze: { exaggeration: 1.3, cfg_weight: 0.25 }
-      derrota: { exaggeration: 1.15, cfg_weight: 0.25 }
+      six: { exaggeration: 1.2, cfg_weight: 0.25 }
+      nine: { exaggeration: 1.2, cfg_weight: 0.25 }
+      twelve: { exaggeration: 1.3, cfg_weight: 0.25 }
+      loss: { exaggeration: 1.15, cfg_weight: 0.25 }
     tts_overrides: {}
 
   dona_cida:
     name: Dona Cida
-    gender: feminino
-    description: Veterana do truco. Madura, firme, levemente rouca, sotaque do interior de Goiás. Alterna deboche tranquilo com grito inesperado.
+    gender: female
+    description: Truco veteran. Mature, firm, slightly hoarse, countryside Goiás accent. Alternates calm mockery with unexpected shouts.
     reference: references/dona_cida/reference.wav
-    consent: "sintética, sem pessoa real: Kokoro-82M (Apache-2.0), mistura pf_dora×0.6 + af_kore×0.4; provisória até haver gravação autorizada"
-    # Voz inventada para a apresentação (scripts/invent_reference.py). Uma gravação autorizada
-    # substitui a referência; aí este bloco e o consent acima mudam.
+    consent: "synthetic, no real person: Kokoro-82M (Apache-2.0), blend pf_dora×0.6 + af_kore×0.4; provisional until there is an authorized recording"
+    # Voice invented for the presentation (scripts/invent_reference.py). An authorized recording
+    # replaces the reference; then this block and the consent above change.
     synthetic:
       blend: { pf_dora: 0.6, af_kore: 0.4 }
       speed: 0.95
@@ -106,27 +106,27 @@ characters:
     params: { exaggeration: 0.6, cfg_weight: 0.4, temperature: 0.8 }
     by_category:
       truco: { exaggeration: 1.0, cfg_weight: 0.3 }
-      seis: { exaggeration: 1.0, cfg_weight: 0.3 }
-      nove: { exaggeration: 1.0, cfg_weight: 0.3 }
-      doze: { exaggeration: 1.05, cfg_weight: 0.3 }
+      six: { exaggeration: 1.0, cfg_weight: 0.3 }
+      nine: { exaggeration: 1.0, cfg_weight: 0.3 }
+      twelve: { exaggeration: 1.05, cfg_weight: 0.3 }
     tts_overrides: {}
 
   jessica:
     name: Jéssica
-    gender: feminino
-    description: Provocadora. Jovem, expressiva, enérgica, fala rápido. Sarcástica, ri dos adversários, grita nos aumentos.
+    gender: female
+    description: Taunter. Young, expressive, energetic, talks fast. Sarcastic, laughs at opponents, shouts on raises.
     reference: references/jessica/reference.wav
-    consent: "sintética, sem pessoa real: Kokoro-82M (Apache-2.0), mistura pf_dora×0.6 + bf_alice×0.4; provisória até haver gravação autorizada"
-    # Voz inventada para a apresentação (scripts/invent_reference.py). Uma gravação autorizada
-    # substitui a referência; aí este bloco e o consent acima mudam.
+    consent: "synthetic, no real person: Kokoro-82M (Apache-2.0), blend pf_dora×0.6 + bf_alice×0.4; provisional until there is an authorized recording"
+    # Voice invented for the presentation (scripts/invent_reference.py). An authorized recording
+    # replaces the reference; then this block and the consent above change.
     synthetic:
       blend: { pf_dora: 0.6, bf_alice: 0.4 }
       speed: 1.15
       text: "Gente, olha isso! Ele achou mesmo que ia ganhar de mim? Ai, que dó, que dó! Pode embaralhar de novo, amor, que eu vou te dar outra surra. Truco! Vai, corre, corre que eu tô vendo sua cara de medo!"
     params: { exaggeration: 0.85, cfg_weight: 0.3, temperature: 0.85 }
     by_category:
-      seis: { exaggeration: 1.15, cfg_weight: 0.25 }
-      nove: { exaggeration: 1.15, cfg_weight: 0.25 }
-      doze: { exaggeration: 1.2, cfg_weight: 0.25 }
-      provocacao: { exaggeration: 0.8, cfg_weight: 0.3 }
+      six: { exaggeration: 1.15, cfg_weight: 0.25 }
+      nine: { exaggeration: 1.15, cfg_weight: 0.25 }
+      twelve: { exaggeration: 1.2, cfg_weight: 0.25 }
+      taunt: { exaggeration: 0.8, cfg_weight: 0.3 }
     tts_overrides: {}

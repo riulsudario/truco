@@ -1,4 +1,4 @@
 import { defineConfig } from 'vitest/config'
 
-// Sem o plugin do Svelte: os testes do cliente cobrem só a lógica em TS puro.
+// No Svelte plugin: the client tests only cover the plain TS logic.
 export default defineConfig({ test: { include: ['src/**/*.test.ts'] } })

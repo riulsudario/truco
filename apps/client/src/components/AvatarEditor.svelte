@@ -1,6 +1,6 @@
 <!--
-  Editor do boneco: desligado por enquanto (fora do menu e sem rota). Para religar, voltar
-  com a rota /boneco no App e mandar loadMyAvatar() no hello e no treino.
+  Avatar editor: disabled for now (out of the menu and without a route). To turn it back on,
+  restore the /boneco route in App and send loadMyAvatar() in the hello and in practice.
 -->
 <script lang="ts">
   import { AVATAR_OPTIONS, type Avatar } from '@truco/protocol'
@@ -16,7 +16,7 @@
 
   let { avatar, onsave, onback }: Props = $props()
 
-  // O editor trabalha numa cópia; só grava ao salvar.
+  // The editor works on a copy; it only stores on save.
   // svelte-ignore state_referenced_locally
   let draft = $state<Avatar>({ ...avatar })
 
@@ -27,7 +27,7 @@
     {
       field: 'hairColor',
       label: t.avatar.hairColor,
-      when: (a) => a.hair !== 'careca' || a.facialHair !== 'nenhum',
+      when: (a) => a.hair !== 'bald' || a.facialHair !== 'none',
     },
     { field: 'facialHair', label: t.avatar.facialHair },
     { field: 'glasses', label: t.avatar.glasses },
@@ -60,7 +60,7 @@
     <h2>{t.avatar.title}</h2>
   </header>
 
-  <!-- Prévia como na mesa: de frente e de lado, sentado. -->
+  <!-- Preview as at the table: seated, from the front and from the side. -->
   <div class="preview">
     <AvatarSprite avatar={draft} facing="front" scale={3} />
     <AvatarSprite avatar={draft} facing="left" scale={2} />

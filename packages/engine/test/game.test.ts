@@ -2,22 +2,22 @@ import { describe, expect, it } from 'vitest'
 import { cardId, newGame, reduce, seatsToAct, toPlayerView, type GameState } from '../src'
 import { play, run, stateWith } from './fixtures'
 
-// Vira K → manilha A. Cadeira 1 começa (o dealer é a 0).
+// Vira K → manilha A. Seat 1 starts (the dealer is seat 0).
 const strongTeam0 = stateWith({
-  vira: 'Ko',
+  vira: 'Kd',
   cards: [
-    ['Qo', '3p', '3c'],
-    ['Qe', 'Jo', 'Je'],
-    ['2p', '2c', 'Qc'],
-    ['Ke', 'Jc', 'Kc'],
+    ['Qd', '3c', '3h'],
+    ['Qs', 'Jd', 'Js'],
+    ['2c', '2h', 'Qh'],
+    ['Ks', 'Jh', 'Kh'],
   ],
 })
 
-/** Uma vaza completa jogando sempre a primeira carta de cada um, começando pela cadeira 1. */
+/** A full round, everyone always playing their first card, starting with seat 1. */
 const roundFrom1 = [play(1), play(2), play(3), play(0)]
 
-describe('nova partida', () => {
-  it('dá 3 cartas por cadeira mais a vira, sem repetir', () => {
+describe('new game', () => {
+  it('deals 3 cards per seat plus the vira, without repeats', () => {
     const state = newGame({ seed: 42 })
     const all = [...state.hand.cards.flat(), state.hand.vira].map(cardId)
     expect(state.hand.cards.map((cards) => cards.length)).toEqual([3, 3, 3, 3])
@@ -25,38 +25,38 @@ describe('nova partida', () => {
     expect(state.hand.turn).toBe(1)
   })
 
-  it('é determinística pela seed', () => {
+  it('is deterministic by seed', () => {
     expect(newGame({ seed: 7 })).toEqual(newGame({ seed: 7 }))
     expect(newGame({ seed: 7 }).hand.cards).not.toEqual(newGame({ seed: 8 }).hand.cards)
   })
 })
 
-describe('vez e vazas', () => {
-  it('recusa jogada fora da vez sem alterar o estado', () => {
+describe('turns and rounds', () => {
+  it('rejects an out-of-turn play without changing the state', () => {
     const before = structuredClone(strongTeam0)
     expect(reduce(strongTeam0, play(2))).toEqual({ ok: false, error: 'not_your_turn' })
     expect(strongTeam0).toEqual(before)
   })
 
-  it('recusa índice de carta inválido', () => {
+  it('rejects an invalid card index', () => {
     expect(reduce(strongTeam0, play(1, 3))).toEqual({ ok: false, error: 'invalid_card' })
   })
 
-  it('quem ganha a vaza começa a próxima', () => {
-    // 2p (cadeira 2) ganha a primeira vaza.
+  it('the round winner starts the next one', () => {
+    // 2c (seat 2) wins the first round.
     const { state } = run(strongTeam0, ...roundFrom1)
     expect(state.hand.rounds[0]!.result).toBe(0)
     expect(state.hand.turn).toBe(2)
   })
 
-  it('time que faz duas vazas leva a mão valendo 1', () => {
+  it('the team that takes two rounds wins the hand worth 1', () => {
     const { state, events } = run(strongTeam0, ...roundFrom1, play(2), play(3), play(0), play(1))
     expect(state.phase).toBe('handOver')
     expect(state.scores).toEqual([1, 0])
     expect(events.at(-1)).toMatchObject({ type: 'handEnded', result: { winner: 0, points: 1 } })
   })
 
-  it('próxima mão roda o dealer e quem começa', () => {
+  it('the next hand rotates the dealer and who starts', () => {
     const { state } = run(strongTeam0, ...roundFrom1, play(2), play(3), play(0), play(1), {
       type: 'nextHand',
     })
@@ -66,7 +66,7 @@ describe('vez e vazas', () => {
     expect(state.hand.number).toBe(2)
   })
 
-  it('carta encoberta só a partir da segunda vaza', () => {
+  it('face-down cards only from the second round on', () => {
     expect(reduce(strongTeam0, play(1, 0, true))).toEqual({
       ok: false,
       error: 'hidden_not_allowed',
@@ -78,20 +78,20 @@ describe('vez e vazas', () => {
 })
 
 describe('truco', () => {
-  it('pedido aceito passa a valer 3', () => {
+  it('an accepted call is worth 3', () => {
     const { state } = run(strongTeam0, { type: 'truco', seat: 1 }, { type: 'accept', seat: 0 })
     expect(state.hand.stake).toBe(3)
     expect(state.hand.raisedBy).toBe(1)
   })
 
-  it('só pede na própria vez', () => {
+  it('can only call on your own turn', () => {
     expect(reduce(strongTeam0, { type: 'truco', seat: 3 })).toEqual({
       ok: false,
       error: 'not_your_turn',
     })
   })
 
-  it('o próprio time não responde nem joga com truco pendente', () => {
+  it('the calling team neither responds nor plays while truco is pending', () => {
     const { state } = run(strongTeam0, { type: 'truco', seat: 1 })
     expect(reduce(state, { type: 'accept', seat: 3 })).toEqual({
       ok: false,
@@ -100,7 +100,7 @@ describe('truco', () => {
     expect(reduce(state, play(1))).toEqual({ ok: false, error: 'truco_pending' })
   })
 
-  it('quem aumentou não aumenta de novo em seguida', () => {
+  it('whoever raised cannot raise again right away', () => {
     const { state } = run(strongTeam0, { type: 'truco', seat: 1 }, { type: 'accept', seat: 2 })
     expect(reduce(state, { type: 'truco', seat: 1 })).toEqual({
       ok: false,
@@ -108,7 +108,7 @@ describe('truco', () => {
     })
   })
 
-  it('o outro time pode pedir seis na vez dele', () => {
+  it('the other team can call six on its turn', () => {
     const { state } = run(
       strongTeam0,
       { type: 'truco', seat: 1 },
@@ -122,7 +122,7 @@ describe('truco', () => {
     expect(state.hand.truco).toEqual({ team: 0, caller: 2, stake: 6, runVotes: [] })
   })
 
-  it('correr dá ao outro time o valor que estava valendo', () => {
+  it('running gives the other team the current stake', () => {
     const { state } = run(
       strongTeam0,
       { type: 'truco', seat: 1 },
@@ -133,7 +133,7 @@ describe('truco', () => {
     expect(state.lastHand).toEqual({ winner: 1, points: 1, reason: 'ran' })
   })
 
-  it('aumentar em resposta aceita o truco; correr depois dá 3', () => {
+  it('raising in response accepts the truco; running afterwards gives 3', () => {
     const { state } = run(
       strongTeam0,
       { type: 'truco', seat: 1 },
@@ -144,7 +144,7 @@ describe('truco', () => {
     expect(state.scores).toEqual([3, 0])
   })
 
-  it('um só querendo correr não basta: o parceiro ainda decide', () => {
+  it('one partner wanting to run is not enough: the other still decides', () => {
     const { state, events } = run(strongTeam0, { type: 'truco', seat: 1 }, { type: 'run', seat: 0 })
     expect(state.phase).toBe('playing')
     expect(events.at(-1)).toEqual({ type: 'runVoted', seat: 0 })
@@ -157,7 +157,7 @@ describe('truco', () => {
     })
   })
 
-  it('basta um da dupla descer, mesmo que o outro quisesse correr', () => {
+  it('one partner accepting is enough, even if the other wanted to run', () => {
     const { state } = run(
       strongTeam0,
       { type: 'truco', seat: 1 },
@@ -168,7 +168,7 @@ describe('truco', () => {
     expect(state.hand.truco).toBeNull()
   })
 
-  it('o parceiro pode aumentar depois que o outro quis correr', () => {
+  it('the partner can raise after the other wanted to run', () => {
     const { state } = run(
       strongTeam0,
       { type: 'truco', seat: 1 },
@@ -178,7 +178,7 @@ describe('truco', () => {
     expect(state.hand.truco).toEqual({ team: 0, caller: 2, stake: 6, runVotes: [] })
   })
 
-  it('para no doze', () => {
+  it('stops at twelve', () => {
     const { state } = run(
       strongTeam0,
       { type: 'truco', seat: 1 },
@@ -199,31 +199,31 @@ describe('truco', () => {
   })
 })
 
-describe('mão de onze', () => {
-  const onze = stateWith({ ...strongTeam0Setup(), scores: [11, 4] })
+describe('hand of eleven', () => {
+  const eleven = stateWith({ ...strongTeam0Setup(), scores: [11, 4] })
 
-  it('vale 3 e espera a decisão do time com 11', () => {
-    expect(onze.hand.kind).toBe('onze')
-    expect(onze.hand.stake).toBe(3)
-    expect(reduce(onze, play(1))).toEqual({ ok: false, error: 'onze_pending' })
-    expect(reduce(onze, { type: 'onze', seat: 1, accept: true })).toEqual({
+  it('is worth 3 and waits for the team at 11 to decide', () => {
+    expect(eleven.hand.kind).toBe('eleven')
+    expect(eleven.hand.stake).toBe(3)
+    expect(reduce(eleven, play(1))).toEqual({ ok: false, error: 'eleven_pending' })
+    expect(reduce(eleven, { type: 'eleven', seat: 1, accept: true })).toEqual({
       ok: false,
       error: 'not_your_team',
     })
   })
 
-  it('o time com 11 vê as cartas do parceiro; o adversário não', () => {
-    expect(toPlayerView(onze, 0).hand.partnerCards).toEqual(onze.hand.cards[2])
-    expect(toPlayerView(onze, 1).hand.partnerCards).toBeNull()
+  it("the team at 11 sees the partner's cards; the opponents do not", () => {
+    expect(toPlayerView(eleven, 0).hand.partnerCards).toEqual(eleven.hand.cards[2])
+    expect(toPlayerView(eleven, 1).hand.partnerCards).toBeNull()
   })
 
-  it('correr da mão de onze dá 1 ao adversário', () => {
-    const { state } = run(onze, { type: 'onze', seat: 2, accept: false })
+  it('running from the hand of eleven gives 1 to the opponents', () => {
+    const { state } = run(eleven, { type: 'eleven', seat: 2, accept: false })
     expect(state.scores).toEqual([11, 5])
   })
 
-  it('jogando, não tem truco e vale 3', () => {
-    const { state } = run(onze, { type: 'onze', seat: 0, accept: true })
+  it('when played, there is no truco and it is worth 3', () => {
+    const { state } = run(eleven, { type: 'eleven', seat: 0, accept: true })
     expect(reduce(state, { type: 'truco', seat: 1 })).toEqual({
       ok: false,
       error: 'truco_not_allowed',
@@ -235,23 +235,23 @@ describe('mão de onze', () => {
   })
 })
 
-describe('mão de ferro', () => {
-  const ferro = stateWith({ ...strongTeam0Setup(), scores: [11, 11] })
+describe('iron hand', () => {
+  const iron = stateWith({ ...strongTeam0Setup(), scores: [11, 11] })
 
-  it('é jogada às cegas, sem truco e sem carta encoberta', () => {
-    expect(ferro.hand.kind).toBe('ferro')
-    expect(toPlayerView(ferro, 1).hand.myCards).toEqual([null, null, null])
-    expect(reduce(ferro, { type: 'truco', seat: 1 })).toEqual({
+  it('is played blind, without truco or face-down cards', () => {
+    expect(iron.hand.kind).toBe('iron')
+    expect(toPlayerView(iron, 1).hand.myCards).toEqual([null, null, null])
+    expect(reduce(iron, { type: 'truco', seat: 1 })).toEqual({
       ok: false,
       error: 'truco_not_allowed',
     })
-    const second = run(ferro, ...roundFrom1).state
+    const second = run(iron, ...roundFrom1).state
     expect(reduce(second, play(2, 0, true))).toEqual({ ok: false, error: 'hidden_not_allowed' })
   })
 })
 
-describe('fim de jogo', () => {
-  it('não aceita mais ações e trava o placar em 12', () => {
+describe('game over', () => {
+  it('accepts no more actions and caps the score at 12', () => {
     const near: GameState = stateWith({ ...strongTeam0Setup(), scores: [10, 0] })
     const { state } = run(
       near,
@@ -277,12 +277,12 @@ describe('fim de jogo', () => {
 
 function strongTeam0Setup() {
   return {
-    vira: 'Ko',
+    vira: 'Kd',
     cards: [
-      ['Qo', '3p', '3c'],
-      ['Qe', 'Jo', 'Je'],
-      ['2p', '2c', 'Qc'],
-      ['Ke', 'Jc', 'Kc'],
+      ['Qd', '3c', '3h'],
+      ['Qs', 'Jd', 'Js'],
+      ['2c', '2h', 'Qh'],
+      ['Ks', 'Jh', 'Kh'],
     ] as [string[], string[], string[], string[]],
   }
 }

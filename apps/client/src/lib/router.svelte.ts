@@ -1,4 +1,4 @@
-/** Rotas: "/" é o menu, "/sala/ABCD" é uma sala. */
+/** Routes: "/" is the menu, "/sala/ABCD" is a room. */
 class Router {
   path = $state(location.pathname)
 

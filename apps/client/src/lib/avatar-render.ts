@@ -1,7 +1,7 @@
 import { CLOTH_COLORS, HAIR_COLORS, SKIN_TONES, type Avatar } from '@truco/protocol'
 import sheets from './avatar-sheets.json'
 
-/** Direções da tira: virado para a esquerda, de frente, virado para a direita. */
+/** Strip directions: facing left, facing front, facing right. */
 export type Facing = 'left' | 'front' | 'right'
 const COLUMN: Record<Facing, number> = { left: 0, front: 1, right: 2 }
 
@@ -19,7 +19,7 @@ const palettes = sheets.palettes as Record<
 >
 
 const hex = (h: string): Rgb => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)) as Rgb
-/** Algumas folhas fogem alguns tons da paleta de origem; casa pela cor mais próxima. */
+/** Some sheets drift a few shades off the source palette; match by nearest color. */
 const TOLERANCE = 16
 
 const images = new Map<string, Promise<HTMLImageElement>>()
@@ -37,7 +37,7 @@ function image(file: string): Promise<HTMLImageElement> {
   return loading
 }
 
-/** Camadas do boneco em ordem de desenho, cada uma com a cor de destino. */
+/** Avatar layers in draw order, each with its target color. */
 function layersOf(avatar: Avatar): { layer: Layer; color: string | null }[] {
   const pick = (key: string) => parts[key] ?? []
   const all = [
@@ -95,7 +95,7 @@ function recolor(data: Uint8ClampedArray, material: string, color: string): void
 
 const cache = new Map<string, Promise<HTMLCanvasElement>>()
 
-/** Boneco sentado (64×64) olhando para a direção dada. */
+/** Seated avatar (64×64) looking in the given direction. */
 export function renderAvatar(avatar: Avatar, facing: Facing): Promise<HTMLCanvasElement> {
   const key = `${JSON.stringify(avatar)}|${facing}`
   let rendering = cache.get(key)
@@ -127,7 +127,7 @@ async function draw(avatar: Avatar, facing: Facing): Promise<HTMLCanvasElement> 
   return canvas
 }
 
-/** Tons da pele do boneco (contorno, sombra, base, luz), para desenhar as mãos. */
+/** The avatar's skin tones (outline, shadow, base, light), for drawing the hands. */
 export function skinTones(avatar: Avatar): {
   outline: string
   shadow: string

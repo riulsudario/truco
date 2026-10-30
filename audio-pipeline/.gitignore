@@ -1,7 +1,7 @@
 .venv/
 __pycache__/
-# Pesos ficam no cache do Hugging Face; models/ só tem links para lá.
+# Weights live in the Hugging Face cache; models/ only holds links to it.
 models/
-# Áudio gerado é reproduzível pelos scripts (seed e parâmetros ficam nos JSON).
+# Generated audio is reproducible by the scripts (seed and parameters are in the JSON files).
 output/
 .venv-kokoro/

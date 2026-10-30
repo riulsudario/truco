@@ -1,6 +1,6 @@
 /**
- * mulberry32 sem estado escondido: recebe a semente atual e devolve o número sorteado
- * junto com a próxima semente, para o estado do jogo continuar puro e serializável.
+ * mulberry32 without hidden state: takes the current seed and returns the drawn number
+ * along with the next seed, so the game state stays pure and serializable.
  */
 export function nextRandom(seed: number): [value: number, nextSeed: number] {
   const nextSeed = (seed + 0x6d2b79f5) | 0
@@ -22,7 +22,7 @@ export function shuffle<T>(items: readonly T[], seed: number): [T[], number] {
   return [result, current]
 }
 
-/** Gerador com estado para quem não precisa serializar (bots, testes). */
+/** Stateful generator for callers that don't need to serialize (bots, tests). */
 export function createRandom(seed: number): () => number {
   let current = seed
   return () => {

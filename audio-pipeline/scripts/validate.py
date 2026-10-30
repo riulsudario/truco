@@ -1,14 +1,14 @@
-"""Validação automática dos áudios. Não substitui ouvir: só pega defeito objetivo.
+"""Automatic audio validation. It does not replace listening: it only catches objective defects.
 
-Checa integridade (decodifica inteiro), duração, silêncio nas pontas, clipping, formato,
-duplicatas e, para output/final, a correspondência com o manifesto.
-Com --asr, transcreve com Whisper local e mede a distância para o texto (pega palavra trocada,
-engolida ou alucinada) e grava o resultado no JSON de cada tomada, onde a revisão mostra.
+Checks integrity (decodes the whole file), duration, edge silence, clipping, format,
+duplicates and, for output/final, agreement with the manifest.
+With --asr, transcribes with a local Whisper, measures the distance to the text (catches swapped,
+swallowed or hallucinated words) and stores the result in each take's JSON, where the review shows it.
 
-    python scripts/validate.py                       # candidatas
-    python scripts/validate.py --asr                 # + transcrição
+    python scripts/validate.py                       # candidates
+    python scripts/validate.py --asr                 # + transcription
     python scripts/validate.py --stage selected
-    python scripts/validate.py --stage final         # + manifesto
+    python scripts/validate.py --stage final         # + manifest
     python scripts/validate.py --path output/smoke --asr
 """
 
@@ -34,14 +34,14 @@ ASR_MODEL = "openai/whisper-large-v3-turbo"
 
 
 def decode(path: Path) -> tuple[np.ndarray, int]:
-    """Decodifica inteiro via FFmpeg (também prova que o arquivo não está truncado)."""
+    """Decodes the whole file with FFmpeg (which also proves it is not truncated)."""
     sr = 48000
     out = subprocess.run(
         ["ffmpeg", "-v", "error", "-i", str(path), "-f", "f32le", "-ac", "1", "-ar", str(sr), "-"],
         capture_output=True,
     )
     if out.returncode != 0 or out.stderr.strip():
-        raise RuntimeError(out.stderr.decode().strip() or "falha ao decodificar")
+        raise RuntimeError(out.stderr.decode().strip() or "failed to decode")
     return np.frombuffer(out.stdout, dtype=np.float32), sr
 
 
@@ -60,7 +60,7 @@ def edge_silence(audio: np.ndarray, sr: int, threshold_db: float) -> tuple[float
 def normalize_words(text: str) -> str:
     text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode().lower()
     text = re.sub(r"(.)\1{2,}", r"\1", text)  # TRUUUUUCO, SEEEEEIS, CHUPAAAA
-    # O Whisper escreve "6" por "seis" e corrige "cê" para "você"; nada disso é erro de fala.
+    # Whisper writes "6" for "seis" and corrects "cê" to "você"; neither is a speech error.
     return " ".join(SPOKEN.get(w, w) for w in re.findall(r"[a-z0-9]+", text))
 
 
@@ -90,33 +90,33 @@ def check_file(path: Path, cfg: dict, processed: bool) -> tuple[dict, list[str],
         info["sample_rate"] = int(stream["sample_rate"])
         info["channels"] = stream["channels"]
         if info["codec"] != EXPECTED_CODEC.get(path.suffix):
-            errors.append(f"codec {info['codec']}, esperado {EXPECTED_CODEC.get(path.suffix)}")
+            errors.append(f"codec {info['codec']}, expected {EXPECTED_CODEC.get(path.suffix)}")
         if info["channels"] != 1:
-            warnings.append(f"{info['channels']} canais, esperado mono")
+            warnings.append(f"{info['channels']} channels, expected mono")
         audio, sr = decode(path)
     except Exception as exc:  # noqa: BLE001
-        return info, [f"corrompido: {exc}"], warnings
+        return info, [f"corrupted: {exc}"], warnings
 
     duration = len(audio) / sr
     info["duration_s"] = round(duration, 3)
     info["sha"] = hashlib.sha256(np.round(audio, 3).tobytes()).hexdigest()[:16]
     if duration < cfg["min_duration_s"]:
-        errors.append(f"curto demais ({duration:.2f}s)")
+        errors.append(f"too short ({duration:.2f}s)")
     if duration > cfg["max_duration_s"]:
-        errors.append(f"longo demais ({duration:.2f}s), provável alucinação")
+        errors.append(f"too long ({duration:.2f}s), likely a hallucination")
     lead, tail = edge_silence(audio, sr, -45)
     info["edge_silence_s"] = [round(lead, 2), round(tail, 2)]
     limit = cfg["max_edge_silence_s"]
     if max(lead, tail) > limit:
-        (errors if processed else warnings).append(f"silêncio nas pontas {lead:.2f}s/{tail:.2f}s")
+        (errors if processed else warnings).append(f"edge silence {lead:.2f}s/{tail:.2f}s")
     peak = float(np.max(np.abs(audio))) if len(audio) else 0.0
     clipped = float(np.mean(np.abs(audio) >= 0.999)) if len(audio) else 0.0
     info["peak_dbfs"] = round(20 * np.log10(peak + 1e-12), 2)
     info["clip_ratio"] = round(clipped, 5)
     if clipped > cfg["clip_ratio"]:
-        (errors if processed else warnings).append(f"clipping em {clipped:.2%} das amostras")
+        (errors if processed else warnings).append(f"clipping in {clipped:.2%} of the samples")
     if np.sqrt(np.mean(audio**2)) < 1e-3:
-        errors.append("praticamente mudo")
+        errors.append("practically silent")
     return info, errors, warnings
 
 
@@ -138,34 +138,34 @@ def run_asr(paths: list[Path]) -> dict[Path, str]:
 
 def check_manifest(files: list[Path]) -> list[str]:
     if not MANIFEST_FILE.exists():
-        return ["manifesto ausente: rode scripts/export.py"]
+        return ["manifest missing: run scripts/export.py"]
     manifest = json.loads(MANIFEST_FILE.read_text())
     errors, listed = [], set()
     char_ids = {c["id"] for c in manifest["characters"]}
     for line in manifest["lines"]:
         for char_id, takes in line["voices"].items():
             if char_id not in char_ids:
-                errors.append(f"{line['id']}: personagem {char_id} fora da lista")
+                errors.append(f"{line['id']}: character {char_id} not in the list")
             for take in takes:
                 for fmt in ("ogg", "mp3"):
                     path = FINAL / take[fmt]
                     listed.add(path.resolve())
                     if not path.exists():
-                        errors.append(f"{line['id']}/{char_id}: {take[fmt]} não existe")
+                        errors.append(f"{line['id']}/{char_id}: {take[fmt]} does not exist")
                     elif path.stat().st_size != take[f"{fmt}_bytes"]:
-                        errors.append(f"{take[fmt]}: tamanho difere do manifesto")
+                        errors.append(f"{take[fmt]}: size differs from the manifest")
     for path in files:
         if path.resolve() not in listed:
-            errors.append(f"{rel(path)} não está no manifesto")
+            errors.append(f"{rel(path)} is not in the manifest")
     return errors
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--stage", choices=sorted(STAGES), default="candidates")
-    parser.add_argument("--path", type=Path, help="pasta específica (sobrescreve --stage)")
-    parser.add_argument("--asr", action="store_true", help=f"transcreve com {ASR_MODEL} (local)")
-    parser.add_argument("--report", type=Path, help="grava o relatório completo em JSON")
+    parser.add_argument("--path", type=Path, help="specific folder (overrides --stage)")
+    parser.add_argument("--asr", action="store_true", help=f"transcribe with {ASR_MODEL} (local)")
+    parser.add_argument("--report", type=Path, help="write the full report as JSON")
     args = parser.parse_args()
 
     cfg = generation()["validation"]
@@ -173,24 +173,24 @@ def main() -> int:
     processed = args.stage in ("selected", "final") or "selected" in root.parts
     files = sorted(p for p in root.rglob("*") if p.suffix in EXPECTED_CODEC and ".tmp." not in p.name)
     if not files:
-        print(f"nenhum áudio em {rel(root)}")
+        print(f"no audio in {rel(root)}")
         return 0
 
     report, failed, seen = [], 0, {}
     for path in files:
         info, errors, warnings = check_file(path, cfg, processed)
         if "sha" in info:
-            # O mesmo áudio em formatos diferentes é esperado; repetido no mesmo formato, não.
+            # The same audio in different formats is expected; repeated in the same format is not.
             key = (info["sha"], path.suffix)
             if key in seen:
-                errors.append(f"duplicado de {seen[key]}")
+                errors.append(f"duplicate of {seen[key]}")
             seen[key] = info["path"]
         info["errors"], info["warnings"] = errors, warnings
         report.append(info)
 
     if args.asr:
         wavs = [p for p in files if p.suffix == ".wav"]
-        print(f"transcrevendo {len(wavs)} tomadas...", flush=True)
+        print(f"transcribing {len(wavs)} takes...", flush=True)
         for path, heard in run_asr(wavs).items():
             meta_path = path.with_suffix(".json")
             meta = json.loads(meta_path.read_text()) if meta_path.exists() else {}
@@ -200,7 +200,7 @@ def main() -> int:
             if text:
                 entry["cer"] = round(cer(text, heard), 3)
                 if entry["cer"] > 0.25:
-                    entry["warnings"].append(f"transcrição diverge ({entry['cer']:.0%}): \"{heard}\"")
+                    entry["warnings"].append(f"transcription differs ({entry['cer']:.0%}): \"{heard}\"")
                 meta["asr"] = {"model": ASR_MODEL, "text": heard, "cer": entry["cer"]}
                 meta_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n")
 
@@ -212,15 +212,15 @@ def main() -> int:
             failed += bool(entry["errors"])
             print(f"{mark} {entry['path']}: {'; '.join(entry['errors'] + entry['warnings'])}")
     for error in manifest_errors:
-        print(f"✗ manifesto: {error}")
+        print(f"✗ manifest: {error}")
     durations = [r["duration_s"] for r in report if "duration_s" in r]
-    print(f"\n{len(report)} arquivos, {failed} com erro, "
-          f"{sum(bool(r['warnings']) and not r['errors'] for r in report)} com aviso; "
-          f"duração {min(durations):.2f}-{max(durations):.2f}s")
+    print(f"\n{len(report)} files, {failed} with errors, "
+          f"{sum(bool(r['warnings']) and not r['errors'] for r in report)} with warnings; "
+          f"duration {min(durations):.2f}-{max(durations):.2f}s")
     if args.asr:
         cers = [r["cer"] for r in report if "cer" in r]
         if cers:
-            print(f"CER médio {np.mean(cers):.1%}, pior {max(cers):.1%}")
+            print(f"mean CER {np.mean(cers):.1%}, worst {max(cers):.1%}")
     if args.report:
         args.report.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
     return 1 if failed or manifest_errors else 0

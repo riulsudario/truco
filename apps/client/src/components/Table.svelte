@@ -37,8 +37,8 @@
 
   const acting = $derived.by((): Seat[] => {
     if (view.phase !== 'playing') return []
-    if (hand.onzePending !== null)
-      return ([0, 1, 2, 3] as Seat[]).filter((s) => teamOf(s) === hand.onzePending)
+    if (hand.elevenPending !== null)
+      return ([0, 1, 2, 3] as Seat[]).filter((s) => teamOf(s) === hand.elevenPending)
     if (hand.truco) {
       const { team, runVotes } = hand.truco
       return ([0, 1, 2, 3] as Seat[]).filter((s) => teamOf(s) !== team && !runVotes.includes(s))
@@ -69,8 +69,8 @@
   })
 
   /**
-   * Leque da mão, como se segura de verdade: as cartas se sobrepõem deixando o canto
-   * esquerdo de cada uma à mostra, e giram em volta de um ponto bem abaixo da mão.
+   * Hand fan, held like the real thing: the cards overlap leaving each one's left corner
+   * showing, and rotate around a point well below the hand.
    */
   function fan(index: number, count: number) {
     const offset = index - (count - 1) / 2
@@ -124,9 +124,9 @@
   <section class="controls">
     <div class="actions">
       {#if view.phase === 'gameOver'}
-        <!-- Quadro no meio da tela, por cima da mesa, nos dois formatos de tela. -->
-        <div class="game-over" role="dialog" aria-modal="true" aria-labelledby="fim">
-          <h2 id="fim">{view.winner === myTeam ? t.gameWon : t.gameLost}</h2>
+        <!-- Box in the middle of the screen, over the table, in both screen orientations. -->
+        <div class="game-over" role="dialog" aria-modal="true" aria-labelledby="game-over-title">
+          <h2 id="game-over-title">{view.winner === myTeam ? t.gameWon : t.gameLost}</h2>
           <p class="final">{t.us} {usScore} × {themScore} {t.them}</p>
           <div class="row">
             {#if onrestart}<button class="btn primary" onclick={onrestart}>{t.playAgain}</button
@@ -134,8 +134,8 @@
             <button class="btn" onclick={onexit}>{t.backToMenu}</button>
           </div>
         </div>
-      {:else if view.legal.onze}
-        <p class="prompt"><b>{t.onzeTitle}</b> {t.onzeHint}</p>
+      {:else if view.legal.eleven}
+        <p class="prompt"><b>{t.elevenTitle}</b> {t.elevenHint}</p>
         <div class="partner-cards">
           {#each hand.partnerCards ?? [] as card, i (i)}
             <Card {card} manilha={hand.manilha} size="sm" />
@@ -144,11 +144,13 @@
         <div class="row">
           <button
             class="btn primary"
-            onclick={() => session.act({ type: 'onze', seat: me, accept: true })}
-            >{t.onzePlay}</button
+            onclick={() => session.act({ type: 'eleven', seat: me, accept: true })}
+            >{t.elevenPlay}</button
           >
-          <button class="btn" onclick={() => session.act({ type: 'onze', seat: me, accept: false })}
-            >{t.onzeRun}</button
+          <button
+            class="btn"
+            onclick={() => session.act({ type: 'eleven', seat: me, accept: false })}
+            >{t.elevenRun}</button
           >
         </div>
       {:else if view.legal.accept}
@@ -171,7 +173,7 @@
       {:else}
         <div class="row">
           <span class="status" class:mine={acting.includes(me)}>
-            {#if hand.kind === 'ferro'}{t.ferro}
+            {#if hand.kind === 'iron'}{t.iron}
             {:else if acting.includes(me)}{t.yourTurn}
             {:else if hand.truco?.runVotes.includes(me)}{t.waitingPartnerRun(
                 session.names[(me + 2) % 4] ?? '',
@@ -326,7 +328,7 @@
     color: var(--gold);
     font-size: 20px;
   }
-  /* Texto fora da mesa ganha fundo para ler bem sobre qualquer chão. */
+  /* Text outside the table gets a background so it reads well over any floor. */
   .status,
   .prompt,
   .clock {
@@ -364,7 +366,7 @@
   .my-hand :global(.card) {
     --w: var(--card-w);
   }
-  /* Cada carta cobre boa parte da anterior: sobra o canto com valor e naipe. */
+  /* Each card covers most of the previous one: the corner with rank and suit remains. */
   .fan + .fan {
     margin-left: calc(var(--card-w) * -0.6);
   }
@@ -390,7 +392,7 @@
       opacity: 0.4;
     }
   }
-  /* Rodapé por cima das suas mãos, para os botões continuarem clicáveis. */
+  /* Footer above your hands, so the buttons stay clickable. */
   .footer {
     position: relative;
     z-index: 3;
@@ -442,9 +444,9 @@
   }
 
   /*
-   * Tela deitada: a cena ocupa a tela inteira e o resto vira HUD nos cantos, como num
-   * jogo de mesa em primeira pessoa. Placar em cima à esquerda, sair/provocar em cima à
-   * direita, histórico embaixo à esquerda, botões embaixo à direita, sua mão no meio.
+   * Landscape: the scene fills the whole screen and the rest becomes a HUD in the corners,
+   * like a first-person table game. Score top left, leave/taunt top right, log bottom left,
+   * buttons bottom right, your hand in the middle.
    */
   @media (min-aspect-ratio: 5/4) and (min-width: 760px) {
     .table-screen {

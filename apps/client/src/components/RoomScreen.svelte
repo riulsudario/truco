@@ -31,7 +31,7 @@
     session?.retryWithPassword(password)
   }
 
-  const ended = $derived(session?.status === 'encerrada')
+  const ended = $derived(session?.status === 'closed')
   const endMessage = $derived.by(() => {
     const reason = session?.endReason
     if (reason === 'kicked') return t.kicked
@@ -41,7 +41,7 @@
   })
 </script>
 
-{#if !session || (session.status === 'conectando' && !session.endReason)}
+{#if !session || (session.status === 'connecting' && !session.endReason)}
   <p class="center">{t.connecting}</p>
 {:else if session.endReason === 'bad_password'}
   <form class="center password" onsubmit={submitPassword}>
@@ -67,7 +67,7 @@
   <WaitingRoom {session} />
 {/if}
 
-{#if session?.status === 'reconectando'}
+{#if session?.status === 'reconnecting'}
   <div class="banner">{t.reconnecting}</div>
 {/if}
 {#if session?.error}

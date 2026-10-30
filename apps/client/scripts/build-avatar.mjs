@@ -1,9 +1,9 @@
-// Camadas do boneco customizável, do Universal LPC Spritesheet Character Generator (num
-// commit fixo). Para cada peça do catálogo (packages/protocol/src/avatar.ts) baixa a folha
-// "sit", recorta o quadro de quem está sentado na cadeira nas três direções que a mesa usa
-// e grava uma tira 192×64 [esquerda, frente, direita] em public/avatar/. O manifesto
-// src/lib/avatar-sheets.json diz quais tiras compõem cada opção, em que ordem e com que
-// paleta recolorir; public/avatar/CREDITS.csv lista os autores das folhas usadas.
+// Layers of the customizable avatar, from the Universal LPC Spritesheet Character Generator
+// (at a pinned commit). For each catalog part (packages/protocol/src/avatar.ts) it downloads
+// the "sit" sheet, crops the chair-sitting frame in the three directions the table uses and
+// writes a 192×64 strip [left, front, right] to public/avatar/. The manifest
+// src/lib/avatar-sheets.json says which strips make up each option, in what order and with
+// which palette to recolor; public/avatar/CREDITS.csv lists the authors of the sheets used.
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { PNG } from 'pngjs'
@@ -14,10 +14,10 @@ const RAW = `https://raw.githubusercontent.com/LiberatedPixelCup/Universal-LPC-S
 const CACHE = '../../assets-src/lpc'
 const OUT = 'public/avatar'
 const FRAME = 64
-/** Linhas da folha "sit" (esquerda, frente, direita) e a coluna do sentado na cadeira. */
+/** Rows of the "sit" sheet (left, front, right) and the column of the chair-sitting frame. */
 const ROWS = [1, 2, 3]
 const COLUMN = 2
-const BODY_TYPE = { masculino: 'male', feminino: 'female' }
+const BODY_TYPE = { male: 'male', female: 'female' }
 const EYES = { z: 105, path: 'eyes/human/adult/default/', material: 'eye' }
 
 async function file(rel) {
@@ -26,7 +26,7 @@ async function file(rel) {
     return await readFile(path)
   } catch {
     const response = await fetch(RAW + rel)
-    if (!response.ok) throw new Error(`${response.status} ao baixar ${rel}`)
+    if (!response.ok) throw new Error(`${response.status} downloading ${rel}`)
     const data = Buffer.from(await response.arrayBuffer())
     await mkdir(dirname(path), { recursive: true })
     await writeFile(path, data)
@@ -38,7 +38,7 @@ const json = async (rel) => JSON.parse((await file(rel)).toString())
 const used = new Set()
 const strips = new Map()
 
-/** Recorta a tira de uma folha e devolve o nome do arquivo gravado. */
+/** Crops a sheet's strip and returns the name of the written file. */
 async function strip(sheetPath) {
   if (strips.has(sheetPath)) return strips.get(sheetPath)
   const sheet = PNG.sync.read(await file(`spritesheets/${sheetPath}`))
@@ -53,7 +53,7 @@ async function strip(sheetPath) {
   return name
 }
 
-/** Camadas de uma opção para um tipo de corpo: [{ file, z, material }]. */
+/** Layers of an option for a body type: [{ file, z, material }]. */
 async function layersOf(option, body) {
   if (!option.def) return []
   const def = await json(`sheet_definitions/${option.def}`)
@@ -67,7 +67,7 @@ async function layersOf(option, body) {
     const sheet = option.variant ? `${dir}sit/${option.variant}.png` : `${dir}sit.png`
     layers.push({ file: await strip(sheet), z: layer.zPos, material })
   }
-  if (layers.length === 0) throw new Error(`${option.def} não tem camada para ${body}`)
+  if (layers.length === 0) throw new Error(`${option.def} has no layer for ${body}`)
   return layers
 }
 
@@ -92,10 +92,10 @@ for (const body of Object.keys(catalog.BODIES)) {
       parts[`${field}:${id}:${body}`] = await layersOf(option, body)
     }
   }
-  console.log(`✓ peças do corpo ${body}`)
+  console.log(`✓ ${body} body parts`)
 }
 
-// Paletas: a de origem de cada material e só as cores que o catálogo usa.
+// Palettes: each material's source palette and only the colors the catalog uses.
 const wanted = {
   body: Object.values(catalog.SKIN_TONES).map((tone) => tone.palette),
   hair: Object.values(catalog.HAIR_COLORS).map((color) => color.palette),
@@ -122,4 +122,4 @@ const covered = (name) =>
   [...used].some((sheet) => sheet === name || sheet.startsWith(name.replace(/\.png$/, '/')))
 const rows = credits.filter((line, i) => i === 0 || covered(line.match(/^"([^"]+)"/)?.[1] ?? '\0'))
 await writeFile(join(OUT, 'CREDITS.csv'), rows.join('\n') + '\n')
-console.log(`✓ ${strips.size} tiras, ${rows.length - 1} linhas de créditos`)
+console.log(`✓ ${strips.size} strips, ${rows.length - 1} credit rows`)

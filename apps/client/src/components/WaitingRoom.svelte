@@ -27,7 +27,7 @@
   let editing = $state(false)
   let form = $state({
     name: '',
-    visibility: 'publica' as Visibility,
+    visibility: 'public' as Visibility,
     password: '',
     difficulty: 'normal' as Difficulty,
   })
@@ -52,7 +52,7 @@
         name: form.name.trim() || room.name,
         visibility: form.visibility,
         difficulty: form.difficulty,
-        // Campo vazio mantém a senha atual; para tirar existe o botão próprio.
+        // An empty field keeps the current password; removing it has its own button.
         ...(form.password.trim() ? { password: form.password.trim() } : {}),
       },
     })
@@ -65,7 +65,7 @@
       copied = true
       setTimeout(() => (copied = false), 1500)
     } catch {
-      // sem clipboard (http fora de localhost); o código está na tela
+      // no clipboard (http outside localhost); the code is on screen
     }
   }
 
@@ -131,7 +131,7 @@
                 ><ShoutText text={session.shouts[seat]} /></span
               >{/if}
             <span class="number">{seat + 1}</span>
-            {#if info.kind === 'humano'}
+            {#if info.kind === 'human'}
               {@const player = playerById(info.playerId)}
               {#if player}
                 <span class="who">{player.nick} {@render badges(player)}</span>
@@ -321,7 +321,7 @@
   .spectators {
     position: relative;
   }
-  /* Balão da provocação, no canto de quem falou. */
+  /* Taunt balloon, in the corner of whoever spoke. */
   .shout {
     position: absolute;
     right: 6px;
@@ -331,7 +331,7 @@
     color: var(--ink);
     border: 3px solid var(--ink);
     padding: 1px 8px;
-    /* Falas gravadas são frases inteiras: quebram linha em vez de vazar da tela. */
+    /* Recorded lines are whole sentences: they wrap instead of overflowing the screen. */
     width: max-content;
     max-width: 280px;
     text-align: center;

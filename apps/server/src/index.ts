@@ -5,7 +5,7 @@ import type { Env } from './env'
 export { Lobby } from './lobby'
 export { Room } from './room'
 
-/** Sem I e O para não confundir com 1 e 0 ao ditar o código. */
+/** No I or O, so they aren't mistaken for 1 and 0 when reading the code aloud. */
 const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ'
 const CODE_PATTERN = /^[A-HJ-NP-Z]{4}$/
 
@@ -36,7 +36,7 @@ async function createRoom(request: Request, env: Env): Promise<Response> {
   const body = v.safeParse(CreateRoomSchema, await request.json().catch(() => null))
   if (!body.success) return json({ error: 'invalid_message' }, 400)
 
-  // O link é aberto: limita quantas salas um mesmo IP cria, para ninguém lotar o lobby.
+  // The link is open: limit how many rooms the same IP creates, so nobody floods the lobby.
   const ip = request.headers.get('CF-Connecting-IP') ?? 'local'
   const lobby = env.LOBBY.get(env.LOBBY.idFromName('lobby'))
   if (!(await lobby.allowCreate(ip))) return json({ error: 'too_many_rooms' }, 429)

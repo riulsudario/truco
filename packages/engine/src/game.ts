@@ -32,7 +32,7 @@ export function newGame({ seed, dealer = 0 }: NewGameOptions): GameState {
   return { phase: 'playing', scores, hand, lastHand: null, winner: null, seed: nextSeed }
 }
 
-/** Aplica uma ação. Nunca altera o estado recebido. */
+/** Applies an action. Never mutates the given state. */
 export function reduce(state: GameState, action: Action): ReduceResult {
   const error = validate(state, action)
   if (error) return { ok: false, error }
@@ -47,14 +47,14 @@ export function isLegal(state: GameState, action: Action): boolean {
   return validate(state, action) === null
 }
 
-/** Todas as ações válidas para a cadeira agora. Base dos bots e dos testes de propriedade. */
+/** Every valid action for the seat right now. Basis for the bots and the property tests. */
 export function legalActions(state: GameState, seat: Seat): Action[] {
   const candidates: Action[] = [
     { type: 'truco', seat },
     { type: 'accept', seat },
     { type: 'run', seat },
-    { type: 'onze', seat, accept: true },
-    { type: 'onze', seat, accept: false },
+    { type: 'eleven', seat, accept: true },
+    { type: 'eleven', seat, accept: false },
   ]
   state.hand.cards[seat]?.forEach((_, index) => {
     candidates.push({ type: 'play', seat, index }, { type: 'play', seat, index, hidden: true })
@@ -62,11 +62,11 @@ export function legalActions(state: GameState, seat: Seat): Action[] {
   return candidates.filter((action) => isLegal(state, action))
 }
 
-/** Cadeiras que podem agir agora; vazio quando a mão acabou. */
+/** Seats that can act now; empty when the hand is over. */
 export function seatsToAct(state: GameState): Seat[] {
   if (state.phase !== 'playing') return []
   const { hand } = state
-  if (hand.onzePending !== null) return SEATS.filter((s) => teamOf(s) === hand.onzePending)
+  if (hand.elevenPending !== null) return SEATS.filter((s) => teamOf(s) === hand.elevenPending)
   if (hand.truco) {
     const { team, runVotes } = hand.truco
     return SEATS.filter((s) => teamOf(s) !== team && !runVotes.includes(s))
@@ -83,7 +83,7 @@ export function nextStake(stake: number): number | null {
   return STAKES[index + 1] ?? null
 }
 
-/** Quem vence a vaza; empate quando as maiores cartas são de times diferentes. */
+/** Who wins the round; a tie when the highest cards belong to different teams. */
 export function roundOutcome(
   round: Round,
   hand: Pick<HandState, 'manilha'>,
@@ -102,8 +102,8 @@ export function roundOutcome(
 }
 
 /**
- * Vencedor da mão pelas regras paulistas de empate (cangar), ou undefined se ainda não
- * dá para decidir. null quer dizer que as três vazas empataram e ninguém pontua.
+ * Hand winner under the Paulista tie rules (cangar), or undefined if it can't be decided
+ * yet. null means all three rounds tied and nobody scores.
  */
 export function handWinner(results: RoundResult[]): Team | null | undefined {
   const [first, second, third] = results
@@ -125,11 +125,11 @@ function validate(state: GameState, action: Action): GameError | null {
   const { hand } = state
   const team = teamOf(action.seat)
 
-  if (action.type === 'onze') {
-    if (hand.onzePending === null) return 'no_onze_pending'
-    return team === hand.onzePending ? null : 'not_your_team'
+  if (action.type === 'eleven') {
+    if (hand.elevenPending === null) return 'no_eleven_pending'
+    return team === hand.elevenPending ? null : 'not_your_team'
   }
-  if (hand.onzePending !== null) return 'onze_pending'
+  if (hand.elevenPending !== null) return 'eleven_pending'
 
   if (action.type === 'accept' || action.type === 'run') {
     if (!hand.truco) return 'no_truco_pending'
@@ -155,7 +155,7 @@ function validate(state: GameState, action: Action): GameError | null {
   if (!Number.isInteger(action.index) || action.index < 0 || action.index >= cards.length) {
     return 'invalid_card'
   }
-  if (action.hidden && (hand.rounds.length < 2 || hand.kind === 'ferro')) {
+  if (action.hidden && (hand.rounds.length < 2 || hand.kind === 'iron')) {
     return 'hidden_not_allowed'
   }
   return null
@@ -182,17 +182,17 @@ function apply(state: GameState, action: Action, events: GameEvent[]): void {
       })
       return
     }
-    case 'onze': {
-      events.push({ type: 'onzeDecided', seat: action.seat, accept: action.accept })
+    case 'eleven': {
+      events.push({ type: 'elevenDecided', seat: action.seat, accept: action.accept })
       if (action.accept) {
-        hand.onzePending = null
+        hand.elevenPending = null
       } else {
-        endHand(state, otherTeam(teamOf(action.seat)), 1, 'onzeRan', events)
+        endHand(state, otherTeam(teamOf(action.seat)), 1, 'elevenRan', events)
       }
       return
     }
     case 'truco': {
-      // Aumentar em resposta aceita o valor proposto antes de subir.
+      // Raising in response accepts the proposed stake before going up.
       if (hand.truco) hand.stake = hand.truco.stake
       const stake = nextStake(hand.stake)!
       hand.truco = { team: teamOf(action.seat), caller: action.seat, stake, runVotes: [] }
@@ -209,7 +209,7 @@ function apply(state: GameState, action: Action, events: GameEvent[]): void {
     }
     case 'run': {
       const truco = hand.truco!
-      // Correr só vale quando os dois da dupla querem; o primeiro voto fica esperando.
+      // Running only counts when both partners want it; the first vote waits.
       if (truco.runVotes.length === 0) {
         truco.runVotes.push(action.seat)
         events.push({ type: 'runVoted', seat: action.seat })
@@ -291,7 +291,7 @@ function dealHand({ number, dealer, scores, seed }: DealInput): [HandState, numb
   }
   const vira = deck[12]!
   const kind = handKind(scores)
-  const onzeTeam = kind === 'onze' ? (scores[0] === WINNING_SCORE - 1 ? 0 : 1) : null
+  const elevenTeam = kind === 'eleven' ? (scores[0] === WINNING_SCORE - 1 ? 0 : 1) : null
 
   return [
     {
@@ -302,11 +302,11 @@ function dealHand({ number, dealer, scores, seed }: DealInput): [HandState, numb
       cards,
       rounds: [{ plays: [], result: null }],
       turn: first,
-      stake: kind === 'onze' ? 3 : 1,
+      stake: kind === 'eleven' ? 3 : 1,
       raisedBy: null,
       truco: null,
       kind,
-      onzePending: onzeTeam,
+      elevenPending: elevenTeam,
     },
     nextSeed,
   ]
@@ -314,6 +314,6 @@ function dealHand({ number, dealer, scores, seed }: DealInput): [HandState, numb
 
 function handKind(scores: readonly [number, number]): HandKind {
   const atEleven = scores.filter((score) => score === WINNING_SCORE - 1).length
-  if (atEleven === 2) return 'ferro'
-  return atEleven === 1 ? 'onze' : 'normal'
+  if (atEleven === 2) return 'iron'
+  return atEleven === 1 ? 'eleven' : 'normal'
 }

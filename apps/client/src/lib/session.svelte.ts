@@ -12,54 +12,55 @@ import { voiceFor } from './avatars'
 import { commonLines, speak } from './voice'
 import { raiseLabel, t } from './strings'
 
-/** Balão de quem não tem cadeira: a plateia. */
+/** Balloon for someone without a seat: the audience. */
 export const AUDIENCE = -1
 
 export const tauntText = (id: TauntId) => TAUNTS.find((taunt) => taunt.id === id)?.text ?? ''
 
-/** Quanto tempo a vaza fechada fica na mesa antes de recolher. */
+/** How long a finished round stays on the table before being cleared. */
 export const ROUND_HOLD_MS = 1300
 const SHOUT_MS = 1800
-/** Balão de fala gravada fica mais tempo: é frase inteira, não uma palavra. */
+/** A recorded line's balloon stays longer: it's a whole sentence, not a word. */
 const SPOKEN_MS = 3200
 const LOG_SIZE = 6
 
 /**
- * O que a mesa precisa para desenhar e jogar, venha o jogo do navegador (treino) ou do
- * servidor (online). A sessão recebe views e eventos e cuida só do ritmo da tela.
+ * What the table needs to draw and play, whether the game comes from the browser (practice)
+ * or from the server (online). The session receives views and events and only handles the
+ * screen's pacing.
  */
 export abstract class GameSession {
   view = $state.raw<PlayerView | null>(null)
   names = $state<string[]>(['', '', '', ''])
-  /** Visual escolhido por quem senta em cada cadeira (null: sem escolha, sorteia pelo nome). */
+  /** Look chosen by whoever sits in each seat (null: no choice, picked from the name). */
   avatars = $state<(Avatar | null)[]>([null, null, null, null])
-  /** Vaza mostrada na mesa: a fechada fica um tempo antes de dar lugar à nova. */
+  /** Round shown on the table: a finished one stays a while before the new one replaces it. */
   heldRound = $state.raw<RoundView | null>(null)
   shouts = $state<Record<number, string>>({})
-  /** Eventos do último lote recebido, para a cena animar quem agiu. */
+  /** Events from the last batch received, so the scene can animate whoever acted. */
   lastEvents = $state.raw<GameEvent[]>([])
-  /** Últimas falas e acontecimentos da mesa, do mais antigo ao mais novo. */
+  /** Latest lines and happenings at the table, oldest to newest. */
   log = $state<string[]>([])
-  /** Música tocando; startedAt já no relógio deste navegador (epoch ms). */
+  /** Track playing; startedAt already on this browser's clock (epoch ms). */
   jukebox = $state<{ trackId: TrackId | null; startedAt: number | null }>({
     trackId: null,
     startedAt: null,
   })
-  /** Prazo (epoch ms) de quem está na vez, quando o servidor controla o relógio. */
+  /** Deadline (epoch ms) for whoever's turn it is, when the server runs the clock. */
   deadline = $state<number | null>(null)
   private shoutTimers: Record<number, ReturnType<typeof setTimeout>> = {}
   private holdTimer: ReturnType<typeof setTimeout> | undefined
 
   abstract act(action: Action): void
   abstract close(): void
-  /** Provocações só existem no online; no treino não há para quem provocar. */
+  /** Taunts only exist online; in practice there's nobody to taunt. */
   readonly canTaunt: boolean = false
-  /** No online a jukebox é da sala; no treino, só sua. */
+  /** Online the jukebox belongs to the room; in practice, only to you. */
   readonly sharedJukebox: boolean = false
   taunt(_id: TauntId): void {}
-  /** Escolhe a música (null desliga). No online vale para a sala toda. */
+  /** Picks the track (null turns it off). Online it applies to the whole room. */
   abstract chooseTrack(trackId: TrackId | null): void
-  /** A faixa acabou: passa para a próxima. */
+  /** The track ended: move on to the next one. */
   abstract trackEnded(trackId: TrackId): void
 
   get tableRound(): RoundView | null {
@@ -68,9 +69,9 @@ export abstract class GameSession {
     return rounds ? rounds[rounds.length - 1]! : null
   }
 
-  /** Aplica uma view nova e anima os eventos que levaram até ela. */
+  /** Applies a new view and animates the events that led to it. */
   protected receive(view: PlayerView, events: GameEvent[]): void {
-    // Remonta a vaza em andamento carta a carta para mostrar a que fechou neste lote.
+    // Rebuilds the round in progress card by card to show the one that closed in this batch.
     if (!this.view) this.log = [t.log.handStarted(view.hand.number, view.hand.kind)]
     let plays = [...(this.view?.hand.rounds.at(-1)?.plays ?? [])]
     for (const event of events) {
@@ -89,7 +90,7 @@ export abstract class GameSession {
     this.view = view
     if (events.length) this.lastEvents = events
     sound.forEvents(events, view.seat)
-    // Falas gravadas: o balão mostra exatamente o que está sendo gritado.
+    // Recorded lines: the balloon shows exactly what is being shouted.
     const voices = this.names.map((name, seat) => voiceFor(name, this.avatars[seat]))
     if (events.some((e) => e.type === 'handStarted')) {
       const distinct = voices.filter((voice, seat) => voices.indexOf(voice) === seat)
@@ -99,7 +100,7 @@ export abstract class GameSession {
     if (view.legal.play && !wasMyTurn) sound.play('turn')
   }
 
-  /** Balão em cima de uma cadeira (ou da plateia, com AUDIENCE). */
+  /** Balloon above a seat (or the audience, with AUDIENCE). */
   shout(seat: Seat | typeof AUDIENCE, text: string, ms = SHOUT_MS): void {
     this.shouts[seat] = text
     clearTimeout(this.shoutTimers[seat])
@@ -120,8 +121,8 @@ export abstract class GameSession {
       case 'runVoted':
         this.shout(event.seat, t.shouts.wantsToRun)
         break
-      case 'onzeDecided':
-        this.shout(event.seat, event.accept ? t.shouts.onzeYes : t.shouts.onzeNo)
+      case 'elevenDecided':
+        this.shout(event.seat, event.accept ? t.shouts.elevenYes : t.shouts.elevenNo)
         break
       case 'cardPlayed':
       case 'handStarted':
@@ -151,8 +152,10 @@ export abstract class GameSession {
       case 'runVoted':
         line = `${who(event.seat)}: ${t.shouts.wantsToRun}`
         break
-      case 'onzeDecided':
-        line = event.accept ? `${who(event.seat)}: ${t.shouts.onzeYes}` : t.log.ran(who(event.seat))
+      case 'elevenDecided':
+        line = event.accept
+          ? `${who(event.seat)}: ${t.shouts.elevenYes}`
+          : t.log.ran(who(event.seat))
         break
       case 'roundEnded':
         line = event.result === 'tie' ? `${t.tie}!` : t.log.round(ours(event.result))

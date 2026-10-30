@@ -16,10 +16,10 @@ import {
 import { greedyPick, trickOf } from './policy'
 
 /**
- * Chance do time da cadeira levar a mão, simulando o resto dela várias vezes. As cartas
- * que o bot não vê são sorteadas entre as que sobram no baralho, então ele não trapaceia.
- * Com firstIndex, a primeira jogada simulada é a carta escolhida (precisa ser a vez dele).
- * Empate em todas as vazas conta meio ponto.
+ * Chance that the seat's team wins the hand, simulating the rest of it many times. Cards
+ * the bot can't see are drawn from what is left in the deck, so it doesn't cheat.
+ * With firstIndex, the first simulated play is the chosen card (it must be the bot's turn).
+ * A tie in every round counts as half a point.
  */
 export function winProbability(
   view: PlayerView,

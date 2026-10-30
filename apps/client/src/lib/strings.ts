@@ -1,7 +1,7 @@
 import type { HandEndReason, Rank, Suit } from '@truco/engine'
 import type { ErrorCode } from '@truco/protocol'
 
-/** Todos os textos da interface. O jogo é só em português. */
+/** All interface texts. The game is Portuguese-only. */
 export const t = {
   title: 'Truco Paulista',
   subtitle: 'baralho limpo',
@@ -19,7 +19,7 @@ export const t = {
   roomName: 'Nome da sala',
   roomNameDefault: (nick: string) => `Mesa ${nick ? `de ${nick}` : 'nova'}`,
   visibility: 'Visibilidade',
-  visibilities: { publica: 'Pública', privada: 'Privada (só com código)' },
+  visibilities: { public: 'Pública', private: 'Privada (só com código)' },
   password: 'Senha (opcional)',
   passwordNeeded: 'Essa sala tem senha',
   create: 'Criar',
@@ -90,12 +90,12 @@ export const t = {
     truco_not_allowed: 'Não dá para pedir agora.',
     no_truco_pending: 'Ninguém pediu truco.',
     not_your_team: 'Quem responde é o outro time.',
-    onze_pending: 'Esperando a decisão da mão de onze.',
-    no_onze_pending: 'Não é mão de onze.',
+    eleven_pending: 'Esperando a decisão da mão de onze.',
+    no_eleven_pending: 'Não é mão de onze.',
     already_voted: 'Você já respondeu; esperando o parceiro.',
   } satisfies Record<ErrorCode, string>,
   difficulty: 'Bots',
-  difficulties: { facil: 'Fácil', normal: 'Normal' },
+  difficulties: { easy: 'Fácil', normal: 'Normal' },
   us: 'Nós',
   them: 'Eles',
   you: 'Você',
@@ -108,11 +108,11 @@ export const t = {
   waiting: (name: string) => `Vez de ${name}`,
   accept: 'Desce!',
   run: 'Correr',
-  onzeTitle: 'Mão de onze!',
-  onzeHint: 'Veja as cartas do parceiro. Jogar vale 3; correr dá 1 para eles.',
-  onzePlay: 'Jogar',
-  onzeRun: 'Correr',
-  ferro: 'Mão de ferro: às cegas!',
+  elevenTitle: 'Mão de onze!',
+  elevenHint: 'Veja as cartas do parceiro. Jogar vale 3; correr dá 1 para eles.',
+  elevenPlay: 'Jogar',
+  elevenRun: 'Correr',
+  iron: 'Mão de ferro: às cegas!',
   trucoAgainstUs: (stake: number) => `Pediram ${stakeName(stake)}!`,
   partnerWantsToRun: (name: string) => `${name} quer correr. Pra correr, os dois têm que querer.`,
   waitingPartnerRun: (name: string) => `Você quer correr. Esperando ${name} decidir.`,
@@ -122,7 +122,7 @@ export const t = {
   reasons: {
     rounds: '',
     ran: 'correram',
-    onzeRan: 'correram da mão de onze',
+    elevenRan: 'correram da mão de onze',
   } satisfies Record<HandEndReason, string>,
   gameWon: 'Vocês ganharam!',
   gameLost: 'Eles ganharam...',
@@ -130,8 +130,8 @@ export const t = {
   backToMenu: 'Voltar ao início',
   round: (n: number) => `${n}ª`,
   log: {
-    handStarted: (n: number, kind: 'normal' | 'onze' | 'ferro') =>
-      `Mão ${n}${kind === 'onze' ? ' (mão de onze)' : kind === 'ferro' ? ' (mão de ferro)' : ''}`,
+    handStarted: (n: number, kind: 'normal' | 'eleven' | 'iron') =>
+      `Mão ${n}${kind === 'eleven' ? ' (mão de onze)' : kind === 'iron' ? ' (mão de ferro)' : ''}`,
     ran: (who: string) => `${who} correu`,
     round: (ours: boolean) => (ours ? 'Vaza nossa' : 'Vaza deles'),
   },
@@ -169,10 +169,10 @@ export const t = {
     accept: 'Desce!',
     run: 'Corri!',
     wantsToRun: 'Quero correr!',
-    onzeYes: 'Vamos nessa!',
-    onzeNo: 'Tô fora.',
+    elevenYes: 'Vamos nessa!',
+    elevenNo: 'Tô fora.',
   },
-  suits: { ouros: 'ouros', espadas: 'espadas', copas: 'copas', paus: 'paus' } satisfies Record<
+  suits: { diamonds: 'ouros', spades: 'espadas', hearts: 'copas', clubs: 'paus' } satisfies Record<
     Suit,
     string
   >,
@@ -185,7 +185,7 @@ export function stakeName(stake: number): string {
   return STAKE_NAMES[stake] ?? String(stake)
 }
 
-/** Texto do botão de pedir/aumentar para o próximo valor da escada. */
+/** Label of the call/raise button for the next value on the ladder. */
 export function raiseLabel(stake: number): string {
   return `${stakeName(stake).toUpperCase()}!`
 }

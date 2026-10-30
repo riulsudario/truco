@@ -12,7 +12,7 @@
   --panel: #2b2140;
   --bg: #120e1a;
 
-  /* Feltro Clássico */
+  /* Classic felt */
   --felt: #2f7d4f;
   --felt-edge: #24633e;
   --felt-pattern: radial-gradient(#3a8c5a 1px, transparent 1px) 0 0 / 8px 8px;
@@ -39,7 +39,7 @@ body {
   color: var(--paper);
   font-family: 'Pixelify Sans', ui-monospace, monospace;
   font-size: 16px;
-  /* Só há peso 400: negrito falso deixa o C parecido com O. */
+  /* Only weight 400 exists: synthetic bold makes the C look like an O. */
   font-synthesis: none;
   -webkit-font-smoothing: none;
   -webkit-tap-highlight-color: transparent;
@@ -76,7 +76,7 @@ body {
   outline-offset: 2px;
 }
 
-/* Formulários */
+/* Forms */
 .field {
   display: grid;
   gap: 6px;
@@ -98,7 +98,7 @@ body {
   gap: 6px;
 }
 .chip {
-  /* O rádio escondido fica dentro do próprio chip, e não solto pela página. */
+  /* The hidden radio stays inside its own chip instead of loose on the page. */
   position: relative;
   padding: 4px 10px;
   border: 3px solid var(--ink);

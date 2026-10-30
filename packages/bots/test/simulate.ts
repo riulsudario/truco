@@ -13,9 +13,9 @@ import {
 } from '@truco/engine'
 import { decide, type Difficulty } from '../src'
 
-export type Player = Difficulty | 'aleatorio'
+export type Player = Difficulty | 'random'
 
-/** Joga uma partida completa. players[i] controla a cadeira i. Devolve o time vencedor. */
+/** Plays a full game. players[i] controls seat i. Returns the winning team. */
 export function simulate(players: [Player, Player, Player, Player], seed: number): Team {
   const random = createRandom(seed * 31 + 7)
   let state: GameState = newGame({ seed, dealer: (seed % 4) as Seat })
@@ -27,7 +27,7 @@ export function simulate(players: [Player, Player, Player, Player], seed: number
     } else {
       const seat = seatsToAct(state)[0]!
       const player = players[seat]
-      if (player === 'aleatorio') {
+      if (player === 'random') {
         const options = legalActions(state, seat)
         action = options[Math.floor(random() * options.length)]!
       } else {
@@ -36,11 +36,11 @@ export function simulate(players: [Player, Player, Player, Player], seed: number
     }
     const result = reduce(state, action)
     if (!result.ok) {
-      throw new Error(`jogada ilegal ${JSON.stringify(action)}: ${result.error}`)
+      throw new Error(`illegal move ${JSON.stringify(action)}: ${result.error}`)
     }
     state = result.state
   }
-  throw new Error('partida não terminou')
+  throw new Error('game did not finish')
 }
 
 export function winRate(

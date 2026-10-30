@@ -1,5 +1,5 @@
-# Python 3.11. Torch com CUDA 12.4 vem do índice do PyTorch (ver README).
-# O pack pt-BR do Chatterbox Multilingual V3 precisa do código do master; versão do PyPI (0.1.7) não carrega o V3.
+# Python 3.11. Torch with CUDA 12.4 comes from the PyTorch index (see README).
+# The Chatterbox Multilingual V3 pt-BR pack needs the master code; the PyPI release (0.1.7) can't load V3.
 --extra-index-url https://download.pytorch.org/whl/cu124
 torch==2.6.0
 torchaudio==2.6.0

@@ -1,9 +1,9 @@
-"""Trata as tomadas com FFmpeg: corta silêncio das pontas, compressão leve, normaliza o volume
-(loudnorm em duas passadas) e limita o pico. O WAV original nunca é alterado; o tratado vai
-para output/selected/ com o mesmo caminho relativo.
+"""Processes the takes with FFmpeg: trims edge silence, light compression, normalizes loudness
+(two-pass loudnorm) and limits the peak. The original WAV is never changed; the processed one goes
+to output/selected/ under the same relative path.
 
-    python scripts/process_audio.py                    # tomadas aprovadas na revisão
-    python scripts/process_audio.py --all              # todas as candidatas (para ouvir tratado)
+    python scripts/process_audio.py                    # takes approved in the review
+    python scripts/process_audio.py --all              # every candidate (to hear them processed)
     python scripts/process_audio.py --source output/smoke --all
 """
 
@@ -21,14 +21,14 @@ from common import CANDIDATES, ROOT, SELECTED, generation, load_review, rel, req
 
 
 def trim_filter(threshold_db: float, keep_ms: int) -> str:
-    # silenceremove só corta o começo; o areverse duplo reaproveita o mesmo filtro para o fim.
+    # silenceremove only trims the start; the double areverse reuses the same filter for the end.
     trim = (f"silenceremove=start_periods=1:start_threshold={threshold_db}dB:"
             f"start_silence={keep_ms / 1000}:detection=peak")
     return f"{trim},areverse,{trim},areverse"
 
 
 def measure(path: Path, pre: str, cfg: dict) -> dict:
-    """Primeira passada do loudnorm: mede o áudio já cortado e comprimido."""
+    """First loudnorm pass: measures the already trimmed and compressed audio."""
     target = f"loudnorm=I={cfg['loudness_lufs']}:TP={cfg['true_peak_db']}:LRA=11:print_format=json"
     out = subprocess.run(
         ["ffmpeg", "-hide_banner", "-nostats", "-i", str(path), "-af", f"{pre},{target}", "-f", "null", "-"],
@@ -47,7 +47,7 @@ def process(src: Path, dst: Path, cfg: dict, sample_rate: int) -> dict:
         f"measured_I={m['input_i']}:measured_TP={m['input_tp']}:measured_LRA={m['input_lra']}:"
         f"measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true"
     )
-    # Fade curto nas pontas evita estalo onde o corte caiu no meio de uma onda.
+    # A short fade at the edges avoids a click where the cut landed mid-wave.
     chain = f"{pre},{loudnorm},alimiter=limit={10 ** (cfg['true_peak_db'] / 20):.3f}:level=false," \
             f"afade=t=in:d=0.005,areverse,afade=t=in:d=0.02,areverse"
     dst.parent.mkdir(parents=True, exist_ok=True)
@@ -63,10 +63,10 @@ def process(src: Path, dst: Path, cfg: dict, sample_rate: int) -> dict:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--all", action="store_true", help="processa todas as tomadas da origem, não só as aprovadas")
-    parser.add_argument("--source", type=Path, default=CANDIDATES, help="pasta de origem (padrão: output/candidates)")
+    parser.add_argument("--all", action="store_true", help="process every take in the source, not only approved ones")
+    parser.add_argument("--source", type=Path, default=CANDIDATES, help="source folder (default: output/candidates)")
     parser.add_argument("--character", action="append")
-    parser.add_argument("--force", action="store_true", help="reprocessa mesmo se o destino for mais novo")
+    parser.add_argument("--force", action="store_true", help="reprocess even if the target is newer")
     args = parser.parse_args()
     require_ffmpeg()
 
@@ -80,7 +80,7 @@ def main() -> int:
     if args.character:
         takes = [t for t in takes if t.relative_to(source).parts[0] in args.character]
     if not takes:
-        print("Nada a processar. Aprove tomadas na revisão (scripts/review.py) ou use --all.")
+        print("Nothing to process. Approve takes in the review (scripts/review.py) or use --all.")
         return 0
 
     target_root = SELECTED if source == CANDIDATES.resolve() else SELECTED / source.name
@@ -95,8 +95,8 @@ def main() -> int:
         info["processing"] = {**gen["processing"], **stats, "source": rel(src)}
         dst.with_suffix(".json").write_text(json.dumps(info, ensure_ascii=False, indent=2) + "\n")
         done += 1
-        print(f"{rel(dst)}  (entrada {stats['input_lufs']:.1f} LUFS)")
-    print(f"{done} tratadas, {len(takes) - done} já estavam em dia")
+        print(f"{rel(dst)}  (input {stats['input_lufs']:.1f} LUFS)")
+    print(f"{done} processed, {len(takes) - done} already up to date")
     return 0
 
 

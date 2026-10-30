@@ -1,7 +1,7 @@
-"""Diagnóstico do ambiente de geração: SO, CPU, RAM, GPU, CUDA, Python, PyTorch, FFmpeg, WSL2.
+"""Generation environment diagnostics: OS, CPU, RAM, GPU, CUDA, Python, PyTorch, FFmpeg, WSL2.
 
-    python scripts/check_environment.py          # só relata
-    python scripts/check_environment.py --json   # saída para máquina
+    python scripts/check_environment.py          # report only
+    python scripts/check_environment.py --json   # machine-readable output
 """
 
 from __future__ import annotations
@@ -83,7 +83,7 @@ def main() -> int:
     except Exception:
         pass
 
-    # Recomendação: o T3 de 500M + S3Gen cabem com folga em 6 GB; abaixo disso, CPU.
+    # Recommendation: the 500M T3 + S3Gen fit comfortably in 6 GB; below that, CPU.
     if info["cuda"] and (info["vram_gb"] or 0) >= 6:
         info["recommended_device"] = "cuda"
     else:
@@ -91,15 +91,15 @@ def main() -> int:
 
     problems = []
     if not info["ffmpeg"]:
-        problems.append("FFmpeg ausente: instale pelo gerenciador de pacotes do sistema.")
+        problems.append("FFmpeg missing: install it with the system package manager.")
     elif not all(info["ffmpeg_encoders"].values()):
-        problems.append(f"FFmpeg sem encoder necessário: {info['ffmpeg_encoders']}")
+        problems.append(f"FFmpeg lacks a required encoder: {info['ffmpeg_encoders']}")
     if not info["torch"]:
-        problems.append("PyTorch ausente: rode a instalação do README dentro da .venv.")
+        problems.append("PyTorch missing: run the README install inside .venv.")
     if not info["chatterbox"]:
-        problems.append("chatterbox-tts ausente.")
+        problems.append("chatterbox-tts missing.")
     if info["recommended_device"] == "cpu":
-        problems.append("Sem GPU CUDA com 6 GB+: a geração roda em CPU, bem mais devagar.")
+        problems.append("No CUDA GPU with 6 GB+: generation runs on CPU, much slower.")
     info["problems"] = problems
 
     if args.json:
@@ -108,8 +108,8 @@ def main() -> int:
         for key, value in info.items():
             if key != "problems":
                 print(f"{key:>18}: {value}")
-        print("\n" + ("\n".join(f"! {p}" for p in problems) if problems else "Tudo certo para gerar."))
-    return 1 if any("ausente" in p for p in problems) else 0
+        print("\n" + ("\n".join(f"! {p}" for p in problems) if problems else "All set to generate."))
+    return 1 if any("missing" in p for p in problems) else 0
 
 
 if __name__ == "__main__":

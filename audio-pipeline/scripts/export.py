@@ -1,11 +1,11 @@
-"""Codifica as tomadas tratadas (output/selected/) em OGG/Opus e MP3 para o navegador e monta o
-manifesto manifests/audio_manifest.json.
+"""Encodes the processed takes (output/selected/) as OGG/Opus and MP3 for the browser and builds
+the manifest manifests/audio_manifest.json.
 
-    python scripts/export.py              # aprovadas e tratadas
-    python scripts/export.py --install    # e instala no jogo
+    python scripts/export.py              # approved and processed
+    python scripts/export.py --install    # and install into the game
 
-Com --install, troca o conteúdo de apps/client/public/sfx/vozes/ pelos OGG/MP3 aprovados e
-grava apps/client/src/lib/voice-manifest.json, a versão enxuta do manifesto que o jogo lê.
+With --install, replaces the contents of apps/client/public/sfx/voices/ with the approved OGG/MP3
+files and writes apps/client/src/lib/voice-manifest.json, the slim manifest the game reads.
 """
 
 from __future__ import annotations
@@ -26,13 +26,13 @@ from common import (  # noqa: E402
 
 
 CLIENT = ROOT.parent / "apps" / "client"
-GAME_AUDIO = CLIENT / "public" / "sfx" / "vozes"
+GAME_AUDIO = CLIENT / "public" / "sfx" / "voices"
 GAME_MANIFEST = CLIENT / "src" / "lib" / "voice-manifest.json"
 
 
 def game_manifest(manifest: dict) -> dict:
-    """Só o que o jogo precisa para escolher e tocar: caminho sem extensão (ele escolhe OGG ou
-    MP3 conforme o navegador) e a variação, que é o que todos na sala precisam concordar."""
+    """Only what the game needs to pick and play: the path without extension (it picks OGG or MP3
+    depending on the browser) and the variant, which is what everyone in the room must agree on."""
     return {
         "version": manifest["version"],
         "lines": [
@@ -61,7 +61,7 @@ def install(manifest: dict) -> None:
                     target.parent.mkdir(parents=True, exist_ok=True)
                     shutil.copy2(FINAL / take[fmt], target)
     GAME_MANIFEST.write_text(json.dumps(game_manifest(manifest), ensure_ascii=False, indent=2) + "\n")
-    print(f"instalado em {GAME_AUDIO.relative_to(ROOT.parent)} e {GAME_MANIFEST.relative_to(ROOT.parent)}")
+    print(f"installed into {GAME_AUDIO.relative_to(ROOT.parent)} and {GAME_MANIFEST.relative_to(ROOT.parent)}")
 
 
 def encode(src: Path, cfg: dict) -> dict[str, Path]:
@@ -82,7 +82,7 @@ def encode(src: Path, cfg: dict) -> dict[str, Path]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--install", action="store_true", help="copia áudio e manifesto enxuto para o jogo")
+    parser.add_argument("--install", action="store_true", help="copy audio and the slim manifest into the game")
     args = parser.parse_args()
     require_ffmpeg()
 
@@ -96,7 +96,7 @@ def main() -> int:
     for wav in sorted(SELECTED.glob("*/*/*.wav")):
         char_id = wav.relative_to(SELECTED).parts[0]
         if char_id not in cast:
-            continue  # testes (smoke, phase_b) não entram no jogo
+            continue  # tests (smoke, phase_b) stay out of the game
         meta = json.loads(wav.with_suffix(".json").read_text())
         candidate = meta["processing"]["source"]
         status = review.get(candidate, {}).get("status", "pending")
@@ -142,7 +142,7 @@ def main() -> int:
             "voices": voices,
         })
     MANIFEST_FILE.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
-    print(f"{exported} tomadas exportadas; manifesto em {rel(MANIFEST_FILE)}")
+    print(f"{exported} takes exported; manifest at {rel(MANIFEST_FILE)}")
 
     if args.install:
         install(manifest)

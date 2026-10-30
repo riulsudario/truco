@@ -5,7 +5,7 @@
   interface Props {
     avatar: Avatar
     facing?: Facing
-    /** Tamanho de cada pixel do boneco (64×64) em px CSS. */
+    /** Size of each avatar pixel (64×64) in CSS px. */
     scale?: number
   }
 

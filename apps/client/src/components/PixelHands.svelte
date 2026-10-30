@@ -1,21 +1,21 @@
 <script lang="ts">
   /**
-   * Duas mãos em pixel art segurando a base do leque, na cor da pele do boneco. Cada mão
-   * é um punho fechado com o polegar por cima das cartas.
+   * Two pixel-art hands holding the base of the fan, in the avatar's skin tone. Each hand
+   * is a closed fist with the thumb over the cards.
    */
   interface Props {
     tones: { outline: string; shadow: string; base: string; light: string }
-    /** Tamanho de cada pixel, em pixels da cena. */
+    /** Size of each pixel, in scene pixels. */
     scale: number
-    /** Distância entre as duas mãos, em pixels do boneco. */
+    /** Distance between the two hands, in avatar pixels. */
     gap?: number
-    /** De perfil só aparece uma mão, a do lado de quem olha. */
+    /** In profile only one hand shows, the one on the viewer's side. */
     single?: boolean
   }
 
   let { tones, scale, gap = 3, single = false }: Props = $props()
 
-  // o contorno, b base, l luz, s sombra; o polegar (l) fica no alto, por cima das cartas.
+  // o outline, b base, l light, s shadow; the thumb (l) sits on top, over the cards.
   const LEFT = ['.oo..', 'ollo.', 'obbbo', 'obbso', '.ooo.']
   const RIGHT = LEFT.map((row) => [...row].reverse().join(''))
 

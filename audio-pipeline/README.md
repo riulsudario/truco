@@ -1,114 +1,115 @@
-# Pipeline de vozes
+# Voice pipeline
 
-Gera as falas dos personagens do truco com síntese neural local e entrega OGG/MP3 prontos para o
-jogo. Nada roda em produção: o jogo só toca arquivos estáticos.
+Generates the truco characters' lines with local neural synthesis and delivers OGG/MP3 files ready
+for the game. Nothing runs in production: the game only plays static files.
 
 ```
-referência gravada ─▶ generate.py ─▶ output/candidates/   (WAV original + JSON com parâmetros)
+recorded reference ─▶ generate.py ─▶ output/candidates/   (original WAV + JSON with parameters)
                                          │
-                       review.py ◀───────┘   ouvir, aprovar, rejeitar, escolher a melhor
+                       review.py ◀───────┘   listen, approve, reject, pick the best
                                          │
-                   process_audio.py ─▶ output/selected/    (corte, compressão, loudnorm, limitador)
+                   process_audio.py ─▶ output/selected/    (trim, compression, loudnorm, limiter)
                           export.py ─▶ output/final/       (OGG/Opus + MP3) + manifests/audio_manifest.json
-                export.py --install ─▶ apps/client/public/sfx/vozes/ + src/lib/voice-manifest.json
-                        validate.py     integridade, duração, silêncio, clipping, duplicatas, manifesto, Whisper
+                export.py --install ─▶ apps/client/public/sfx/voices/ + src/lib/voice-manifest.json
+                        validate.py     integrity, duration, silence, clipping, duplicates, manifest, Whisper
 ```
 
-## Modelo
+## Model
 
-[Chatterbox Multilingual](https://github.com/resemble-ai/chatterbox) da Resemble AI, licença MIT
-(código e pesos), uso comercial permitido. Usamos o **Single Language Pack pt-BR**
-(`ResembleAI/Chatterbox-Multilingual-pt-br`), um finetune do V3 só para português do Brasil. O
-checkpoint multilíngue geral V3 fica disponível com `--model v3` para comparação.
+[Chatterbox Multilingual](https://github.com/resemble-ai/chatterbox) by Resemble AI, MIT license
+(code and weights), commercial use allowed. We use the **pt-BR Single Language Pack**
+(`ResembleAI/Chatterbox-Multilingual-pt-br`), a V3 finetune for Brazilian Portuguese only. The
+general V3 multilingual checkpoint is available with `--model v3` for comparison.
 
-O que foi conferido no código instalado (commit `5de7a54` do master; a versão 0.1.7 do PyPI não
-carrega o V3):
+What was checked in the installed code (master commit `5de7a54`; the PyPI release 0.1.7 can't
+load V3):
 
 - `generate(text, language_id, audio_prompt_path, exaggeration=0.5, cfg_weight=0.5,
-  temperature=0.8, repetition_penalty=1.2, min_p=0.05, top_p=1.0)`. Não há parâmetro de seed: o
-  `generate.py` fixa `torch`, `numpy` e `random` antes de cada tomada, com uma semente derivada de
-  personagem, fala e variação. A mesma configuração gera o mesmo áudio.
-- Idioma `pt`. O texto é passado para minúsculas pelo tokenizer, então MAIÚSCULAS não mudam nada:
-  o grito vem de `exaggeration` e da referência.
-- A referência dá timbre, sotaque e energia. O modelo lê só os primeiros 10 s (6 s para o prompt de
-  fala). Referência em outro idioma passa o sotaque desse idioma; a documentação recomenda
-  `cfg_weight: 0` nesse caso.
-- Sem referência, o modelo usa uma voz embutida (`conds.pt`, feminina, F0 mediano de ~235 Hz).
-  Serve só para testar o pipeline (`--builtin`), nunca como personagem.
-- Toda saída leva a marca d'água inaudível Perth da Resemble. Não há opção para desligar.
-- O `s3gen_v3.pt` do pack não traz dois buffers fixos do tokenizer, que o modelo recria sozinho. O
-  Space oficial do pack carrega com `strict=False` pelo mesmo motivo. O `generate.py` faz o mesmo e
-  falha se faltar qualquer outra chave.
+  temperature=0.8, repetition_penalty=1.2, min_p=0.05, top_p=1.0)`. There is no seed parameter:
+  `generate.py` seeds `torch`, `numpy` and `random` before each take, with a seed derived from the
+  character, line and variant. The same configuration produces the same audio.
+- Language `pt`. The tokenizer lowercases the text, so CAPITALS change nothing: the shouting comes
+  from `exaggeration` and from the reference.
+- The reference provides timbre, accent and energy. The model only reads the first 10 s (6 s for
+  the speech prompt). A reference in another language carries that language's accent; the docs
+  recommend `cfg_weight: 0` in that case.
+- Without a reference, the model uses a built-in voice (`conds.pt`, female, median F0 around
+  235 Hz). It is only for testing the pipeline (`--builtin`), never as a character.
+- Every output carries Resemble's inaudible Perth watermark. There is no option to turn it off.
+- The pack's `s3gen_v3.pt` lacks two fixed tokenizer buffers, which the model recreates by itself.
+  The pack's official Space loads it with `strict=False` for the same reason. `generate.py` does
+  the same and fails if any other key is missing.
 
-Alternativas descartadas pela licença dos pesos: XTTS-v2 (CPML, não comercial), F5-TTS e Fish
-Speech/OpenAudio (CC-BY-NC). Kokoro e Piper têm vozes pt-BR com licença livre, mas sem clonagem
-por referência e com pouca expressividade. Não foram testadas aqui.
+Alternatives ruled out by their weights' license: XTTS-v2 (CPML, non-commercial), F5-TTS and Fish
+Speech/OpenAudio (CC-BY-NC). Kokoro and Piper have freely licensed pt-BR voices, but no reference
+cloning and little expressiveness. They were not tested here.
 
-## Instalação
+## Installation
 
-Precisa de FFmpeg com `libopus` e `libmp3lame` no sistema. O resto fica isolado na `.venv`:
+Needs FFmpeg with `libopus` and `libmp3lame` on the system. Everything else stays isolated in `.venv`:
 
 ```bash
 cd audio-pipeline
-curl -LsSf https://astral.sh/uv/install.sh | UV_NO_MODIFY_PATH=1 sh   # uv em ~/.local/bin, sem mexer no PATH
+curl -LsSf https://astral.sh/uv/install.sh | UV_NO_MODIFY_PATH=1 sh   # uv in ~/.local/bin, PATH untouched
 ~/.local/bin/uv venv --python 3.11 .venv
 ~/.local/bin/uv pip install --python .venv/bin/python -r requirements.txt --index-strategy unsafe-best-match
 .venv/bin/python scripts/check_environment.py
 ```
 
-Na primeira geração, os pesos (~5 GB, mais 1,6 GB do Whisper se usar `--asr`) são baixados para o cache do Hugging Face (`~/.cache/huggingface`).
-`models/` só guarda links para lá. Na máquina de referência (RTX 4060 Laptop com 8 GB, WSL2), o modelo
-carrega em ~15 s e cada tomada leva ~2-3 s, então as 720 levam ~30 min. Em CPU funciona, mas é bem
-mais lento.
+On the first generation, the weights (~5 GB, plus 1.6 GB for Whisper when using `--asr`) are
+downloaded to the Hugging Face cache (`~/.cache/huggingface`). `models/` only holds links to it. On
+the reference machine (RTX 4060 Laptop with 8 GB, WSL2), the model loads in ~15 s and each take
+takes ~2-3 s, so the 720 takes need ~30 min. It works on CPU, but much more slowly.
 
-## Uso
+## Usage
 
-Todos os comandos rodam de dentro de `audio-pipeline/` com `.venv/bin/python`.
+Every command runs from inside `audio-pipeline/` with `.venv/bin/python`.
 
 ```bash
-# 0. Referências (ver references/README.md)
+# 0. References (see references/README.md)
 scripts/prepare_reference.py dona_cida ~/Downloads/cida.opus
-.venv-kokoro/bin/python scripts/invent_reference.py   # ou vozes inventadas, sem pessoa real (abaixo)
+.venv-kokoro/bin/python scripts/invent_reference.py   # or invented voices, no real person (below)
 
-# 1. Prova de conceito
-scripts/generate.py --phase A                 # "SEIS, LADRÃO!" × 6 vozes × 3 = 18
-scripts/generate.py --phase B                 # 5 falas × 5 estilos × 6 vozes, em output/phase_b/
-scripts/validate.py --asr                     # Whisper local confere o que foi dito
+# 1. Proof of concept
+scripts/generate.py --phase A                 # "SEIS, LADRÃO!" × 6 voices × 3 = 18
+scripts/generate.py --phase B                 # 5 lines × 5 styles × 6 voices, in output/phase_b/
+scripts/validate.py --asr                     # local Whisper checks what was said
 
-# 2. Revisão
-scripts/auto_review.py                        # pré-aprova o que o Whisper entendeu (precisa do --asr)
+# 2. Review
+scripts/auto_review.py                        # pre-approves what Whisper understood (needs --asr)
 scripts/review.py                             # http://127.0.0.1:8765
 
-# 3. Biblioteca (só depois de aprovar a fase A)
+# 3. Library (only after approving phase A)
 scripts/generate.py --all                     # 40 × 6 × 3 = 720
 scripts/generate.py --character tiao
 scripts/generate.py --character jessica --category truco
-scripts/generate.py --line seis_001 --variants 5
-scripts/generate.py --character ze --line truco_004 --variant 2 --force   # regera uma tomada
+scripts/generate.py --line six_001 --variants 5
+scripts/generate.py --character ze --line truco_004 --variant 2 --force   # regenerates one take
 
-# 4. Entrega
-scripts/process_audio.py                      # trata as aprovadas
-scripts/export.py --install                   # OGG/MP3 + manifesto, e copia para o jogo
+# 4. Delivery
+scripts/process_audio.py                      # processes the approved takes
+scripts/export.py --install                   # OGG/MP3 + manifest, and copies into the game
 scripts/validate.py --stage final
 ```
 
-A geração retoma de onde parou. Uma tomada só é refeita quando muda o texto, os parâmetros, a seed
-ou o arquivo de referência. `--dry-run` lista o que seria gerado.
+Generation resumes where it stopped. A take is only redone when the text, the parameters, the seed
+or the reference file change. `--dry-run` lists what would be generated.
 
-`--builtin` gera com a voz embutida em `output/smoke/`, para testar o pipeline sem referências.
+`--builtin` generates with the built-in voice into `output/smoke/`, to test the pipeline without
+references.
 
-## Vozes inventadas
+## Invented voices
 
-Enquanto não houver gravações autorizadas, o elenco usa referências sintéticas, sem pessoa real.
-O `invent_reference.py` fala um texto do personagem com o
-[Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) (Apache-2.0, local, CPU), numa voz que mistura
-dois voicepacks dele (um pt-BR com um de outro idioma, para dar um timbre que não existe no
-Kokoro), e passa o resultado pelo `prepare_reference.py`. A receita fica no bloco `synthetic` de
-cada personagem em `characters.yaml`, e o `consent` diz que a voz é sintética e provisória. As
-misturas foram escolhidas medindo o tom: Tonhão ~85 Hz, Tião ~105, Zé ~130, Juninho ~145, Dona
-Cida ~155, Jéssica ~185 nas tomadas da fase A.
+Until there are authorized recordings, the cast uses synthetic references, with no real person.
+`invent_reference.py` speaks a character text with
+[Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) (Apache-2.0, local, CPU), in a voice that
+blends two of its voicepacks (a pt-BR one with one from another language, to get a timbre that
+doesn't exist in Kokoro), and runs the result through `prepare_reference.py`. The recipe lives in
+each character's `synthetic` block in `characters.yaml`, and `consent` says the voice is synthetic
+and provisional. The blends were picked by measuring pitch: Tonhão ~85 Hz, Tião ~105, Zé ~130,
+Juninho ~145, Dona Cida ~155, Jéssica ~185 in the phase A takes.
 
-O Kokoro roda numa venv separada para não misturar dependências com o Chatterbox:
+Kokoro runs in a separate venv to keep its dependencies apart from Chatterbox:
 
 ```bash
 ~/.local/bin/uv venv --python 3.11 .venv-kokoro
@@ -116,49 +117,49 @@ O Kokoro roda numa venv separada para não misturar dependências com o Chatterb
   --extra-index-url https://pypi.org/simple --index-strategy unsafe-best-match torch kokoro soundfile pyyaml
 ```
 
-Para trocar por uma gravação de verdade: `prepare_reference.py`, apagar o bloco `synthetic`,
-preencher o `consent` com quem gravou e regerar (a mudança de referência invalida as tomadas
-antigas sozinha).
+To switch to a real recording: `prepare_reference.py`, delete the `synthetic` block, fill in
+`consent` with who recorded it and regenerate (changing the reference invalidates the old takes on
+its own).
 
-## Configuração
+## Configuration
 
-- `data/lines.json`: as 40 falas, sem alteração. `id` estável (`seis_001`), categoria (`truco`,
-  `seis`, `nove`, `doze`, `provocacao`, `vitoria`, `derrota`). Para mudar a pronúncia sem mexer no
-  original, use `tts_overrides: {"truco_004": "Truco, filho duma égua!"}`. Para um personagem só,
-  use `tts_overrides` dentro dele em `characters.yaml`. O manifesto guarda os dois textos.
-- `config/characters.yaml`: elenco. Cada personagem tem referência, `consent`, parâmetros base e
-  ajuste por categoria. Para incluir um personagem, adicione uma entrada aqui, crie
-  `references/<id>/` e coloque o id em `VOICES` (`packages/protocol/src/avatar.ts`).
-- `config/generation.yaml`: modelo, padrões, `base_seed`, número de variações, estilos da fase B,
-  alvos de tratamento (−16 LUFS, pico −1,5 dBTP) e limites da validação.
+- `data/lines.json`: the 40 lines, unchanged. Stable `id` (`six_001`), category (`truco`, `six`,
+  `nine`, `twelve`, `taunt`, `win`, `loss`). To change the pronunciation without touching the
+  original, use `tts_overrides: {"truco_004": "Truco, filho duma égua!"}`. For a single character,
+  use `tts_overrides` inside it in `characters.yaml`. The manifest keeps both texts.
+- `config/characters.yaml`: the cast. Each character has a reference, `consent`, base parameters
+  and per-category tweaks. To add a character, add an entry here, create `references/<id>/` and
+  put the id in `VOICES` (`packages/protocol/src/avatar.ts`).
+- `config/generation.yaml`: model, defaults, `base_seed`, number of variants, phase B styles,
+  processing targets (−16 LUFS, −1.5 dBTP peak) and validation limits.
 
-Precedência dos parâmetros: padrões < personagem < categoria (ou estilo, na fase B).
+Parameter precedence: defaults < character < category (or style, in phase B).
 
-## Nomes de arquivo
+## File names
 
-`<personagem>/<categoria>/<texto_sem_acento_e_pontuacao>_<variação>.wav`, por exemplo
-`dona_cida/truco/subi_no_muro_cai_de_costas_truco_seu_bosta_01.wav`. Na fase B, a pasta do meio é
-o estilo.
+`<character>/<category>/<text_without_accents_or_punctuation>_<variant>.wav`, for example
+`dona_cida/truco/subi_no_muro_cai_de_costas_truco_seu_bosta_01.wav`. In phase B, the middle folder
+is the style. The slug comes from the spoken Portuguese text, so it stays in Portuguese.
 
-## No jogo
+## In the game
 
-O servidor não sintetiza nem escolhe áudio. Cada navegador deriva a fala dos mesmos eventos
-autoritativos do servidor (`apps/client/src/lib/voice.ts`): a semente vem do número da mão, da
-cadeira e do valor da aposta, e escolhe a fala e a tomada. Assim todos na sala ouvem a mesma
-variação, sem mensagem nova no protocolo, e o treino offline funciona igual.
+The server neither synthesizes nor picks audio. Each browser derives the line from the same
+authoritative server events (`apps/client/src/lib/voice.ts`): the seed comes from the hand number,
+the seat and the stake, and picks the line and the take. That way everyone in the room hears the
+same variant, with no new protocol message, and offline practice works the same.
 
-- A voz de cada cadeira vem de `avatar.voice`. Os bots da casa têm voz fixa: Tonhão, Dona Cida,
-  Zé do Bar → Zé, Seu Lunga → Tião, Tia Neide → Jéssica, Pé de Pano → Juninho. Quem não escolheu
-  ganha uma voz do gênero do corpo do boneco, sorteada pelo apelido.
-- Fala sem tomada aprovada na voz de quem grita cai no pacote do time (`public/sfx/falas`), como era
-  antes.
-- Volume próprio para as falas e mudo por personagem no painel da jukebox. No máximo duas falas ao
-  mesmo tempo. As falas de truco e seis das vozes da mesa são carregadas a cada mão. O navegador
-  escolhe OGG/Opus ou MP3.
+- Each seat's voice comes from `avatar.voice`. The house bots have fixed voices: Tonhão, Dona Cida,
+  Zé do Bar → Zé, Seu Lunga → Tião, Tia Neide → Jéssica, Pé de Pano → Juninho. Players who didn't
+  pick one get a voice matching their avatar's body, drawn from their nickname.
+- A line with no approved take in the shouter's voice falls back to the team pack
+  (`public/sfx/lines`), as before.
+- The lines have their own volume and a per-character mute in the jukebox panel. At most two lines
+  play at once. The truco and six lines of the voices at the table are preloaded every hand. The
+  browser picks OGG/Opus or MP3.
 
-## Manifesto
+## Manifest
 
-`manifests/audio_manifest.json` (completo) tem, por fala, as tomadas aprovadas de cada personagem
-com variação, caminhos OGG/MP3, tamanhos, duração, status, modelo, parâmetros, seed e texto falado.
-O jogo recebe a versão enxuta em `apps/client/src/lib/voice-manifest.json`. A revisão grava as
-decisões em `manifests/review.json`.
+`manifests/audio_manifest.json` (full) has, per line, each character's approved takes with variant,
+OGG/MP3 paths, sizes, duration, status, model, parameters, seed and spoken text. The game gets the
+slim version in `apps/client/src/lib/voice-manifest.json`. The review stores its decisions in
+`manifests/review.json`.

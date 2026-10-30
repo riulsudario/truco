@@ -1,4 +1,4 @@
-"""Caminhos, configuração e utilidades compartilhadas pelos scripts do pipeline."""
+"""Paths, configuration and helpers shared by the pipeline scripts."""
 
 from __future__ import annotations
 
@@ -25,7 +25,7 @@ MODELS = ROOT / "models"
 
 
 def slugify(text: str) -> str:
-    """Nome de arquivo estável: minúsculas, sem acento, sem pontuação, espaços viram _."""
+    """Stable file name: lowercase, no accents, no punctuation, spaces become _."""
     ascii_text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode()
     words = re.findall(r"[a-z0-9]+", ascii_text.lower())
     return "_".join(words)
@@ -61,7 +61,7 @@ def rel(path: Path) -> str:
 
 
 def params_for(character: dict, line: dict, gen: dict, style: str | None = None) -> dict:
-    """Padrões do modelo < personagem < categoria (ou estilo da fase B)."""
+    """Model defaults < character < category (or phase B style)."""
     params = dict(gen["defaults"])
     params.update(character.get("params") or {})
     if style:
@@ -72,7 +72,7 @@ def params_for(character: dict, line: dict, gen: dict, style: str | None = None)
 
 
 def spoken_text(character: dict, line: dict, lines: dict) -> str:
-    """Texto enviado ao modelo: override do personagem > override global > original."""
+    """Text sent to the model: character override > global override > original."""
     own = (character.get("tts_overrides") or {}).get(line["id"])
     return own or lines.get("tts_overrides", {}).get(line["id"]) or line["text"]
 
@@ -96,7 +96,7 @@ def save_review(review: dict) -> None:
 def require_ffmpeg() -> None:
     for tool in ("ffmpeg", "ffprobe"):
         if not shutil.which(tool):
-            raise SystemExit(f"{tool} não encontrado no PATH")
+            raise SystemExit(f"{tool} not found in PATH")
 
 
 def ffprobe(path: Path) -> dict:
@@ -105,5 +105,5 @@ def ffprobe(path: Path) -> dict:
         capture_output=True, text=True,
     )
     if out.returncode != 0:
-        raise RuntimeError(out.stderr.strip() or f"ffprobe falhou em {path}")
+        raise RuntimeError(out.stderr.strip() or f"ffprobe failed on {path}")
     return json.loads(out.stdout)

@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test'
 
 const PORT = 8788
 
-// Sobe o Worker de verdade servindo o build do cliente, com semente fixa e estado limpo.
+// Starts the real Worker serving the client build, with a fixed seed and clean state.
 export default defineConfig({
   testDir: 'e2e',
   timeout: 120_000,

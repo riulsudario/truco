@@ -11,10 +11,10 @@
 
   let { nick, oncreated, onback }: Props = $props()
 
-  // Valores iniciais vêm das props; depois o formulário é dono deles.
+  // Initial values come from props; after that the form owns them.
   // svelte-ignore state_referenced_locally
   let name = $state(t.roomNameDefault(nick))
-  let visibility = $state<Visibility>('publica')
+  let visibility = $state<Visibility>('public')
   let password = $state('')
   let difficulty = $state<Difficulty>('normal')
   let busy = $state(false)

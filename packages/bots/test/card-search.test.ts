@@ -2,12 +2,12 @@ import { afterEach, expect, it } from 'vitest'
 import { PROFILES } from '../src'
 import { winRate } from './simulate'
 
-const original = { ...PROFILES.facil }
+const original = { ...PROFILES.easy }
 afterEach(() => {
-  PROFILES.facil = original
+  PROFILES.easy = original
 })
 
-it('escolher carta por Monte Carlo ganha da regra gulosa', () => {
-  PROFILES.facil = { ...PROFILES.normal, searchCards: false }
-  expect(winRate(['normal', 'facil', 'normal', 'facil'], 400)).toBeGreaterThan(0.52)
+it('choosing cards by Monte Carlo beats the greedy rule', () => {
+  PROFILES.easy = { ...PROFILES.normal, searchCards: false }
+  expect(winRate(['normal', 'easy', 'normal', 'easy'], 400)).toBeGreaterThan(0.52)
 })

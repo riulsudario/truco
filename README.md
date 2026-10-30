@@ -1,52 +1,69 @@
 # Truco Paulista
 
-Truco paulista online com baralho limpo (Q, J, K, A, 2, 3), salas de até 4 pessoas,
-bots que completam a mesa e provocações pré-definidas. Visual pixel art com skins de
-mesa. Tudo em português.
+Online truco paulista with the short deck (Q, J, K, A, 2, 3), rooms of up to 4 players, bots that
+fill the table and predefined taunts. Pixel art look. The game itself is in Brazilian Portuguese;
+the code is in English.
 
-## Rodando
+Play it at [truco.riul.dev](https://truco.riul.dev).
+
+## Running
 
 ```sh
 pnpm install
-pnpm dev          # Vite em :5173 + Worker (wrangler dev) em :8787
+pnpm dev          # Vite on :5173 + Worker (wrangler dev) on :8787
 ```
 
-Abra http://localhost:5173. "Treino contra bots" roda inteiro no navegador; "Jogar
-online" usa o Worker local.
+Open http://localhost:5173. "Treino contra bots" (practice) runs entirely in the browser; "Jogar
+online" uses the local Worker.
 
-## Comandos
+## Commands
 
-| Comando       | O que faz                                                     |
-| ------------- | ------------------------------------------------------------- |
-| `pnpm check`  | tipos + ESLint + Prettier + testes de engine, bots e servidor |
-| `pnpm e2e`    | build e partida completa no Playwright contra o Worker real   |
-| `pnpm deploy` | build e `wrangler deploy` (precisa de `npx wrangler login`)   |
+| Command       | What it does                                                      |
+| ------------- | ----------------------------------------------------------------- |
+| `pnpm check`  | types + ESLint + Prettier + engine, bots, client and server tests |
+| `pnpm e2e`    | build and a full Playwright match against the real Worker         |
+| `pnpm deploy` | build and `wrangler deploy` (needs `npx wrangler login`)          |
 
-## Estrutura
+## Layout
 
 ```
-packages/engine    regras puras: reduce(estado, ação) → { estado, eventos }
-packages/bots      IA: Monte Carlo sobre as cartas que ela não vê + limiares de truco
-packages/protocol  mensagens cliente ↔ servidor (valibot) e catálogo de provocações
-apps/server        Worker + Durable Objects: Room (uma por sala) e Lobby (lista pública)
+packages/engine    pure rules: reduce(state, action) → { state, events }
+packages/bots      AI: Monte Carlo over the cards it can't see + truco thresholds
+packages/protocol  client ↔ server messages (valibot) and the taunt catalog
+apps/server        Worker + Durable Objects: Room (one per room) and Lobby (public list)
 apps/client        Svelte 5 + Vite
+audio-pipeline     local voice synthesis for the characters' shouted lines
 e2e                Playwright
 ```
 
-O servidor é autoritativo: o cliente manda intenções, o `Room` aplica no engine e
-devolve para cada cadeira só o que ela pode ver (`toPlayerView`). A lógica da sala vive
-em `room-core.ts`, sem APIs da Cloudflare, e é testada com relógio falso.
+The server is authoritative: the client sends intents, the `Room` applies them to the engine and
+sends each seat only what it is allowed to see (`toPlayerView`). The room logic lives in
+`room-core.ts`, with no Cloudflare APIs, and is tested with a fake clock.
 
-## Regras implementadas
+## Implemented rules
 
-- Ordem 3 > 2 > A > K > J > Q; manilha é o rank seguinte à vira, em ciclo (vira 3 → Q).
-  Naipes da manilha: paus (zap) > copas > espadas > ouros.
-- Melhor de 3 vazas com as regras de cangar; carta encoberta a partir da 2ª vaza.
-- Truco → seis → nove → doze, com aceitar, correr e aumentar.
-- Mão de onze (o time vê as cartas do parceiro, vale 3, correr dá 1) e mão de ferro
-  (às cegas, sem truco). Jogo até 12.
+- Order 3 > 2 > A > K > J > Q; the manilha is the rank after the vira, wrapping around (vira 3 → Q).
+  Manilha suits: clubs (zap) > hearts > spades > diamonds.
+- Best of 3 rounds with the tie rules; face-down cards from the 2nd round on.
+- Truco → six → nine → twelve, with accept, run and raise. Running takes both partners;
+  accepting takes one.
+- Hand of eleven (the team sees the partner's cards, worth 3, running gives 1) and iron hand
+  (played blind, no truco). Game to 12.
+
+## Glossary
+
+Truco terms with no good English equivalent keep their Portuguese name in the code:
+
+| Term         | Meaning                                                              |
+| ------------ | -------------------------------------------------------------------- |
+| truco        | the game, and the call that raises the hand's stake to 3             |
+| vira         | the card turned up after the deal; it sets the manilha               |
+| manilha      | the trump rank (the one right after the vira)                        |
+| zap          | the strongest manilha, the one of clubs                              |
+| mão de onze  | hand of eleven (`eleven` in the code): a team at 11 decides to play  |
+| mão de ferro | iron hand (`iron` in the code): both teams at 11, cards played blind |
 
 ## Assets
 
-Ver `CREDITS.md`. As cartas hoje são desenhadas em CSS/SVG; os packs CC0 entram pelo
-`assets-src/` (instruções lá).
+See `CREDITS.md`. The cards are drawn in CSS/SVG; the avatar layers come in through `assets-src/`
+(instructions there).

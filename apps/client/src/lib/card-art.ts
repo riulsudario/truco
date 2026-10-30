@@ -2,8 +2,8 @@ import { cardId, type Card, type Rank } from '@truco/engine'
 import { isRed, SUIT_PIXELS } from './pixels'
 
 /**
- * Cartas em 20×30 pixels, desenhadas em canvas: as mesmas no jogo (cartas na mesa) e no
- * estúdio (leques na mão dos personagens, pré-renderizados).
+ * 20×30 pixel cards drawn on canvas: the same in the game (cards on the table) and in the
+ * studio (pre-rendered fans in the characters' hands).
  */
 export const CARD_ART = { w: 20, h: 30 } as const
 

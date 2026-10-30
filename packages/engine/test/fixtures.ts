@@ -11,24 +11,24 @@ import {
   type Suit,
 } from '../src'
 
-const SUIT_BY_LETTER: Record<string, Suit> = { o: 'ouros', e: 'espadas', c: 'copas', p: 'paus' }
+const SUIT_BY_LETTER: Record<string, Suit> = { d: 'diamonds', s: 'spades', h: 'hearts', c: 'clubs' }
 
-/** Atalho de carta: c('3p') é o 3 de paus, c('Qo') a dama de ouros. */
+/** Card shorthand: c('3c') is the 3 of clubs, c('Qd') the queen of diamonds. */
 export function c(code: string): Card {
   const suit = SUIT_BY_LETTER[code.slice(-1)]
-  if (!suit) throw new Error(`naipe inválido em ${code}`)
+  if (!suit) throw new Error(`invalid suit in ${code}`)
   return { rank: code.slice(0, -1) as Rank, suit }
 }
 
 interface HandSetup {
   vira: string
-  /** Cartas por cadeira, na ordem 0..3. */
+  /** Cards per seat, in order 0..3. */
   cards: [string[], string[], string[], string[]]
   scores?: [number, number]
   turn?: Seat
 }
 
-/** Estado no início de uma mão com cartas escolhidas a dedo. */
+/** State at the start of a hand with hand-picked cards. */
 export function stateWith({ vira, cards, scores, turn = 1 }: HandSetup): GameState {
   const base = newGame({ seed: 1 })
   if (scores) {
@@ -36,7 +36,7 @@ export function stateWith({ vira, cards, scores, turn = 1 }: HandSetup): GameSta
   }
   const viraCard = c(vira)
   const atEleven = base.scores.filter((s) => s === 11).length
-  const kind = atEleven === 2 ? 'ferro' : atEleven === 1 ? 'onze' : 'normal'
+  const kind = atEleven === 2 ? 'iron' : atEleven === 1 ? 'eleven' : 'normal'
   base.hand = {
     ...base.hand,
     vira: viraCard,
@@ -44,13 +44,13 @@ export function stateWith({ vira, cards, scores, turn = 1 }: HandSetup): GameSta
     cards: cards.map((seatCards) => seatCards.map(c)),
     turn,
     kind,
-    stake: kind === 'onze' ? 3 : 1,
-    onzePending: kind === 'onze' ? (base.scores[0] === 11 ? 0 : 1) : null,
+    stake: kind === 'eleven' ? 3 : 1,
+    elevenPending: kind === 'eleven' ? (base.scores[0] === 11 ? 0 : 1) : null,
   }
   return base
 }
 
-/** Aplica ações em sequência e falha o teste se alguma for ilegal. */
+/** Applies actions in sequence and fails the test if any is illegal. */
 export function run(
   state: GameState,
   ...actions: Action[]
@@ -59,7 +59,7 @@ export function run(
   const events: GameEvent[] = []
   for (const action of actions) {
     const result = reduce(current, action)
-    if (!result.ok) throw new Error(`${JSON.stringify(action)} falhou: ${result.error}`)
+    if (!result.ok) throw new Error(`${JSON.stringify(action)} failed: ${result.error}`)
     current = result.state
     events.push(...result.events)
   }

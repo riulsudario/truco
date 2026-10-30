@@ -28,13 +28,13 @@ import {
 
 export const TURN_MS = 20_000
 export const NEXT_HAND_MS = 2_600
-/** Pausa extra depois de uma vaza fechar, para todo mundo ver as quatro cartas. */
+/** Extra pause after a round closes, so everyone sees the four cards. */
 export const ROUND_HOLD_MS = 1_300
 export const BOT_DELAY_MS = [450, 950] as const
 export const EMPTY_CLOSE_MS = 5 * 60_000
 /**
- * Em produção o alarme do Durable Object às vezes dispara uns milissegundos antes do
- * horário marcado; dentro dessa folga ele conta como vencido.
+ * In production the Durable Object alarm sometimes fires a few milliseconds before the
+ * scheduled time; within this slack it counts as due.
  */
 export const ALARM_SLACK_MS = 100
 
@@ -53,11 +53,11 @@ interface Timer {
   at: number
 }
 
-/** Tudo que a sala guarda. Serializável: é o que vai para o storage do Durable Object. */
+/** Everything the room keeps. Serializable: it is what goes into the Durable Object storage. */
 export interface RoomData {
   code: string
   settings: RoomSettings
-  /** Token de quem criou a sala; vira dono ao entrar. */
+  /** Token of whoever created the room; they become the owner on joining. */
   creatorToken: string
   ownerId: string | null
   players: StoredPlayer[]
@@ -66,18 +66,18 @@ export interface RoomData {
   game: GameState | null
   timer: Timer | null
   emptySince: number | null
-  /** Semente dos bots e das partidas novas. */
+  /** Seed for the bots and new games. */
   seed: number
-  /** Música da sala, igual para todo mundo. */
+  /** The room's music, the same for everyone. */
   jukebox?: JukeboxState
-  /** Última provocação de cada cadeira de bot (epoch ms). */
+  /** Last taunt from each bot seat (epoch ms). */
   botTauntAt?: number[]
   closed: boolean
 }
 
 export type Outgoing =
   | { to: string; msg: ServerMessage }
-  /** Envia a mensagem e fecha a conexão do jogador. */
+  /** Sends the message and closes the player's connection. */
   | { close: string; msg: ServerMessage }
 
 export type JoinResult = { ok: true; playerId: string } | { ok: false; error: ErrorCode }
@@ -97,7 +97,7 @@ export function createRoomData(
     creatorToken,
     ownerId: null,
     players: [],
-    seats: SEATS.map(() => ({ kind: 'vazia' })),
+    seats: SEATS.map(() => ({ kind: 'empty' })),
     banned: [],
     game: null,
     timer: null,
@@ -108,8 +108,8 @@ export function createRoomData(
 }
 
 /**
- * Regras da sala: quem entra, quem senta, quem manda, quando os bots jogam. Não conhece
- * WebSocket nem storage; o Durable Object entrega mensagens e despacha o que sai daqui.
+ * Room rules: who joins, who sits, who is in charge, when the bots play. It knows nothing
+ * about WebSockets or storage; the Durable Object delivers messages and dispatches what comes out.
  */
 export class RoomCore {
   private out: Outgoing[] = []
@@ -142,7 +142,7 @@ export class RoomCore {
         lastTauntAt: 0,
       }
       data.players.push(player)
-      const free = data.game ? -1 : data.seats.findIndex((s) => s.kind === 'vazia')
+      const free = data.game ? -1 : data.seats.findIndex((s) => s.kind === 'empty')
       if (free >= 0) this.seatPlayer(player, free as Seat)
       if (isCreator || data.ownerId === null) data.ownerId = player.id
     }
@@ -154,7 +154,7 @@ export class RoomCore {
     this.send(player.id, { t: 'welcome', playerId: player.id, room: this.snapshot() })
     this.broadcastRoom()
     if (data.game) {
-      // Quem voltou pode estar na vez: tira o bot de cena e devolve o relógio.
+      // Whoever came back may be on turn: take the bot out and give the clock back.
       this.schedule(false, true)
       this.send(player.id, this.gameMessage(player, []))
     }
@@ -217,11 +217,11 @@ export class RoomCore {
     if (!this.data.players.some((p) => p.connected)) this.data.emptySince = this.now()
     if (this.data.ownerId === player.id) this.data.ownerId = this.oldestConnected()?.id ?? player.id
     this.broadcastRoom()
-    // Se era a vez dele, o bot assume sem esperar o relógio.
+    // If it was their turn, the bot takes over without waiting for the clock.
     if (this.data.game) this.schedule(false, true)
   }
 
-  /** Executa o que venceu: jogada de bot, tempo esgotado, próxima mão ou sala vazia. */
+  /** Runs whatever is due: a bot move, a timeout, the next hand or an empty room. */
   alarm(): void {
     const now = this.now()
     const { data } = this
@@ -272,7 +272,7 @@ export class RoomCore {
       visibility: data.settings.visibility,
       hasPassword: Boolean(data.settings.password),
       difficulty: data.settings.difficulty,
-      status: data.game ? 'jogando' : 'esperando',
+      status: data.game ? 'playing' : 'waiting',
       jukebox: data.jukebox ?? { trackId: null, startedAt: null },
       serverTime: this.now(),
       seats: data.seats,
@@ -294,16 +294,16 @@ export class RoomCore {
       name: data.settings.name,
       humans: data.players.filter((p) => p.connected).length,
       bots: data.seats.filter((s) => s.kind === 'bot').length,
-      status: data.game ? 'jogando' : 'esperando',
+      status: data.game ? 'playing' : 'waiting',
       hasPassword: Boolean(data.settings.password),
     }
   }
 
-  // ---- sala -----------------------------------------------------------------------------
+  // ---- room -----------------------------------------------------------------------------
 
   private sit(player: StoredPlayer, seat: Seat): void {
     if (this.data.game) return this.error(player, 'game_running')
-    if (this.data.seats[seat]!.kind !== 'vazia') return this.error(player, 'seat_taken')
+    if (this.data.seats[seat]!.kind !== 'empty') return this.error(player, 'seat_taken')
     this.unseat(player)
     this.seatPlayer(player, seat)
     this.broadcastRoom()
@@ -316,7 +316,7 @@ export class RoomCore {
     this.broadcastRoom()
   }
 
-  /** Dono troca alguém de cadeira (ou manda assistir). Quem estava no destino troca de lugar. */
+  /** The owner moves someone to another seat (or to watching). Whoever was there swaps places. */
   private move(owner: StoredPlayer, targetId: string, seat: Seat | null): void {
     if (this.data.game) return this.error(owner, 'game_running')
     const target = this.player(targetId)
@@ -327,11 +327,11 @@ export class RoomCore {
     }
     const from = target.seat
     const occupant = this.data.seats[seat]!
-    this.data.seats[seat] = { kind: 'humano', playerId: target.id }
+    this.data.seats[seat] = { kind: 'human', playerId: target.id }
     target.seat = seat
-    if (from !== null) this.data.seats[from] = { kind: 'vazia' }
+    if (from !== null) this.data.seats[from] = { kind: 'empty' }
 
-    if (occupant.kind === 'humano') {
+    if (occupant.kind === 'human') {
       const displaced = this.player(occupant.playerId)!
       displaced.seat = null
       if (from !== null) this.seatPlayer(displaced, from)
@@ -345,11 +345,11 @@ export class RoomCore {
     if (this.data.game) return this.error(owner, 'game_running')
     const current = this.data.seats[seat]!
     if (add) {
-      if (current.kind !== 'vazia') return this.error(owner, 'seat_taken')
+      if (current.kind !== 'empty') return this.error(owner, 'seat_taken')
       this.data.seats[seat] = { kind: 'bot', name: this.botName() }
     } else {
       if (current.kind !== 'bot') return this.error(owner, 'seat_taken')
-      this.data.seats[seat] = { kind: 'vazia' }
+      this.data.seats[seat] = { kind: 'empty' }
     }
     this.broadcastRoom()
   }
@@ -372,10 +372,10 @@ export class RoomCore {
   private removePlayer(player: StoredPlayer): void {
     const { data } = this
     if (player.seat !== null) {
-      // No meio da partida a cadeira não pode ficar vazia: um bot assume de vez.
+      // Mid-game the seat can't be left empty: a bot takes over for good.
       data.seats[player.seat] = data.game
         ? { kind: 'bot', name: `${player.nick} (bot)` }
-        : { kind: 'vazia' }
+        : { kind: 'empty' }
     }
     data.players = data.players.filter((p) => p.id !== player.id)
     if (data.ownerId === player.id) data.ownerId = this.oldestConnected()?.id ?? null
@@ -393,13 +393,13 @@ export class RoomCore {
     }
   }
 
-  // ---- partida --------------------------------------------------------------------------
+  // ---- game -----------------------------------------------------------------------------
 
   private start(owner: StoredPlayer): void {
     const { data } = this
     if (data.game && data.game.phase !== 'gameOver') return this.error(owner, 'game_running')
     for (const seat of SEATS) {
-      if (data.seats[seat]!.kind === 'vazia')
+      if (data.seats[seat]!.kind === 'empty')
         data.seats[seat] = { kind: 'bot', name: this.botName() }
     }
     const seed = Math.floor(this.random() * 2 ** 31)
@@ -445,7 +445,7 @@ export class RoomCore {
     this.botTaunts(events)
   }
 
-  /** No máximo um bot provoca por lance, respeitando o intervalo de cada um. */
+  /** At most one bot taunts per move, respecting each one's cooldown. */
   private botTaunts(events: GameEvent[]): void {
     const now = this.now()
     const last = (this.data.botTauntAt ??= [0, 0, 0, 0])
@@ -479,8 +479,8 @@ export class RoomCore {
   }
 
   /**
-   * Decide quem age a seguir e quando: humano conectado tem relógio, bot age logo.
-   * keepClock preserva o relógio em curso quando só mudou quem está conectado.
+   * Decides who acts next and when: a connected human gets a clock, a bot acts right away.
+   * keepClock keeps the running clock when only who is connected has changed.
    */
   private schedule(roundClosed: boolean, keepClock = false): void {
     const game = this.data.game
@@ -491,7 +491,7 @@ export class RoomCore {
     } else if (game.phase === 'handOver') {
       this.data.timer = { kind: 'nextHand', at: now + NEXT_HAND_MS }
     } else if (seatsToAct(game).some((seat) => !this.humanAt(seat)?.connected)) {
-      // Bot na vez (ou bot da dupla respondendo truco junto com um humano) age logo.
+      // A bot on turn (or a bot answering truco alongside a human partner) acts right away.
       const [min, max] = BOT_DELAY_MS
       this.data.timer = { kind: 'act', at: now + hold + min + this.random() * (max - min) }
     } else {
@@ -500,7 +500,7 @@ export class RoomCore {
     }
   }
 
-  /** Cadeira que o bot vai jogar: no timeout, a do humano que demorou; senão a do bot. */
+  /** Seat the bot will play: on timeout, the slow human's; otherwise the bot's own. */
   private autoSeat(kind: Timer['kind']): Seat | undefined {
     const seats = seatsToAct(this.data.game!)
     if (kind === 'timeout') return seats.find((seat) => this.humanAt(seat)?.connected)
@@ -508,8 +508,8 @@ export class RoomCore {
   }
 
   /**
-   * Qualquer um na sala escolhe a música, como numa jukebox de bar. O pedido com `after`
-   * é o aviso de que a faixa acabou: vários chegam juntos, só o primeiro troca.
+   * Anyone in the room picks the music, like a bar jukebox. A request with `after` is the
+   * notice that the track ended: several arrive together, only the first one switches.
    */
   private jukebox(player: StoredPlayer, trackId: TrackId | null, after?: TrackId): void {
     const current = this.data.jukebox ?? { trackId: null, startedAt: null }
@@ -532,7 +532,7 @@ export class RoomCore {
     this.broadcastTaunt(player.seat, player.nick, id)
   }
 
-  // ---- utilitários ----------------------------------------------------------------------
+  // ---- helpers --------------------------------------------------------------------------
 
   private player(id: string): StoredPlayer | undefined {
     return this.data.players.find((p) => p.id === id)
@@ -540,16 +540,16 @@ export class RoomCore {
 
   private humanAt(seat: Seat): StoredPlayer | undefined {
     const info = this.data.seats[seat]
-    return info?.kind === 'humano' ? this.player(info.playerId) : undefined
+    return info?.kind === 'human' ? this.player(info.playerId) : undefined
   }
 
   private seatPlayer(player: StoredPlayer, seat: Seat): void {
-    this.data.seats[seat] = { kind: 'humano', playerId: player.id }
+    this.data.seats[seat] = { kind: 'human', playerId: player.id }
     player.seat = seat
   }
 
   private unseat(player: StoredPlayer): void {
-    if (player.seat !== null) this.data.seats[player.seat] = { kind: 'vazia' }
+    if (player.seat !== null) this.data.seats[player.seat] = { kind: 'empty' }
     player.seat = null
   }
 

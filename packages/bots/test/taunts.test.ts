@@ -5,31 +5,31 @@ import { tauntReaction } from '../src'
 const always = () => 0
 const never = () => 0.999
 
-describe('provocações dos bots', () => {
-  it('quem pede truco não provoca (já grita a fala); o parceiro dele põe pilha', () => {
+describe('bot taunts', () => {
+  it('the truco caller does not taunt (it already shouts the line); its partner cheers', () => {
     const events: GameEvent[] = [{ type: 'trucoCalled', seat: 1, stake: 3 }]
     expect(tauntReaction(events, 1, always)).toBeNull()
-    expect(tauntReaction(events, 3, always)).toBe('truco-ladrao')
+    expect(tauntReaction(events, 3, always)).toBe('truco-thief')
     expect(tauntReaction(events, 3, never)).toBeNull()
   })
 
-  it('tira sarro quando o adversário corre, mas não quando o próprio time corre', () => {
+  it('mocks when an opponent runs, but not when its own team runs', () => {
     const events: GameEvent[] = [{ type: 'ran', seat: 0 }]
-    expect(tauntReaction(events, 1, always)).toBe('medinho')
+    expect(tauntReaction(events, 1, always)).toBe('scared')
     expect(tauntReaction(events, 2, always)).toBeNull()
   })
 
-  it('reage ao fim do jogo conforme o resultado', () => {
+  it('reacts to the end of the game according to the result', () => {
     const events: GameEvent[] = [{ type: 'gameEnded', winner: 1 }]
-    expect(tauntReaction(events, 3, always)).toBe('palmas')
-    expect(tauntReaction(events, 0, always)).toBe('fui-roubado')
+    expect(tauntReaction(events, 3, always)).toBe('clap')
+    expect(tauntReaction(events, 0, always)).toBe('robbed')
   })
 
-  it('o evento mais recente do lote tem prioridade', () => {
+  it('the most recent event in the batch takes priority', () => {
     const events: GameEvent[] = [
       { type: 'roundEnded', result: 'tie' },
       { type: 'gameEnded', winner: 0 },
     ]
-    expect(tauntReaction(events, 0, always)).toBe('palmas')
+    expect(tauntReaction(events, 0, always)).toBe('clap')
   })
 })

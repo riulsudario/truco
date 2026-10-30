@@ -18,10 +18,10 @@ import { t } from './strings'
 const HUMAN: Seat = 0
 const BOT_NAMES = ['Tonhão', 'Dona Cida', 'Zé do Bar']
 const NEXT_HAND_MS = 2600
-/** O que os bots respondem quando você provoca. */
-const COMEBACKS: TauntId[] = ['vai-chorar', 'risada', 'medinho', 'olhos', 'mao-de-alface']
+/** What the bots reply when you taunt them. */
+const COMEBACKS: TauntId[] = ['gonna-cry', 'laugh', 'scared', 'eyes', 'butterfingers']
 
-/** Treino offline: engine e bots rodando no navegador, você na cadeira 0. */
+/** Offline practice: engine and bots running in the browser, you in seat 0. */
 export class LocalSession extends GameSession {
   override readonly canTaunt = true
   private state: GameState
@@ -55,7 +55,7 @@ export class LocalSession extends GameSession {
   override taunt(id: TauntId): void {
     sound.taunt(id)
     this.shout(HUMAN, tauntText(id))
-    // Às vezes um adversário rebate, com o tempo de quem pensa na resposta.
+    // Sometimes an opponent fires back, with the delay of someone thinking of a reply.
     if (this.random() < 0.5) {
       const seat = this.random() < 0.5 ? 1 : 3
       const reply = COMEBACKS[Math.floor(this.random() * COMEBACKS.length)]!
@@ -75,7 +75,7 @@ export class LocalSession extends GameSession {
     if (this.jukebox.trackId === trackId) this.chooseTrack(nextTrack(trackId))
   }
 
-  /** Mesma regra do servidor: no máximo um bot provoca por lance. */
+  /** Same rule as the server: at most one bot taunts per move. */
   private botTaunts(events: GameEvent[]): void {
     for (const seat of [1, 2, 3] as Seat[]) {
       if (Date.now() - this.botTauntAt[seat]! < BOT_TAUNT_COOLDOWN_MS) continue
@@ -93,7 +93,7 @@ export class LocalSession extends GameSession {
     return true
   }
 
-  /** Agenda a próxima jogada dos bots (ou a próxima mão) depois de uma pausa natural. */
+  /** Schedules the bots' next move (or the next hand) after a natural pause. */
   private schedule(extraDelay: number): void {
     clearTimeout(this.timer)
     const { state } = this
@@ -103,7 +103,7 @@ export class LocalSession extends GameSession {
       return
     }
     const seats = seatsToAct(state)
-    // O bot age se estiver entre quem decide (inclusive respondendo truco junto com você).
+    // The bot acts if it is among the deciders (including answering truco along with you).
     const seat = seats.find((s) => s !== HUMAN)
     if (seat === undefined) return
     this.timer = setTimeout(

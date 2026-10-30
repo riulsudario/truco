@@ -1,29 +1,29 @@
 import type { Suit } from '@truco/engine'
 
-/** Naipes desenhados pixel a pixel (7×7), para não depender de fonte com os símbolos. */
+/** Suits drawn pixel by pixel (7×7), so we don't depend on a font with the symbols. */
 export const SUIT_PIXELS: Record<Suit, string[]> = {
-  ouros: ['...#...', '..###..', '.#####.', '#######', '.#####.', '..###..', '...#...'],
-  copas: ['.##.##.', '#######', '#######', '#######', '.#####.', '..###..', '...#...'],
-  espadas: ['...#...', '..###..', '.#####.', '#######', '#######', '...#...', '..###..'],
-  paus: ['..###..', '..###..', '#######', '#######', '##.#.##', '...#...', '..###..'],
+  diamonds: ['...#...', '..###..', '.#####.', '#######', '.#####.', '..###..', '...#...'],
+  hearts: ['.##.##.', '#######', '#######', '#######', '.#####.', '..###..', '...#...'],
+  spades: ['...#...', '..###..', '.#####.', '#######', '#######', '...#...', '..###..'],
+  clubs: ['..###..', '..###..', '#######', '#######', '##.#.##', '...#...', '..###..'],
 }
 
-/** Converte o bitmap num path SVG com um quadrado por pixel igual a `on`. */
+/** Converts the bitmap into an SVG path with one square per pixel equal to `on`. */
 export function pixelPath(rows: string[], on = '#'): string {
   return rows
     .flatMap((row, y) => [...row].map((cell, x) => (cell === on ? `M${x} ${y}h1v1h-1z` : '')))
     .join('')
 }
 
-export const isRed = (suit: Suit) => suit === 'ouros' || suit === 'copas'
+export const isRed = (suit: Suit) => suit === 'diamonds' || suit === 'hearts'
 
-/** Bitmap colorido: cada caractere é uma cor da paleta; '.' é transparente. */
+/** Colored bitmap: each character is a palette color; '.' is transparent. */
 export interface PixelSprite {
   rows: string[]
   palette: Record<string, string>
 }
 
-/** Um path por cor, para o SVG ficar pequeno mesmo com sprites maiores. */
+/** One path per color, so the SVG stays small even with larger sprites. */
 export function spritePaths(sprite: PixelSprite): { key: string; color: string; d: string }[] {
   return Object.entries(sprite.palette).map(([key, color]) => ({
     key,
