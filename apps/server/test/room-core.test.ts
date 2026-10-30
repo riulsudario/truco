@@ -372,7 +372,17 @@ describe('taunts and cleanup', () => {
     expect(room.snapshot().jukebox.trackId).toBe('evidencias')
   })
 
-  it('an empty room closes on its own after 5 minutes', () => {
+  it('the room closes as soon as the last person leaves', () => {
+    const owner = join('Riul', CREATOR)
+    const ana = join('Ana', token(1))
+    room.handle(owner, { t: 'leave' })
+    expect(room.data.closed).toBe(false)
+    room.handle(ana, { t: 'leave' })
+    expect(room.data.closed).toBe(true)
+    expect(room.summary().humans).toBe(0)
+  })
+
+  it('a room whose people all dropped closes after a short wait', () => {
     const owner = join('Riul', CREATOR)
     room.disconnect(owner)
     advance(EMPTY_CLOSE_MS - 1)

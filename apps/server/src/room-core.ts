@@ -31,7 +31,8 @@ export const NEXT_HAND_MS = 2_600
 /** Extra pause after a round closes, so everyone sees the four cards. */
 export const ROUND_HOLD_MS = 1_300
 export const BOT_DELAY_MS = [450, 950] as const
-export const EMPTY_CLOSE_MS = 5 * 60_000
+/** How long a room whose people all dropped (not left) waits for someone to come back. */
+export const EMPTY_CLOSE_MS = 30_000
 /**
  * In production the Durable Object alarm sometimes fires a few milliseconds before the
  * scheduled time; within this slack it counts as due.
@@ -391,7 +392,8 @@ export class RoomCore {
     }
     data.players = data.players.filter((p) => p.id !== player.id)
     if (data.ownerId === player.id) data.ownerId = this.oldestConnected()?.id ?? null
-    if (!data.players.some((p) => p.connected)) data.emptySince = this.now()
+    // The last person to leave closes the room.
+    if (!data.players.some((p) => p.connected)) return this.close()
     this.broadcastRoom()
     if (data.game) this.schedule(false, true)
   }
