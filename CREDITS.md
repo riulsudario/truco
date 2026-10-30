@@ -21,14 +21,16 @@ WebP. A garrafa tem o rótulo de uma marca real: trocar antes de publicar.
 A jukebox toca vídeos dos canais oficiais no YouTube pelo player embutido (ver
 `packages/protocol/src/jukebox.ts`); nenhum áudio é baixado nem redistribuído.
 
-Sons das provocações: risada ([Group Giggling](https://opengameart.org/content/group-giggling)),
-palmas ([Well Done, qubodup](https://opengameart.org/content/well-done)) e raiva
-([Male grunt/yelling](https://opengameart.org/content/male-gruntyelling-sounds)), todos CC0.
+Sons das provocações: palmas ([Well Done, qubodup](https://opengameart.org/content/well-done), CC0).
+Risada, choro e raiva são sons de meme recortados de vídeos do YouTube, sem licença declarada:
+[gato rindo](https://www.youtube.com/watch?v=GTXUWhmjCog),
+[Banana Cat chorando](https://www.youtube.com/watch?v=pBUs2R9JV5M) e
+[grrr](https://www.youtube.com/watch?v=zwJ2xG1QUqM).
 As 40 falas gritadas (truco, seis/nove/doze, provocações, vitória e derrota) vêm do pacote
 gravado pelo time (`apps/client/sound-src/falas.zip`, convertido por
 `scripts/build-voices.mjs`). As mesmas falas nas vozes dos seis personagens
 (`public/sfx/vozes/`) são sintetizadas localmente pelo `audio-pipeline/` com o
 [Chatterbox Multilingual pt-BR](https://huggingface.co/ResembleAI/Chatterbox-Multilingual-pt-br)
 (MIT), a partir de vozes inventadas com o [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M)
-(Apache-2.0), sem nenhuma pessoa real. Os sons de choro, olhos e caveira foram feitos aqui com
+(Apache-2.0), sem nenhuma pessoa real. Os sons de olhos e caveira foram feitos aqui com
 a voz pt-BR do Windows mais efeitos (sox); fogo e coração são sintetizados.
